@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+export default= {
   content: ["./resorurce/**/* .blade.php"],
   content: ["./resorurce/**/* .js"],
   content: ["./resorurce/**/* .vue"],
