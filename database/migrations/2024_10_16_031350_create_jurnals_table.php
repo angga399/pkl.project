@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jurnals', function (Blueprint $table) {
             $table->id();
-            $table->string('tanggal');
+            $table->date('tanggal');
             $table->string('nama');
             $table->string('paraf');
             $table->string('keterangan');
