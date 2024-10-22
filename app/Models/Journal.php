@@ -13,8 +13,7 @@ class Journal extends Model
         'judul_jurnal',
         'tanggal',
         'nama',
-        'paraf',
-        'keterangan',
+        'uraian_konsentrasi',
     ];
 }
 

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance List</title>
+    <title>Daftar hadir List</title>
 </head>
 <body>
-    <h1>Attendance List</h1>
-    <a href="{{ route('daftarhdr.create') }}">Create New Attendance</a>
+    <h1>Daftar hadir List</h1>
+    <a href="{{ route('daftarhdr.create') }}">Daftar hadir</a>
     <table border="1">
         <thead>
             <tr>

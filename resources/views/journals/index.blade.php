@@ -8,20 +8,16 @@
     <a href="{{ route('journals.create') }}">Tambah Jurnal</a>
     <table>
         <tr>
-            <th>Judul Jurnal</th>
             <th>Tanggal</th>
             <th>Nama</th>
-            <th>Paraf</th>
-            <th>Keterangan</th>
+            <th>Uraian Konsentrasi</th>
             <th>Aksi</th>
         </tr>
         @foreach ($journals as $journal)
         <tr>
-            <td>{{ $journal->judul_jurnal }}</td>
             <td>{{ $journal->tanggal }}</td>
             <td>{{ $journal->nama }}</td>
-            <td>{{ $journal->paraf }}</td>
-            <td>{{ $journal->keterangan }}</td>
+            <td>{{ $journal->uraian_konsentrasi }}</td>
             <td>
                 <a href="{{ route('journals.edit', $journal->id) }}">Edit</a>
                 <form action="{{ route('journals.destroy', $journal->id) }}" method="POST" style="display:inline;">

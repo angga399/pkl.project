@@ -21,11 +21,9 @@ class JournalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul_jurnal' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'nama' => 'required|string|max:255',
-            'paraf' => 'required|string|max:255',
-            'keterangan' => 'nullable|string',
+            'uraian_keterangan' => 'nullable|string',
         ]);
 
         Journal::create($request->all());
@@ -45,11 +43,9 @@ class JournalController extends Controller
     public function update(Request $request, Journal $journal)
     {
         $request->validate([
-            'judul_jurnal' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'nama' => 'required|string|max:255',
-            'paraf' => 'required|string|max:255',
-            'keterangan' => 'nullable|string',
+            'uraian_konsentrasi' => 'nullable|string',
         ]);
 
         $journal->update($request->all());

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Attendance</title>
+    <title>Absen Hadir</title>
 </head>
 <body>
-    <h1>Create Attendance</h1>
+    <h1>Absen Hadir</h1>
     <form action="{{ route('daftarhdr.store') }}" method="POST">
         @csrf
         <div>
