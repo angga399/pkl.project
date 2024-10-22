@@ -6,36 +6,47 @@
     <title>Daftar Jurnal</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
     <div class="container mx-auto py-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Daftar Jurnal</h1>
         <div class="mb-4 text-center">
             <a href="{{ route('journals.create') }}" class="bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Tambah Jurnal</a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach ($journals as $journal)
-            <div class="bg-white border border-gray-200 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl p-6">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{ $journal->judul_jurnal }}</h2>
-                
-                <div class="text-gray-600 space-y-2">
-                    <p><span class="font-medium">Tanggal:</span> {{ $journal->tanggal }}</p>
-                    <p><span class="font-medium">Nama:</span> {{ $journal->nama }}</p>
-                    <p><span class="font-medium">Paraf:</span> {{ $journal->paraf }}</p>
-                    <p><span class="font-medium">Keterangan:</span> {{ $journal->keterangan }}</p>
-                </div>
-        
-                <div class="flex justify-between items-center mt-6">
-                    <a href="{{ route('journals.edit', $journal->id) }}" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
-                    <form action="{{ route('journals.destroy', $journal->id) }}" method="POST" class="inline-block">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">Hapus</button>
-                    </form>
+        @foreach ($journals as $journal)
+
+        <h2 class="text-lg font-semibold text-gray-800 mb-2"></h2>
+        <section class="text-gray-600 body-font overflow-hidden">
+            <div class="container px-4 py-4 mx-auto"> <!-- Mengurangi py dari 8 ke 4 -->
+                <div class="-my-2 divide-y divide-gray-100"> <!-- Mengurangi my dari 4 ke 2 -->
+                    <div class="py-2 flex flex-wrap md:flex-nowrap"> <!-- Mengurangi py dari 4 ke 2 -->
+                        <!-- Bagian pertama dengan border -->
+                        <div class="md:w-64 md:mb-0 mb-2 flex-shrink-0 flex flex-col border-r border-gray-300 pr-2">
+                            <span class="font-bold title-font text-gray-700">CATEGORY</span>
+                            <span class="mt-1 text-gray-500 text-sm">{{ $journal->tanggal }}</span>
+                            <span class="font-bold title-font text-gray-700">NAMA</span>
+                            <span class="mt-1 text-gray-500 text-sm">{{ $journal->nama }}</span>
+                        </div>
+    
+                        <!-- Bagian kedua dengan padding kiri lebih kecil -->
+                        <div class="md:flex-grow pl-2">
+                            <h2 class="text-xl font-bold text-gray-900 title-font mb-1">{{ $journal->judul_jurnal }}</h2>
+                            <p class="leading-relaxed text-sm">{{ $journal->keterangan }}</p>
+                            <a class="text-indigo-500 inline-flex items-center mt-2">summit
+                                <svg class="w-4 h-4 ml-1" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14"></path>
+                                    <path d="M12 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            @endforeach
-        </div>
+        </section>
         
-    </div>
-</body>
-</html>
+    
+        <form action="{{ route('journals.destroy', $journal->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Delete</button>
+    
+    @endforeach
+    

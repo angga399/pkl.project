@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('tanggal');
             $table->time('jam_datang');
             $table->time('jam_pulang');
-
             $table->string('paraf_pembimbing');
             $table->timestamps();
         });
