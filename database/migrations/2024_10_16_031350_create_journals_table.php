@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal');
-            $table->string('nama');
+            $table->text('nama');
             $table->text('uraian_konsentrasi')->nullable();
             $table->timestamps();
         });
