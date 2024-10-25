@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,6 +47,8 @@
           </div>
         </section>
     </div>
+    
+  </body>
 
   <footer class="text-gray-600 body-font">
     <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
@@ -86,6 +87,3 @@
       </span>
     </div>
   </footer>
-
-</body>
-</html>

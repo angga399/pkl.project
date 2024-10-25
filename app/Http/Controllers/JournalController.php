@@ -22,7 +22,7 @@ class JournalController extends Controller
     {
         $request->validate([
             'tanggal' => 'required|date',
-            'nama' => 'required|string|max:255',
+            'nama' => 'required',
             'uraian_keterangan' => 'nullable|string',
         ]);
 
