@@ -22,7 +22,7 @@ class JournalController extends Controller
     {
         $request->validate([
             'tanggal' => 'required|date',
-            'nama' => 'required|string|max:255',
+            'nama' => 'required',
             'uraian_keterangan' => 'nullable|string',
         ]);
 
@@ -38,6 +38,12 @@ class JournalController extends Controller
     public function edit(Journal $journal)
     {
         return view('journals.edit', compact('journal'));
+        
+        $request->validate([
+            'tanggal' => 'required|date',
+            'nama' => 'required',
+            'uraian_konsentrasi' => 'nullable|string',
+        ]);
     }
 
     public function update(Request $request, Journal $journal)
