@@ -14,19 +14,22 @@ class AbsenController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi data
-        $request->validate([
-            'image' => 'required|string'
+        $data = $request->validate([
+            'image' => 'required|file|image', // Validasi untuk file gambar
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'notes' => 'nullable|string',
         ]);
-
-        // Menghapus bagian 'data:image/jpeg;base64,' dari data URI
-        $image = str_replace('data:image/jpeg;base64,', '', $request->image);
-        $image = str_replace(' ', '+', $image);
-        $imageName = 'absen_' . time() . '.jpeg';
-
-        // Simpan gambar ke penyimpanan
-        Storage::disk('public')->put('absen/' . $imageName, base64_decode($image));
-
-        return response()->json(['success' => true, 'message' => 'Absen berhasil disimpan.']);
+    
+        // Simpan data foto
+        Absen::create([
+            'image' => file_get_contents($request->file('image')->getRealPath()), // Simpan gambar sebagai biner
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+            'notes' => $data['notes'] ?? null,
+        ]);
+    
+        return response()->json(['message' => 'Foto dan lokasi berhasil disimpan']);
     }
 }
+
