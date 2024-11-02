@@ -6,6 +6,9 @@
     <title>Daftar Jurnal</title>
     @vite('resources/css/app.css')
 </head>
+<div class="flex justify-center mb-4">
+    <x-back></x-back>
+</div>
 <body class="bg-gray-100">
     <div class="min-h-screen flex flex-col">
         <!-- Konten Utama -->
@@ -14,7 +17,6 @@
             <div class="text-center mb-4">
                 <a href="{{ route('journals.create') }}" class="text-indigo-500 hover:underline">Tambah Jurnal</a>
             </div>
-            <a href="/welcome" class="text-blue-500 hover:underline">Back</a>
             <!-- Card Jurnal -->
             @foreach ($journals as $journal)
                 <section class="text-gray-600 body-font">
