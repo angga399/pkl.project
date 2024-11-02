@@ -9,8 +9,8 @@ class DaftarhdrController extends Controller
 {
     public function index()
     {
-        $daftarhdrs = Daftarhdr::all();
-        return view('daftarhdr.index', compact('daftarhdrs'));
+        $data = Daftarhdr::all();
+        return view('daftarhdr.index', compact('data'));
     }
 
     public function create()
@@ -19,53 +19,32 @@ class DaftarhdrController extends Controller
     }
 
     public function store(Request $request)
+{
+    Daftarhdr::create([
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'image_data' => $request->imageData,
+        'notes' => $request->notes,
+    ]);
+
+    return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil disimpan.');
+}
+
+
+    public function edit(Daftarhdr $daftarhdr)
     {
-        $request->validate([
-            'hari' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'jam_datang' => 'required',
-            'jam_pulang' => 'required',
-            'paraf_pembimbing' => 'required|string|max:255',
-        ]);
-
-        Daftarhdr::create($request->all());
-
-        return redirect()->route('daftarhdr.index')->with('success', 'Attendance created successfully.');
-    }
-
-    public function show($id)
-    {
-        $daftarhdr = Daftarhdr::findOrFail($id);
-        return view('daftarhdr.show', compact('daftarhdr'));
-    }
-
-    public function edit($id)
-    {
-        $daftarhdr = Daftarhdr::findOrFail($id);
         return view('daftarhdr.edit', compact('daftarhdr'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Daftarhdr $daftarhdr)
     {
-        $request->validate([
-            'hari' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'jam_datang' => 'required',
-            'jam_pulang' => 'required',
-            'paraf_pembimbing' => 'required|string|max:255',
-        ]);
-
-        $daftarhdr = Daftarhdr::findOrFail($id);
-        $daftarhdr->update($request->all());
-
-        return redirect()->route('daftarhdr.index')->with('success', 'Attendance updated successfully.');
+        $daftarhdr->update($request->only(['latitude', 'longitude', 'imageData', 'notes']));
+        return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil diperbarui.');
     }
 
-    public function destroy($id)
+    public function destroy(Daftarhdr $daftarhdr)
     {
-        $daftarhdr = Daftarhdr::findOrFail($id);
         $daftarhdr->delete();
-
-        return redirect()->route('daftarhdr.index')->with('success', 'Attendance deleted successfully.');
+        return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil dihapus.');
     }
 }

@@ -5,76 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengambilan Foto dengan Lokasi</title>
     <script src="{{ asset('js/webcam.min.js') }}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        #camera {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        #mapContainer {
-            height: 300px;
-            width: 1000px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-        }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        #result {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-    </style>
 </head>
-<body>
-    <h1>Pengambilan Foto dengan Lokasi</h1>
-    <div id="camera"></div>
-    <button onclick="takeSnapshot()">Ambil Foto</button>
-    <div class="container">
-        <div id="result"></div>
-        <div id="mapContainer"></div>
+<body class="flex flex-col items-center bg-gray-100 py-10">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Pengambilan Foto dengan Lokasi</h1>
+    
+    <div id="camera" class="mb-6"></div>
+    <button onclick="takeSnapshot()" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">Ambil Foto</button>
+
+    <div class="flex flex-col md:flex-row justify-center items-center gap-8 mt-6">
+        <div id="result" class="text-center"></div>
+        <div>
+            <div id="mapContainer" class="h-72 w-full md:w-96 rounded-lg border border-gray-300 overflow-hidden"></div>
+            <a id="googleMapsLink" href="#" target="_blank" class="text-blue-500 underline mt-4 block text-center hidden">Lihat Lokasi di Google Maps</a>
+        </div>
     </div>
-    <form id="createForm" action="{{ route('create.store') }}" method="POST" enctype="multipart/form-data">
+
+    <!-- Form Create -->
+    <form id="createForm" action="{{ route('daftarhdr.store') }}" method="POST" enctype="multipart/form-data" class="mt-6">
         @csrf
         <input type="hidden" name="latitude" id="latitude" required>
         <input type="hidden" name="longitude" id="longitude" required>
         <input type="hidden" name="notes" id="notes">
         <input type="hidden" name="imageData" id="imageData">
-        <button type="button" onclick="submitForm()" id="submitBtn" style="display: none;">Simpan Data</button>
+        <button type="submit" id="submitBtn" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mt-4 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 hidden">Simpan Data</button>
     </form>
 
     <script>
@@ -94,6 +50,10 @@
             document.getElementById('latitude').value = latitude;
             document.getElementById('longitude').value = longitude;
             displayMap(latitude, longitude);
+
+            const googleMapsLink = document.getElementById('googleMapsLink');
+            googleMapsLink.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            googleMapsLink.classList.remove('hidden');
         }
 
         function showError(error) {
@@ -123,16 +83,22 @@
 
         function takeSnapshot() {
             Webcam.snap(function(data_uri) {
-                document.getElementById('result').innerHTML = `<img src="${data_uri}" alt="Foto Hasil">`;
+                document.getElementById('result').innerHTML = `
+                    <img src="${data_uri}" alt="Foto Hasil" class="rounded-md">
+                    <div class="mt-4 text-gray-700" id="dateDisplay"></div>
+                `;
                 document.getElementById('imageData').value = data_uri;
-                document.getElementById('submitBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').classList.remove('hidden');
+                
+                const dateDisplay = document.getElementById('dateDisplay');
+                const now = new Date();
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const day = days[now.getDay()];
+                const date = now.toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
+                dateDisplay.textContent = `${day}, ${date}`;
             });
-        }
-
-        function submitForm() {
-            const notes = prompt("Masukkan catatan (opsional):");
-            document.getElementById('notes').value = notes;
-            document.getElementById('createForm').submit();
         }
 
         window.onload = function() {
@@ -141,7 +107,7 @@
 
         function displayMap(lat, lon) {
             const mapContainer = document.getElementById('mapContainer');
-            mapContainer.innerHTML = `<div id="map"></div>`;
+            mapContainer.innerHTML = `<div id="map" class="w-full h-full"></div>`;
             const map = L.map('map').setView([lat, lon], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'

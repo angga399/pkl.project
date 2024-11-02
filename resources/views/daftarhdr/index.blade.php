@@ -1,43 +1,45 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar hadir List</title>
+    <title>Hasil</title>
 </head>
+<body>
+    
+    <h1 class="text-2xl font-semibold mb-4">Data Foto dengan Lokasi</h1>
+    <a href="{{ route('daftarhdr.create') }}" class="btn btn-primary mb-4">Tambah Data</a>
 
-    <h1>Daftar hadir List</h1>
-    <a href="{{ route('daftarhdr.create') }}">Daftar hadir</a>
-    <table border="1">
+    <table class="table-auto w-full">
         <thead>
-            <div class="min-h-screen flex flex-col">
             <tr>
-                <th>Hari</th>
-                <th>Tanggal</th>
-                <th>Jam Datang</th>
-                <th>Jam Pulang</th>
-                <th>Paraf Pembimbing</th>
-                <th>Action</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Foto</th>
+                <th>Catatan</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($daftarhdrs as $daftarhdr)
+            @foreach ($data as $item)
                 <tr>
-                    <td>{{ $daftarhdr->hari }}</td>
-                    <td>{{ $daftarhdr->tanggal }}</td>
-                    <td>{{ $daftarhdr->jam_datang }}</td>
-                    <td>{{ $daftarhdr->jam_pulang }}</td>
-                    <td>{{ $daftarhdr->paraf_pembimbing }}</td>
+                    <td>{{ $item->latitude }}</td>
+                    <td>{{ $item->longitude }}</td>
+                    <td><img src="{{ $item->image_data }}" alt="Foto" width="100"></td>
+                    <td>{{ $item->notes }}</td>
                     <td>
-                        <a href="{{ route('daftarhdr.edit', $daftarhdr->id) }}">Edit</a>
-                        <form action="{{ route('daftarhdr.destroy', $daftarhdr->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('daftarhdr.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('daftarhdr.destroy', $item->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Delete</button>
+                            <button type="submit" class="btn btn-danger">Hapus</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-<  </div>
-<x-footer class="bg-gray-800 text-white py-4 mt-auto"></x-footer>
+</body>
+</html>
+
+
