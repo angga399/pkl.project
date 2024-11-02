@@ -10,10 +10,9 @@ class Daftarhdr extends Model
     use HasFactory;
 
     protected $fillable = [
-        'hari', 
-        'tanggal', 
-        'jam_datang', 
-        'jam_pulang', 
-        'paraf_pembimbing'
+        'latitude',
+        'longitude',
+        'image_data',
+        'notes',
     ];
 }

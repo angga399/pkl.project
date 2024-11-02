@@ -4,12 +4,14 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
-use App\Http\Controllers\AbsenController;
+
+Route::resource('daftarhdr', DaftarhdrController::class);
+
+Route::post('/create', [DaftarhdrController::class, 'store'])->name('create.store');
 
 
 
-Route::get('/absen', [AbsenController::class, 'index'])->name('absen.index');
-Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
+
 
 
 Route::get('/welcome', function () {
