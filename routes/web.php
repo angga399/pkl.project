@@ -6,6 +6,11 @@ use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
 use App\Http\Controllers\AbsenController;
 use App\Models\Daftarhdr;
+use App\Http\Controllers\DftrshalatController;
+
+Route::resource('dftrshalats', DftrshalatController::class);
+
+
 
 Route::get('/welcome', function () {
     return view('welcome'); // pastikan ada file 'welcome.blade.php' di resources/views
