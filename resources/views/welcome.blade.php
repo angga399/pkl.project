@@ -29,7 +29,7 @@
                   <img alt="Daftar Absen" class="w-20 h-20 mb-4 mx-auto object-cover object-center rounded-full border-2 border-gray-200" src="https://dummyimage.com/100x100/000/fff&text=Absen">
                   <h2 class="text-lg font-medium text-gray-900 mb-2">Daftar Absen</h2>
                   <p class="text-gray-500">Isi daftar absen Anda.</p>
-                  <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">   <a href="{{ route('daftarhdr.create') }}">Absen Hadir</a></button>
+                  <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">   <a href="{{ route('daftarhdr.index') }}">Absen Hadir</a></button>
                 </div>
               </div>
 
@@ -39,7 +39,11 @@
                   <img alt="Absen Sholat" class="w-20 h-20 mb-4 mx-auto object-cover object-center rounded-full border-2 border-gray-200" src="https://dummyimage.com/100x100/000/fff&text=Sholat">
                   <h2 class="text-lg font-medium text-gray-900 mb-2">Daftar Absen Sholat</h2>
                   <p class="text-gray-500">Isi absen sholat dengan cepat.</p>
+
                   <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"> <a href="{{ route('dftrshalats.create') }}"> Absen Shalat</button>
+
+                  <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"> <a href="{{ route('dftrshalats.index') }}">Absen shalat</a></button>
+
                 </div>
               </div>
 
