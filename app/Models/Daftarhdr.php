@@ -9,10 +9,9 @@ class Daftarhdr extends Model
 {
     use HasFactory;
 
+    protected $table = 'daftarhdrs';
+
     protected $fillable = [
-        'latitude',
-        'longitude',
-        'image_data',
-        'notes',
+        'hari', 'tanggal', 'latitude', 'longitude', 'dataGambar'
     ];
 }

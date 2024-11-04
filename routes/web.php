@@ -6,6 +6,9 @@ use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
 
 Route::resource('daftarhdr', DaftarhdrController::class);
+Route::get('/daftarhdr', [DaftarhdrController::class, 'index'])->name('daftarhdr.index');
+
+Route::post('/daftarhdr/store', [DaftarhdrController::class, 'store'])->name('daftarhdr.store');
 
 Route::post('/create', [DaftarhdrController::class, 'store'])->name('create.store');
 

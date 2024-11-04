@@ -12,11 +12,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('daftarhdrs', function (Blueprint $table) {
-            $table->id();
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->text('image_data'); // untuk menyimpan data gambar dalam bentuk Base64
-            $table->text('notes')->nullable();
+           $table->id();
+            $table->string('hari'); // Stores the day
+            $table->string('tanggal'); // Stores the date
+            $table->decimal('latitude', 10, 8)->nullable(); // Stores latitude
+            $table->decimal('longitude', 11, 8)->nullable(); // Stores longitude
+            $table->text('dataGambar'); // Stores the photo data as base64
             $table->timestamps();
         });
     }

@@ -11,31 +11,70 @@
 </head>
 <body class="flex flex-col items-center bg-gray-100 py-10">
     <h1 class="text-2xl font-semibold text-gray-800 mb-6">Pengambilan Foto dengan Lokasi</h1>
-    
+
+    <!-- Pesan Keberhasilan -->
+    @if(session('success'))
+        <div class="bg-green-200 text-green-700 px-4 py-2 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div id="camera" class="mb-6"></div>
-    <button onclick="takeSnapshot()" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">Ambil Foto</button>
+    <button onclick="ambilFoto()" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">Ambil Foto</button>
 
     <div class="flex flex-col md:flex-row justify-center items-center gap-8 mt-6">
-        <div id="result" class="text-center"></div>
+        <div id="hasil" class="text-center"></div>
         <div>
             <div id="mapContainer" class="h-72 w-full md:w-96 rounded-lg border border-gray-300 overflow-hidden"></div>
             <a id="googleMapsLink" href="#" target="_blank" class="text-blue-500 underline mt-4 block text-center hidden">Lihat Lokasi di Google Maps</a>
         </div>
     </div>
 
-    <!-- Form Create -->
-    <form id="createForm" action="{{ route('daftarhdr.store') }}" method="POST" enctype="multipart/form-data" class="mt-6">
+    <!-- Form Simpan -->
+    <form id="formSimpan" action="{{ route('daftarhdr.store') }}" method="POST" enctype="multipart/form-data" class="mt-6">
         @csrf
-        <input type="hidden" name="latitude" id="latitude" required>
-        <input type="hidden" name="longitude" id="longitude" required>
-        <input type="hidden" name="notes" id="notes">
-        <input type="hidden" name="imageData" id="imageData">
-        <button type="submit" id="submitBtn" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mt-4 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 hidden">Simpan Data</button>
+        <input type="hidden" name="hari" id="hari" required>
+        <input type="hidden" name="tanggal" id="tanggal" required>
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+        <input type="hidden" name="dataGambar" id="dataGambar">
+        <button type="submit" id="btnSimpan" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 mt-4 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 hidden">Simpan Data</button>
     </form>
 
     <script>
-        let latitude, longitude;
+        // Mengatur webcam
+        Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        Webcam.attach('#camera');
 
+        // Fungsi untuk mengambil foto
+        function ambilFoto() {
+            Webcam.snap(function(data_uri) {
+                document.getElementById('hasil').innerHTML = `
+                    <img src="${data_uri}" alt="Foto Hasil" class="rounded-md">
+                    <div class="mt-4 text-gray-700" id="tampilTanggal"></div>
+                `;
+                document.getElementById('dataGambar').value = data_uri;
+                document.getElementById('btnSimpan').classList.remove('hidden');
+                
+                const sekarang = new Date();
+                const hariList = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const hari = hariList[sekarang.getDay()];
+                const tanggal = sekarang.toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
+
+                document.getElementById('hari').value = hari;
+                document.getElementById('tanggal').value = tanggal;
+                document.getElementById('tampilTanggal').textContent = `${hari}, ${tanggal}`;
+            });
+        }
+
+        // Mendapatkan lokasi pengguna
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -45,8 +84,8 @@
         }
 
         function showPosition(position) {
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
             document.getElementById('latitude').value = latitude;
             document.getElementById('longitude').value = longitude;
             displayMap(latitude, longitude);
@@ -73,38 +112,6 @@
             }
         }
 
-        Webcam.set({
-            width: 320,
-            height: 240,
-            image_format: 'jpeg',
-            jpeg_quality: 90
-        });
-        Webcam.attach('#camera');
-
-        function takeSnapshot() {
-            Webcam.snap(function(data_uri) {
-                document.getElementById('result').innerHTML = `
-                    <img src="${data_uri}" alt="Foto Hasil" class="rounded-md">
-                    <div class="mt-4 text-gray-700" id="dateDisplay"></div>
-                `;
-                document.getElementById('imageData').value = data_uri;
-                document.getElementById('submitBtn').classList.remove('hidden');
-                
-                const dateDisplay = document.getElementById('dateDisplay');
-                const now = new Date();
-                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-                const day = days[now.getDay()];
-                const date = now.toLocaleDateString('id-ID', {
-                    day: 'numeric', month: 'long', year: 'numeric'
-                });
-                dateDisplay.textContent = `${day}, ${date}`;
-            });
-        }
-
-        window.onload = function() {
-            getLocation();
-        }
-
         function displayMap(lat, lon) {
             const mapContainer = document.getElementById('mapContainer');
             mapContainer.innerHTML = `<div id="map" class="w-full h-full"></div>`;
@@ -115,6 +122,10 @@
             L.marker([lat, lon]).addTo(map)
                 .bindPopup("Lokasi Anda")
                 .openPopup();
+        }
+
+        window.onload = function() {
+            getLocation();
         }
     </script>
 </body>
