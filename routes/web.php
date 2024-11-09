@@ -12,6 +12,9 @@ Route::resource('dftrshalats', DftrshalatController::class);
 
 
 
+Route::get('/pembimbingpkl', function () {
+    return view('pembimbingpkl'); // pastikan ada file 'pembimbingpkl.blade.php' di resources/views
+})->name('pembimbingpkl');
 Route::get('/welcome', function () {
     return view('welcome'); // pastikan ada file 'welcome.blade.php' di resources/views
 })->name('welcome');
