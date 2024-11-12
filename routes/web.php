@@ -12,6 +12,20 @@ Route::resource('daftarhdr', DaftarhdrController::class); // Ini sudah mencakup 
 
 // Rute lainnya
 Route::resource('dftrshalats', DftrshalatController::class);
+
+
+
+
+
+Route::get('/pembimbingpkl', function () {
+    return view('pembimbingpkl'); // pastikan ada file 'pembimbingpkl.blade.php' di resources/views
+})->name('pembimbingpkl');
+Route::get('/welcome', function () {
+    return view('welcome'); // pastikan ada file 'welcome.blade.php' di resources/views
+})->name('welcome');
+
+Route::post('/create', [DaftarhdrController::class, 'store'])->name('create.store');
+
 Route::resource('journals', JournalController::class);
 
 // Halaman utama
@@ -26,5 +40,5 @@ Route::post('/journals/{id}/tolak', [PembimbingController::class, 'tolak'])->nam
 
 // Rute untuk pembimbingd (halaman persetujuan)
 Route::get('/pembimbingd/index', [PembimbingdController::class, 'index'])->name('pembimbingd.index');
-Route::post('pembimbingd/approve/{id}', [PembimbingdController::class, 'approve'])->name('pembimbingd.approve');
-Route::post('pembimbingd/reject/{id}', [PembimbingdController::class, 'reject'])->name('pembimbingd.reject');
+Route::post('pembimbingd/{id}', [PembimbingdController::class, 'approve'])->name('pembimbingd.approve');
+Route::post('pembimbingd/{id}', [PembimbingdController::class, 'reject'])->name('pembimbingd.reject');

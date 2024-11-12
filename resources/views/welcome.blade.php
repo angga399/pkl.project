@@ -6,9 +6,9 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-100">
+  <x-navigasi></x-navigasi> <!-- Menampilkan komponen navigasi -->
 
     <div class="min-h-full">
-        <x-navigasi></x-navigasi> <!-- Menampilkan komponen navigasi -->
 
         <section class="text-gray-600 body-font">
           <div class="container px-5 py-24 mx-auto">
