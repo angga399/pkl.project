@@ -46,9 +46,11 @@ public function index()
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'dataGambar' => $request->dataGambar,
+            'status' => 'Pending'
         ]);
+        return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil disimpan dan menunggu persetujuan.');
 
-        return redirect()->back()->with('success', 'Data berhasil disimpan.');
+
     }
 
 

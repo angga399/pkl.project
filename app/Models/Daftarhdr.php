@@ -11,7 +11,6 @@ class Daftarhdr extends Model
 
     protected $table = 'daftarhdrs';
 
-    protected $fillable = [
-        'hari', 'tanggal', 'latitude', 'longitude', 'dataGambar'
-    ];
+    protected $fillable = ['dataGambar', 'hari', 'tanggal', 'status'];
+
 }

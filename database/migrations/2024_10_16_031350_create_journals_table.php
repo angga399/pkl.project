@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('nama');
             $table->text('uraian_konsentrasi')->nullable();
+            $table->enum('status', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
             $table->timestamps();
         });
     }
@@ -26,5 +27,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('journals');
+        Schema::table('journals', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
     }
 };

@@ -33,13 +33,19 @@
                                     <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">{{ $journal->nama }}</h2>
                                     <div class="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
                                     <p class="text-base">{{ $journal->tanggal }}</p>
+                                    <!-- Menampilkan Status -->
+                                    <p class="text-sm mt-4 font-semibold 
+                                        @if ($journal->status == 'Disetujui') text-green-500 
+                                        @elseif ($journal->status == 'Ditolak') text-red-500 
+                                        @else text-yellow-500 @endif">
+                                        Status: {{ $journal->status }}
+                                    </p>
                                 </div>
                             </div>
                             <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
                                 <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">Isi jurnal:</h2>
                                 <p class="leading-relaxed text-lg mb-4">{{ $journal->uraian_konsentrasi }}</p>
-                                <button href="#" class="text-indigo-500 inline-flex items-center">Summit to
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                                  
                                         <path d="M5 12h14M12 5l7 7-7 7"></path>
                                     </svg>
                                 </button>
@@ -52,6 +58,10 @@
                                         <button type="submit" class="text-red-500 hover:underline">Hapus</button>
                                     </form>
                                 </div>
+                                <!-- Tombol Setuju dan Tolak (hanya jika status belum disetujui atau ditolak) -->
+                                @if ($journal->status == 'Menunggu')
+                                  
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -62,5 +72,6 @@
         <!-- Footer di bagian bawah halaman -->
         <x-footer class="bg-gray-800 text-white py-4 mt-auto"></x-footer>
     </div>
+    
 </body>
 </html>

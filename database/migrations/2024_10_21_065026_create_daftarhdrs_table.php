@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('latitude', 10, 8)->nullable(); // Stores latitude
             $table->decimal('longitude', 11, 8)->nullable(); // Stores longitude
             $table->text('dataGambar'); // Stores the photo data as base64
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }
@@ -28,6 +29,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('daftarhdrs');
-
+        Schema::table('daftarhdr', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
     }
 };

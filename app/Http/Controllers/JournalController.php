@@ -18,17 +18,28 @@ class JournalController extends Controller
         return view('journals.create');
     }
 
+
     public function store(Request $request)
     {
+        // Validasi data input
         $request->validate([
+            'nama' => 'required|string|max:255',
             'tanggal' => 'required|date',
-            'nama' => 'required',
-            'uraian_keterangan' => 'nullable|string',
+            'uraian_konsentrasi' => 'required|string|max:500',
         ]);
-
-        Journal::create($request->all());
-        return redirect()->route('journals.index')->with('success', 'Jurnal berhasil ditambahkan!');
+    
+        // Menyimpan jurnal baru dengan status 'Menunggu'
+        Journal::create([
+            'nama' => $request->nama,
+            'tanggal' => $request->tanggal,
+            'uraian_konsentrasi' => $request->uraian_konsentrasi,
+            'status' => 'Menunggu', // status default
+        ]);
+    
+        // Redirect ke halaman Pembimbing PKL
+        return redirect()->route('journals.index')->with('status', 'Jurnal berhasil dikirim dan menunggu persetujuan!');
     }
+    
 
     public function show(Journal $journal)
     {
