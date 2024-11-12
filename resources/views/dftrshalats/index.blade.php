@@ -9,8 +9,10 @@
 
 <body>
 <div class="container mt-5">
+    <x-navigasi></x-navigasi>
     <h1>Daftar Waktu Shalat</h1>
     <a href="{{ route('dftrshalats.create') }}" class="btn btn-primary mb-3">Tambah Waktu Shalat</a>
+    <x-back></x-back>
 
     @if (session('success'))
         <div class="alert alert-success">

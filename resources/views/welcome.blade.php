@@ -9,48 +9,71 @@
   <x-navigasi></x-navigasi> <!-- Menampilkan komponen navigasi -->
 
     <div class="min-h-full">
-
-        <section class="text-gray-600 body-font">
-          <div class="container px-5 py-24 mx-auto">
-            <div class="flex flex-wrap -m-4 justify-center">
-              <!-- Card 1: Jurnal -->
-              <div class="lg:w-1/4 mb-6 p-4">
-                <div class="bg-white shadow-md rounded-lg p-6 text-center">
-                  <img alt="Jurnal" class="w-20 h-20 mb-4 mx-auto object-cover object-center rounded-full border-2 border-gray-200" src="https://dummyimage.com/100x100/000/fff&text=Jurnal">
-                  <h2 class="text-lg font-medium text-gray-900 mb-2">Jurnal</h2>
-                  <p class="text-gray-500">Isi jurnal harian Anda dengan mudah</p>
-                  <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"> <a href="{{ route('journals.create') }}">Isi Jurnal</a></button>
-
-                </div>
-              </div>
-
-              <!-- Card 2: Daftar Absen -->
-              <div class="lg:w-1/4 mb-6 p-4">
-                <div class="bg-white shadow-md rounded-lg p-6 text-center">
-                  <img alt="Daftar Absen" class="w-20 h-20 mb-4 mx-auto object-cover object-center rounded-full border-2 border-gray-200" src="https://dummyimage.com/100x100/000/fff&text=Absen">
-                  <h2 class="text-lg font-medium text-gray-900 mb-2">Daftar Absen</h2>
-                  <p class="text-gray-500">Isi daftar absen Anda.</p>
-                  <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">   <a href="{{ route('daftarhdr.create') }}">Absen Hadir</a></button>
-                </div>
-              </div>
-
-              <!-- Card 3: Daftar Absen Sholat -->
-              <div class="lg:w-1/4 p-4">
-                <div class="bg-white shadow-md rounded-lg p-6 text-center">
-                  <img alt="Absen Sholat" class="w-20 h-20 mb-4 mx-auto object-cover object-center rounded-full border-2 border-gray-200" src="https://dummyimage.com/100x100/000/fff&text=Sholat">
-                  <h2 class="text-lg font-medium text-gray-900 mb-2">Daftar Absen Sholat</h2>
-                  <p class="text-gray-500">Isi absen sholat dengan cepat.</p>
- 
-                  <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"> <a href="{{ route('dftrshalats.create') }}"> Absen Shalat</button>
-
-
-
-                </div>
-              </div>
-
+      <section class="text-gray-600 body-font">
+        <div class="container px-5 py-24 mx-auto">
+          <div class="text-center mb-20">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font text-gray-900 mb-4">HALAMAN SISWA/I</h1>
+            <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500s">Silahkan isi kegiatan kalian selama pkl</p>
+            <div class="flex mt-6 justify-center">
+              <div class="w-16 h-1 rounded-full bg-indigo-500 inline-flex"></div>
             </div>
           </div>
-        </section>
+          <div class="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4 md:space-y-0 space-y-6">
+            <div class="p-4 md:w-1/3 flex flex-col text-center items-center">
+              <div class="w-20 h-20 inline-flex items-center justify-center rounded-full  mb-5 flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
+                 <img src="image/bee.png" alt="">
+                </svg>
+              </div>
+              <div class="flex-grow">
+                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">jurnal</h2>
+                <p class="leading-relaxed text-base">HALAMAN JURNAL</p>
+                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{ route('journals.index') }}">go page
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div class="p-4 md:w-1/3 flex flex-col text-center items-center">
+              <div class="w-20 h-20 inline-flex items-center justify-center rounded-full  mb-5 flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
+                  <circle cx="6" cy="6" r="3"></circle>
+                  <circle cx="6" cy="18" r="3"></circle>
+                <img src="image/we.png" alt="">
+                </svg>
+              </div>
+              <div class="flex-grow">
+                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">absensi</h2> 
+                <p class="leading-relaxed text-base">HALAMAN ABSEN </p>
+                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{ route('daftarhdr.index') }}">go page
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div class="p-4 md:w-1/3 flex flex-col text-center items-center">
+              <div class="w-20 h-20 inline-flex items-center justify-center rounded-full  mb-5 flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
+            <img src="image/me.png" alt="">
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="flex-grow">
+                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">monitoring  shalat</h2>
+                <p class="leading-relaxed text-base">HALAMAN Shalat</p>
+                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{route('dftrshalats.index') }}">go page
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>>
     </div>
   </body>
 

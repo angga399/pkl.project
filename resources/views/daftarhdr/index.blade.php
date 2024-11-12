@@ -47,17 +47,7 @@
                         </div>
 
                         <!-- Display Latitude and Longitude -->
-                        <div class="flex justify-between mb-3">
-                            <div>
-                                <h2 class="tracking-widest text-xs title-font font-medium text-gray-400">Latitude:</h2>
-                                <h1 class="title-font text-lg font-medium text-gray-900">{{ $item->latitude }}</h1>
-                            </div>
-                            <div>
-                                <h2 class="tracking-widest text-xs title-font font-medium text-gray-400">Longitude:</h2>
-                                <h1 class="title-font text-lg font-medium text-gray-900">{{ $item->longitude }}</h1>
-                            </div>
-                        </div>
-
+                       
                         <!-- Display Status -->
 <div class="flex justify-between mb-3">
     <div>

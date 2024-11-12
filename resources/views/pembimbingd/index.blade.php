@@ -29,14 +29,16 @@
                     <img src="{{ $item->dataGambar }}" alt="Foto" class="w-32 h-32 object-cover rounded-md">
                 </div>
                 <div class="flex flex-col justify-between">
-                    <form action="{{ route('pembimbingd.approve', $item->id) }}" method="POST" class="mb-2">
+                    <form action="{{ route('pembimbingd.approve', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Setujui</button>
+                        <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded">Setuju</button>
                     </form>
-                    <form action="{{ route('pembimbingd.reject', $item->id) }}" method="POST">
+                    
+                    <form action="{{ route('pembimbingd.not approve', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Tolak</button>
+                        <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded">Tolak</button>
                     </form>
+                    
                 </div>
             </div>
         @endforeach

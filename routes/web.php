@@ -20,16 +20,14 @@ Route::resource('dftrshalats', DftrshalatController::class);
 Route::get('/pembimbingpkl', function () {
     return view('pembimbingpkl'); // pastikan ada file 'pembimbingpkl.blade.php' di resources/views
 })->name('pembimbingpkl');
-Route::get('/welcome', function () {
-    return view('welcome'); // pastikan ada file 'welcome.blade.php' di resources/views
-})->name('welcome');
+
 
 Route::post('/create', [DaftarhdrController::class, 'store'])->name('create.store');
 
 Route::resource('journals', JournalController::class);
 
 // Halaman utama
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome', ['title' => 'home page']);
 })->name('welcome');
 
@@ -39,6 +37,7 @@ Route::post('/journals/{id}/setuju', [PembimbingController::class, 'setuju'])->n
 Route::post('/journals/{id}/tolak', [PembimbingController::class, 'tolak'])->name('pembimbing.tolak');
 
 // Rute untuk pembimbingd (halaman persetujuan)
+// Rute untuk halaman persetujuan
 Route::get('/pembimbingd/index', [PembimbingdController::class, 'index'])->name('pembimbingd.index');
-Route::post('pembimbingd/{id}', [PembimbingdController::class, 'approve'])->name('pembimbingd.approve');
-Route::post('pembimbingd/{id}', [PembimbingdController::class, 'reject'])->name('pembimbingd.reject');
+Route::post('/pembimbingd/{id}/setuju', [PembimbingdController::class, 'approve'])->name('pembimbingd.approve');
+Route::post('/pembimbingd/{id}/tolak', [PembimbingdController::class, 'reject'])->name('pembimbingd.not approve');

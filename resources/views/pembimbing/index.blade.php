@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto">
-        <h1 class="text-center text-3xl font-bold mb-6">Jurnal yang Menunggu Persetujuan</h1>
+        <h1 class="text-center text-3xl font-bold my-6">Jurnal yang Menunggu Persetujuan</h1>
         
         @foreach ($journals as $journal)
         <section class="text-gray-600 body-font mb-6">
@@ -22,19 +22,25 @@
                         <!-- Status Jurnal -->
                         <p class="text-sm text-gray-500 mb-4">
                             <strong>Status: </strong>
-                            <span class="text-{{ $journal->status == 'Disetujui' ? 'green' : ($journal->status == 'Ditolak' ? 'red' : 'yellow') }}-500">{{ $journal->status }}</span>
+                            @if($journal->status == 'Disetujui')
+                                <span class="text-green-500">Disetujui</span>
+                            @elseif($journal->status == 'Ditolak')
+                                <span class="text-red-500">Ditolak</span>
+                            @else
+                                <span class="text-yellow-500">Menunggu</span>
+                            @endif
                         </p>
 
                         <!-- Tombol Setuju dan Tolak -->
                         @if($journal->status == 'Menunggu')
                         <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded">Setuju</button>
+                            <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Setuju</button>
                         </form>
 
                         <form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded">Tolak</button>
+                            <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Tolak</button>
                         </form>
                         @endif
                     </div>
