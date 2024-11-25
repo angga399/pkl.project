@@ -58,14 +58,7 @@
 
 
                        
-                        <div class="flex justify-between">
-                            <a href="{{ route('daftarhdr.edit', $item->id) }}" class="text-yellow-500 font-bold">Edit</a>
-                            <form action="{{ route('daftarhdr.destroy', $item->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 font-bold">Hapus</button>
-                            </form>
-                        </div>
+                      
                     </div>
                 </div>
             </div>

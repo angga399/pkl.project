@@ -26,9 +26,9 @@
                 </svg>
               </div>
               <div class="flex-grow">
-                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">jurnal</h2>
-                <p class="leading-relaxed text-base">HALAMAN JURNAL</p>
-                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{ route('journals.index') }}">go page
+                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Jurnal</h2>
+                <p class="leading-relaxed text-base">Isi Jurnal</p>
+                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{ route('journals.index') }}">Go Page
                   <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
@@ -44,9 +44,9 @@
                 </svg>
               </div>
               <div class="flex-grow">
-                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">absensi</h2> 
-                <p class="leading-relaxed text-base">HALAMAN ABSEN </p>
-                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{ route('daftarhdr.index') }}">go page
+                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Absensi</h2> 
+                <p class="leading-relaxed text-base">Absen Hadir</p>
+                <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{ route('daftarhdr.index') }}">Go Page
                   <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
@@ -61,8 +61,8 @@
                 </svg>
               </div>
               <div class="flex-grow">
-                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">monitoring  shalat</h2>
-                <p class="leading-relaxed text-base">HALAMAN Shalat</p>
+                <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Absen Shalat</h2>
+                <p class="leading-relaxed text-base">Absen Shalat</p>
                 <a class="mt-3 text-indigo-500 inline-flex items-center" href="{{route('dftrshalats.index') }}">go page
                   <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>

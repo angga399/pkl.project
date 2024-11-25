@@ -6,7 +6,7 @@ use App\Http\Controllers\DaftarhdrController;
 use App\Http\Controllers\DftrshalatController;
 use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\PembimbingdController;
-
+use App\Http\Controllers\ShalatController;
 // Rute utama untuk daftarhdr
 Route::resource('daftarhdr', DaftarhdrController::class); // Ini sudah mencakup semua rute untuk daftarhdr
 
@@ -37,7 +37,14 @@ Route::post('/journals/{id}/setuju', [PembimbingController::class, 'setuju'])->n
 Route::post('/journals/{id}/tolak', [PembimbingController::class, 'tolak'])->name('pembimbing.tolak');
 
 // Rute untuk pembimbingd (halaman persetujuan)
-// Rute untuk halaman persetujuan
+
 Route::get('/pembimbingd/index', [PembimbingdController::class, 'index'])->name('pembimbingd.index');
 Route::post('/pembimbingd/{id}/setuju', [PembimbingdController::class, 'approve'])->name('pembimbingd.approve');
-Route::post('/pembimbingd/{id}/tolak', [PembimbingdController::class, 'reject'])->name('pembimbingd.not approve');
+Route::post('/pembimbingd/{id}/tolak', [PembimbingdController::class, 'not approve'])->name('pembimbingd.not approve');
+
+
+
+Route::get('/', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
+Route::get('/create', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
+Route::post('/store', [DftrshalatController::class, 'store'])->name('dftrshalats.store');
+

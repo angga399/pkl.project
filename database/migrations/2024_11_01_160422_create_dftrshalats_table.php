@@ -7,16 +7,16 @@ class CreateDftrshalatsTable extends Migration
 {
     public function up()
     {
-        Schema::create('dftrshalat', function (Blueprint $table) {
+        Schema::create('dftrshalats', function (Blueprint $table) {
             $table->id();
-            $table->string('hari');
+            $table->string('type'); // Duha, Dzuhur, Ashar
             $table->date('tanggal');
-            $table->time('duha');
-            $table->time('dzuhur');
-            $table->time('ashar');
+            $table->string('hari');
+            $table->time('waktu'); // Waktu otomatis dicatat
             $table->timestamps();
         });
     }
+    
 
     public function down()
     {

@@ -1,74 +1,37 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Dftrshalat;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class DftrshalatController extends Controller
 {
-    // Menampilkan daftar waktu shalat
     public function index()
     {
         $dftrshalats = Dftrshalat::all();
         return view('dftrshalats.index', compact('dftrshalats'));
     }
 
-    // Menampilkan form untuk membuat data waktu shalat baru
-    public function create()
+    public function create(Request $request)
     {
-        return view('dftrshalats.create');
+        $type = $request->type;
+        return view('dftrshalats.create', compact('type'));
     }
 
-    // Menyimpan data waktu shalat baru
     public function store(Request $request)
     {
         $request->validate([
-            'hari' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'duha' => 'required|date_format:H:i',
-            'dzuhur' => 'required|date_format:H:i',
-            'ashar' => 'required|date_format:H:i',
+            'type' => 'required|string',
         ]);
 
-        Dftrshalat::create($request->all());
-
-        return redirect()->route('dftrshalats.index')->with('success', 'Data waktu shalat berhasil ditambahkan');
-    }
-
-    // Menampilkan detail data waktu shalat tertentu
-    public function show(Dftrshalat $dftrshalat)
-    {
-        return view('dftrshalats.show', compact('dftrshalat'));
-    }
-
-    // Menampilkan form untuk mengedit data waktu shalat tertentu
-    public function edit(Dftrshalat $dftrshalat)
-    {
-        return view('dftrshalats.edit', compact('dftrshalat'));
-    }
-
-    // Mengupdate data waktu shalat tertentu
-    public function update(Request $request, Dftrshalat $dftrshalat)
-    {
-        $request->validate([
-            'hari' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'duha' => 'required|date_format:H:i',
-            'dzuhur' => 'required|date_format:H:i',
-            'ashar' => 'required|date_format:H:i',
+        Dftrshalat::create([
+            'type' => $request->type,
+            'tanggal' => now()->toDateString(),
+            'hari' => Carbon::now()->locale('id')->isoFormat('dddd'),
+            'waktu' => now()->toTimeString(), // Waktu otomatis dari server
         ]);
 
-        $dftrshalat->update($request->all());
-
-        return redirect()->route('dftrshalats.index')->with('success', 'Data waktu shalat berhasil diperbarui');
-    }
-
-    // Menghapus data waktu shalat tertentu
-    public function destroy(Dftrshalat $dftrshalat)
-    {
-        $dftrshalat->delete();
-
-        return redirect()->route('dftrshalats.index')->with('success', 'Data waktu shalat berhasil dihapus');
+        return redirect()->route('dftrshalats.index')->with('success', 'Data berhasil disimpan!');
     }
 }

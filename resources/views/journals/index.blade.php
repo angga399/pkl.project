@@ -49,15 +49,7 @@
                                         <path d="M5 12h14M12 5l7 7-7 7"></path>
                                     </svg>
                                 </button>
-                                <!-- Tombol Edit dan Hapus -->
-                                <div class="flex justify-between mt-4">
-                                    <a href="{{ route('journals.edit', $journal->id) }}" class="text-indigo-500 hover:underline">Edit</a>
-                                    <form action="{{ route('journals.destroy', $journal->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:underline">Hapus</button>
-                                    </form>
-                                </div>
+                          
                                 <!-- Tombol Setuju dan Tolak (hanya jika status belum disetujui atau ditolak) -->
                                 @if ($journal->status == 'Menunggu')
                                   
