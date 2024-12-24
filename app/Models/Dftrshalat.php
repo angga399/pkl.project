@@ -10,7 +10,7 @@ class Dftrshalat extends Model
     use HasFactory;
 
     // Nama tabel yang terkait dengan model ini
-    protected $table = 'dftrshalat';
+    protected $table = 'dftrshalats';
 
     // Kolom-kolom yang boleh diisi secara massal
    
