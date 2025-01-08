@@ -18,20 +18,34 @@ class DftrshalatController extends Controller
         $type = $request->type;
         return view('dftrshalats.create', compact('type'));
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([
             'type' => 'required|string',
         ]);
-
-        Dftrshalat::create([
+        
+        // Simpan data ke database
+        $dftrshalat = Dftrshalat::create([
             'type' => $request->type,
             'tanggal' => now()->toDateString(),
             'hari' => Carbon::now()->locale('id')->isoFormat('dddd'),
-            'waktu' => now()->toTimeString(), // Waktu otomatis dari server
+            'waktu' => now()->toTimeString(),
         ]);
-
-        return redirect()->route('dftrshalats.index')->with('success', 'Data berhasil disimpan!');
+    
+        // Redirect ke halaman show dengan ID data yang baru dibuat
+        return redirect()->route('dftrshalats.show', $dftrshalat->id)->with('success', 'Data berhasil disimpan!');
     }
+    
+    
+    public function show($id)
+{
+    // Ambil data berdasarkan ID yang dikirim
+    $dftrshalat = Dftrshalat::findOrFail($id);
+
+    // Tampilkan halaman detail
+    return view('dftrshalats.show', compact('dftrshalat'));
+}
+
+    
 }

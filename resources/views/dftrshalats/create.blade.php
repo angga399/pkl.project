@@ -22,6 +22,11 @@
             <label>Hari</label>
             <input type="text" name="hari" class="form-control" value="{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd') }}" readonly>
         </div>
+        <div class="form-group">
+            <label>Waktu</label>
+            <input type="time" name="time" class="form-control" value="{{ \Carbon\Carbon::now()->format('H:i') }}">
+        </div>
+        
         <div class="form-check">
             <input type="checkbox" name="checked" id="checked" class="form-check-input" required>
             <label for="checked" class="form-check-label">Centang untuk mencatat waktu {{ ucfirst($type) }}</label>
