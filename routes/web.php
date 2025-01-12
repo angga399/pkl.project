@@ -5,37 +5,46 @@ use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
 use App\Http\Controllers\DftrshalatController;
 use App\Http\Controllers\PembimbingController;
-use App\Http\Controllers\PembimbingdController;
 use App\Http\Controllers\ShalatController;
-
 // Rute utama untuk daftarhdr
-Route::resource('daftarhdr', DaftarhdrController::class);
+Route::resource('daftarhdr', DaftarhdrController::class); // Ini sudah mencakup semua rute untuk daftarhdr
 
-// Rute untuk dftrshalats
+// Rute lainnya
 Route::resource('dftrshalats', DftrshalatController::class);
 
-// Halaman utama
-Route::get('/', function () {
-    return view('welcome', ['title' => 'home page']);
-})->name('welcome');
 
-// Rute untuk pembimbing
-Route::get('/pembimbing', [PembimbingController::class, 'index'])->name('pembimbing.index');
-Route::post('/journals/{id}/setuju', [PembimbingController::class, 'setuju'])->name('pembimbing.setuju');
-Route::post('/journals/{id}/tolak', [PembimbingController::class, 'tolak'])->name('pembimbing.tolak');
 
-// Rute untuk pembimbingd (halaman persetujuan)
-Route::get('/pembimbingd/index', [PembimbingdController::class, 'index'])->name('pembimbingd.index');
-Route::post('/pembimbingd/{id}/setuju', [PembimbingdController::class, 'approve'])->name('pembimbingd.approve');
-Route::post('/pembimbingd/{id}/tolak', [PembimbingdController::class, 'not approve'])->name('pembimbingd.not approve');
 
-// Rute untuk halaman pembimbingpkl
+
 Route::get('/pembimbingpkl', function () {
     return view('pembimbingpkl'); // pastikan ada file 'pembimbingpkl.blade.php' di resources/views
 })->name('pembimbingpkl');
 
-// Rute untuk journals
+
+Route::post('/create', [DaftarhdrController::class, 'store'])->name('create.store');
+
 Route::resource('journals', JournalController::class);
 
-// Rute default untuk aplikasi
-Route::get('/dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
+// Halaman utama
+Route::get('/welcome', function () {
+    return view('welcome', ['title' => 'home page']);
+})->name('welcome');
+
+
+Route::get('/pembimbing/journals', [PembimbingController::class, 'journals'])->name('pembimbing.journals');
+Route::post('/pembimbing/journals/{id}/approve', [PembimbingController::class, 'approveJournal'])->name('pembimbing.setuju');
+Route::post('/pembimbing/journals/{id}/reject', [PembimbingController::class, 'rejectJournal'])->name('pembimbing.tolak');
+
+Route::get('/pembimbing/approvals', [PembimbingController::class, 'approvals'])->name('pembimbing.approvals');
+Route::post('/pembimbing/approvals/{id}/approve', [PembimbingController::class, 'approvePhoto'])->name('pembimbing.approve');
+Route::post('/pembimbing/approvals/{id}/reject', [PembimbingController::class, 'rejectPhoto'])->name('pembimbing.reject');
+
+
+
+
+
+
+Route::get('/', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
+Route::get('/create', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
+Route::post('/store', [DftrshalatController::class, 'store'])->name('dftrshalats.store');
+

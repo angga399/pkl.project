@@ -34,14 +34,15 @@
                         <!-- Tombol Setuju dan Tolak -->
                         @if($journal->status == 'Menunggu')
                         <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Setuju</button>
-                        </form>
+    @csrf
+    <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Setuju</button>
+</form>
 
-                        <form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Tolak</button>
-                        </form>
+<form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST" style="display:inline;">
+    @csrf
+    <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Tolak</button>
+</form>
+
                         @endif
                     </div>
                 </div>

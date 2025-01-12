@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Journal;
+use App\Models\Daftarhdr;
 use Illuminate\Http\Request;
 
 class PembimbingController extends Controller
@@ -13,6 +14,19 @@ class PembimbingController extends Controller
         $journals = Journal::where('status', 'Menunggu')->get();
         return view('pembimbing.index', compact('journals'));
     }
+
+    public function journals()
+{
+    $journals = Journal::all(); // Sesuaikan dengan model atau logika Anda
+    return view('pembimbing.journals', compact('journals'));
+}
+
+public function approvals()
+{
+    $daftarhdrs = Daftarhdr::all(); // Sesuaikan dengan model atau logika Anda
+    return view('pembimbing.approvals', compact('daftarhdrs'));
+}
+
 
     public function setuju($id)
     {
