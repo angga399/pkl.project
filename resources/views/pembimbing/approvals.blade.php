@@ -1,4 +1,3 @@
-<!-- resources/views/pembimbingd/index.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,37 +8,52 @@
 </head>
 <body class="bg-gray-100 py-10">
 
-    <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Halaman Persetujuan</h1>
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Halaman Persetujuan</h1>
 
-    @if(session('success'))
+    @if(session('status'))
         <div class="bg-green-200 text-green-700 px-4 py-2 rounded mb-4">
-            {{ session('success') }}
-        </div>
-    @elseif(session('error'))
-        <div class="bg-red-200 text-red-700 px-4 py-2 rounded mb-4">
-            {{ session('error') }}
+            {{ session('status') }}
         </div>
     @endif
 
     <div class="container mx-auto px-4">
         @foreach ($daftarhdrs as $item)
-            <div class="flex justify-between border-b border-gray-300 py-4">
-                <div>
-                    <h2 class="text-lg font-medium">{{ $item->hari }} - {{ $item->tanggal }}</h2>
-                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-32 h-32 object-cover rounded-md">
+            <div class="bg-white shadow-lg rounded-lg p-4 mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-xl font-medium">{{ $item->hari }} - {{ $item->tanggal }}</h2>
+                    </div>
+                    <div>
+                        <img src="{{ $item->dataGambar }}" alt="Foto" class="w-20 h-20 object-cover rounded-md">
+                    </div>
                 </div>
-                <div class="flex flex-col justify-between">
-                <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" style="display:inline;">
-    @csrf
-    <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded">Setuju</button>
-</form>
 
-<form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" style="display:inline;">
-    @csrf
-    <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded">Tolak</button>
-</form>
+                <div class="text-center">
+                    <!-- Jika sudah ada status, tampilkan status -->
+                    @if($item->status)
+                        <div class="text-lg font-semibold text-gray-700">
+                            Status: <span class="text-green-500">{{ $item->status }}</span>
+                        </div>
+                    @else
+                        <!-- Jika status belum ada, tampilkan tombol Setuju dan Tolak -->
+                        <div class="flex justify-around mt-4">
+                            <!-- Setujui Form -->
+                            <form action="{{ route('pembimbing.aprove', $item->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md w-28">
+                                    Setuju
+                                </button>
+                            </form>
 
-                    
+                            <!-- Tolak Form -->
+                            <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-28">
+                                    Tolak
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach

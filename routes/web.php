@@ -21,30 +21,35 @@ Route::get('/pembimbingpkl', function () {
 })->name('pembimbingpkl');
 
 
-Route::post('/create', [DaftarhdrController::class, 'store'])->name('create.store');
+Route::post('/daftarhdr/store', [DaftarhdrController::class, 'store'])->name('daftarhdr.store');
 
 Route::resource('journals', JournalController::class);
 
 // Halaman utama
-Route::get('/welcome', function () {
+Route::get('/', function () {
     return view('welcome', ['title' => 'home page']);
 })->name('welcome');
 
 
 Route::get('/pembimbing/journals', [PembimbingController::class, 'journals'])->name('pembimbing.journals');
-Route::post('/pembimbing/journals/{id}/approve', [PembimbingController::class, 'approveJournal'])->name('pembimbing.setuju');
-Route::post('/pembimbing/journals/{id}/reject', [PembimbingController::class, 'rejectJournal'])->name('pembimbing.tolak');
+Route::post('/pembimbing/journals/{id}/approve', [PembimbingController::class, 'setuju'])->name('pembimbing.setuju');
+Route::post('/pembimbing/journals/{id}/reject', [PembimbingController::class, 'tolak'])->name('pembimbing.tolak');
 
 Route::get('/pembimbing/approvals', [PembimbingController::class, 'approvals'])->name('pembimbing.approvals');
-Route::post('/pembimbing/approvals/{id}/approve', [PembimbingController::class, 'approvePhoto'])->name('pembimbing.approve');
-Route::post('/pembimbing/approvals/{id}/reject', [PembimbingController::class, 'rejectPhoto'])->name('pembimbing.reject');
+Route::post('/pembimbing/approvals/{id}/approve', [PembimbingController::class, 'aprove'])->name('pembimbing.aprove');
+Route::post('/pembimbing/approvals/{id}/reject', [PembimbingController::class, 'reject'])->name('pembimbing.reject');
 
 
 
 
 
 
-Route::get('/', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
+Route::get('/Dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
 Route::get('/create', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
 Route::post('/store', [DftrshalatController::class, 'store'])->name('dftrshalats.store');
 
+Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
+    Route::get('approvals', [PembimbingController::class, 'approvals'])->name('approvals');
+    Route::post('approve/{id}', [PembimbingController::class, 'approve'])->name('approve');
+    Route::post('reject/{id}', [PembimbingController::class, 'reject'])->name('reject');
+});

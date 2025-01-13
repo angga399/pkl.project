@@ -33,12 +33,7 @@ public function index()
             'dataGambar' => 'required|string',
         ]);
 
-        try {
-            // Konversi tanggal ke format Y-m-d
-            $tanggal = Carbon::createFromFormat('j F Y', $request->tanggal)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid.']);
-        }
+
         // Save data to the database
         Daftarhdr::create([
             'hari' => $request->hari,
