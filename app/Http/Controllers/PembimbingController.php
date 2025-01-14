@@ -62,22 +62,33 @@ public function shalat()
 
 
     // Proses persetujuan
-    public function aprove($id)
-    {
-        $daftarhdr = Daftarhdr::findOrFail($id);
-        $daftarhdr->status = 'Disetujui';
-        $daftarhdr->save();
-    
-        return redirect()->route('pembimbing.approvals')->with('status', 'Absen disetujui!');
-    }
+  // Proses persetujuan
+  public function approve($id)
+  {
+      // Cari data berdasarkan ID
+      $item = Daftarhdr::findOrFail($id);
+      
+      // Update status menjadi 'Disetujui'
+      $item->status = 'Disetujui';
+      $item->save();
+      
+      // Redirect kembali dengan pesan sukses
+      return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil disetujui.');
+  }
+  
 
-    // Proses penolakan
-    public function reject($id)
-    {
-        $daftarhdr = Daftarhdr::findOrFail($id);
-        $daftarhdr->status = 'Ditolak';
-        $daftarhdr->save();
+public function reject($id)
+{
+    // Cari data berdasarkan ID
+    $daftarhdrs = Daftarhdr::findOrFail($id);
     
-        return redirect()->route('pembimbing.approvals')->with('status', 'Absen ditolak!');
-    }
+    // Update status menjadi 'Ditolak'
+    $daftarhdrs->status = 'Ditolak';
+    $daftarhdrs->save();
+
+    
+    // Redirect kembali dengan pesan sukses
+    return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak dan dihapus.');
+}
+
 }

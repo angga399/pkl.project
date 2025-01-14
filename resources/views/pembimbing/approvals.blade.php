@@ -9,12 +9,12 @@
 <body class="bg-gray-100 py-10">
 
     <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Halaman Persetujuan</h1>
-
     @if(session('status'))
-        <div class="bg-green-200 text-green-700 px-4 py-2 rounded mb-4">
-            {{ session('status') }}
-        </div>
-    @endif
+    <div class="bg-green-200 text-green-700 px-4 py-2 rounded mb-4">
+        {{ session('status') }}
+    </div>
+@endif
+
 
     <div class="container mx-auto px-4">
         @foreach ($daftarhdrs as $item)
@@ -29,31 +29,30 @@
                 </div>
 
                 <div class="text-center">
-                    <!-- Jika sudah ada status, tampilkan status -->
-                    @if($item->status)
-                        <div class="text-lg font-semibold text-gray-700">
-                            Status: <span class="text-green-500">{{ $item->status }}</span>
-                        </div>
-                    @else
-                        <!-- Jika status belum ada, tampilkan tombol Setuju dan Tolak -->
-                        <div class="flex justify-around mt-4">
-                            <!-- Setujui Form -->
-                            <form action="{{ route('pembimbing.aprove', $item->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md w-28">
-                                    Setuju
-                                </button>
-                            </form>
-
-                            <!-- Tolak Form -->
-                            <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-28">
-                                    Tolak
-                                </button>
-                            </form>
-                        </div>
-                    @endif
+                    <div class="text-center">
+                        @if($item->status)
+                            <!-- Jika sudah ada status, tampilkan status -->
+                          
+                            <!-- Jika status belum ada, tampilkan tombol Setuju dan Tolak -->
+                            <div class="flex justify-around mt-4">
+                                <!-- Setujui Form -->
+                                <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md w-28">
+                                        Setuju
+                                    </button>
+                                </form>
+                    
+                                <!-- Tolak Form -->
+                                <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-28">
+                                        Tolak
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>                    
                 </div>
             </div>
         @endforeach
