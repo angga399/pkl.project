@@ -21,6 +21,9 @@ class PembimbingController extends Controller
           ->get();
 
 return view('pembimbingd.index', compact('daftarhdrs'));
+
+$shalat = Dftrshalat::where('status', 'Menunggu')->get();
+return view('pembimbing.index', compact('shalat'));
     }
 
     public function journals()
@@ -39,7 +42,7 @@ public function shalat()
     $dftrshalats = Dftrshalat::all(); // Sesuaikan dengan model atau logika Anda
     return view('pembimbing.shalat', compact('dftrshalats'));
 }
-
+//journal halaman
 
     public function setuju($id)
     {
@@ -60,7 +63,7 @@ public function shalat()
     }
 
 
-
+//approvevals halaman
     // Proses persetujuan
   // Proses persetujuan
   public function approve($id)
@@ -89,6 +92,25 @@ public function reject($id)
     
     // Redirect kembali dengan pesan sukses
     return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak dan dihapus.');
+}
+
+//shalat shalat
+public function disetujui($id)
+{
+    $shalat = Dftrshalat::findOrFail($id);
+    $shalat->status = 'Disetujui';
+    $shalat->save();
+
+    return redirect()->route('pembimbing.shalat')->with('status', 'shalat disetujui!');
+}
+
+public function ditolak($id)
+{
+    $journal = Dftrshalat::findOrFail($id);
+    $journal->status = 'Ditolak';
+    $journal->save();
+
+    return redirect()->route('pembimbing.shalat')->with('status', 'shalat ditolak!');
 }
 
 }
