@@ -31,12 +31,25 @@ class DftrshalatController extends Controller
             'tanggal' => now()->toDateString(),
             'hari' => Carbon::now()->locale('id')->isoFormat('dddd'),
             'waktu' => now()->toTimeString(),
+            'status'=> 'panding'
+
         ]);
     
         // Redirect ke halaman show dengan ID data yang baru dibuat
-        return redirect()->route('dftrshalats.show', $dftrshalat->id)->with('success', 'Data berhasil disimpan!');
+        return redirect()->route('dftrshalats.show', $dftrshalat->id)->with('success', 'Data berhasil disimpan menunggu persetujuan!');
     }
     
+    public function update(Request $request, Dftrshalat $dftrshalat)
+{
+    $request->validate([
+       'tanggal'=>'required|date',
+       'hari'=>'required',
+       'waktu'=>'required',
+       'status'=>'required'
+    ]);
+    $dftrshalat->update($request->all());
+    return redirect()->route('dftrshalats.show')->with('succses','journal berhasil di perbarui');
+}
     
     public function show($id)
 {
