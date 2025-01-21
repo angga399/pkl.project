@@ -30,6 +30,33 @@
             </div>
         </div>
 
+        <table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Type</th>
+            <th>Tanggal</th>
+            <th>Hari</th>
+            <th>Waktu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($data as $item)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->type }}</td>
+                <td>{{ $item->tanggal }}</td>
+                <td>{{ $item->hari }}</td>
+                <td>{{ $item->waktu }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5" class="text-center">Tidak ada data</td>
+            </tr>
+        @endforelse
+    </tbody>
+</table>
+
      
 </body>
 </html>
