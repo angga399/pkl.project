@@ -9,6 +9,13 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Beranda Waktu Shalat</h1>
+        
+        <!-- Link untuk mengakses form pembuatan waktu shalat -->
+        <div class="mb-3 text-center">
+            <a href="{{ route('dftrshalats.create', ['type' => 'duha']) }}" class="btn btn-primary">Tambah Duha</a>
+            <a href="{{ route('dftrshalats.create', ['type' => 'dzuhur']) }}" class="btn btn-success">Tambah Dzuhur</a>
+            <a href="{{ route('dftrshalats.create', ['type' => 'ashar']) }}" class="btn btn-warning">Tambah Ashar</a>
+        </div>
 
         <!-- Pesan sukses jika ada -->
         @if (session('success'))
@@ -16,20 +23,52 @@
                 {{ session('success') }}
             </div>
         @endif
+        
+        <!-- Tabel Daftar Waktu Shalat -->
+        <div class="mt-5">
+            <h2>Daftar Waktu Shalat</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tipe</th>
+                        <th>Tanggal</th>
+                        <th>Hari</th>
+                        <th>Waktu</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dftrshalats as $shalat)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $shalat->type }}</td>
+                            <td>{{ $shalat->tanggal }}</td>
+                            <td>{{ $shalat->hari }}</td>
+                            <td>{{ $shalat->waktu }}</td>
+                            <td>{{ $shalat->status }}</td>
+                            <td>
+                                <!-- Tombol Edit (bisa aktifkan jika diperlukan) -->
+                                {{-- <a href="{{ route('dftrshalats.edit', ['dftrshalat' => $shalat->id]) }}" class="btn btn-warning btn-sm">Edit</a> --}}
+                                
+                                <!-- Tombol Delete -->
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $shalat->id }}').submit();" class="btn btn-danger btn-sm">Hapus</a>
 
-        <!-- Tombol pilihan -->
-        <div class="row mt-5">
-            <div class="col-md-4 text-center">
-                <a href="{{ route('dftrshalats.create', ['type' => 'duha']) }}" class="btn btn-primary btn-lg">Duha</a>
-            </div>
-            <div class="col-md-4 text-center">
-                <a href="{{ route('dftrshalats.create', ['type' => 'dzuhur']) }}" class="btn btn-success btn-lg">Dzuhur</a>
-            </div>
-            <div class="col-md-4 text-center">
-                <a href="{{ route('dftrshalats.create', ['type' => 'ashar']) }}" class="btn btn-warning btn-lg">Ashar</a>
-            </div>
+                                <form id="delete-form-{{ $shalat->id }}" action="{{ route('dftrshalats.destroy', $shalat->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    </div>
 
-     
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
