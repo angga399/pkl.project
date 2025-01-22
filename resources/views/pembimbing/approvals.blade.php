@@ -16,18 +16,17 @@
 @endif
 
 
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach ($daftarhdrs as $item)
-            <div class="bg-white shadow-lg rounded-lg p-4 mb-4">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h2 class="text-xl font-medium">{{ $item->hari }} - {{ $item->tanggal }}</h2>
-                    </div>
-                    <div>
-                        <img src="{{ $item->dataGambar }}" alt="Foto" class="w-20 h-20 object-cover rounded-md">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="relative">
+                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-full h-56 object-cover rounded-t-lg">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4">
+                        <h2 class="text-lg font-medium text-white">{{ $item->hari }} - {{ $item->tanggal }}</h2>
                     </div>
                 </div>
 
+<<<<<<< Updated upstream
                 <div class="text-center">
                     <div class="text-center">
                         @if($item->status)
@@ -53,6 +52,34 @@
                             </div>
                         @endif
                     </div>                    
+=======
+                <div class="p-4">
+                    <!-- Jika sudah ada status, tampilkan status -->
+                    @if($item->status)
+                        <div class="text-lg font-semibold text-gray-700">
+                            Status: <span class="text-green-500">{{ $item->status }}</span>
+                        </div>
+                    @else
+                        <!-- Jika status belum ada, tampilkan tombol Setuju dan Tolak -->
+                        <div class="flex justify-between mt-4">
+                            <!-- Setujui Form -->
+                            <form action="{{ route('pembimbing.aprove', $item->id) }}" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-md w-full hover:bg-green-600 focus:outline-none transition">
+                                    Setuju
+                                </button>
+                            </form>
+
+                            <!-- Tolak Form -->
+                            <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded-md w-full hover:bg-red-600 focus:outline-none transition">
+                                    Tolak
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+>>>>>>> Stashed changes
                 </div>
             </div>
         @endforeach

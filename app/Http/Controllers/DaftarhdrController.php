@@ -30,8 +30,6 @@ public function index()
         $request->validate([
             'hari' => 'required|string',
             'tanggal' => 'required|string',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
             'dataGambar' => 'required|string',
         ]);
 

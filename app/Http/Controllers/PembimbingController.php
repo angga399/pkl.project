@@ -95,22 +95,24 @@ public function reject($id)
 }
 
 //shalat shalat
+
+
 public function disetujui($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
     $shalat->status = 'Disetujui';
     $shalat->save();
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'shalat disetujui!');
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
 }
 
 public function ditolak($id)
 {
-    $journal = Dftrshalat::findOrFail($id);
-    $journal->status = 'Ditolak';
-    $journal->save();
+    $shalat = Dftrshalat::findOrFail($id);
+    $shalat->status = 'Ditolak';
+    $shalat->save();
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'shalat ditolak!');
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak!');
 }
 
 }

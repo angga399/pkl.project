@@ -18,12 +18,12 @@
               <h2 class="text-gray-900 text-lg title-font font-medium">absensi kehadiran siswa</h2>
             </div>
             <div class="flex-grow">
-              <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-              <a class="mt-3 text-indigo-500 inline-flex items-center">page
+              <p class="leading-relaxed text-base">isi absen kehadiran siswa</p>
+              <button class="mt-3 text-indigo-500 inline-flex items-center" href="/pembimbing/approvals">page
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7"></path>
                 </svg>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
               <h2 class="text-gray-900 text-lg title-font font-medium">praktik kerja lapangan</h2>
             </div>
             <div class="flex-grow">
-              <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
+              <p class="leading-relaxed text-base">isi absen kehadiran siswa</p>
               <a class="mt-3 text-indigo-500 inline-flex items-center">page
                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7"></path>

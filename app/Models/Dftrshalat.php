@@ -15,6 +15,4 @@ class Dftrshalat extends Model
     // Kolom-kolom yang boleh diisi secara massal
    
     protected $fillable = ['type', 'tanggal', 'hari', 'waktu'];
-
-    
 }
