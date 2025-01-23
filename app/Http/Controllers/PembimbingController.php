@@ -11,20 +11,20 @@ class PembimbingController extends Controller
 {
     public function index()
     {
-        // Mengambil jurnal dengan status 'Menunggu'
+        //jourmnals: Mengambil jurnal dengan status 'Menunggu'
         $journals = Journal::where('status', 'Menunggu')->get();
-        return view('pembimbing.index', compact('journals'));
+        return view('pembimbing.journals', compact('journals'));
 
-          // Filter hanya menampilkan data yang statusnya belum disetujui atau ditolak
+          // approvals: Filter hanya menampilkan data yang statusnya belum disetujui atau ditolak
           $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
           ->where('status', '!=', 'Ditolak')
           ->get();
+return view('pembimbingd.approvals', compact('daftarhdrs'));
 
-return view('pembimbingd.index', compact('daftarhdrs'));
-
-$shalat = Dftrshalat::where('status', 'Menunggu')->get();
-return view('pembimbing.index', compact('shalat'));
-    }
+//shalat: Menyaring hanya data yang statusnya 'Menunggu'
+ $dftrshalats = Dftrshalat::where('status', 'Menunggu')->get();
+ return view('pembimbing.shalat', compact('dftrshalats'));
+        }
 
     public function journals()
 {
@@ -94,9 +94,6 @@ public function reject($id)
     return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak dan dihapus.');
 }
 
-//shalat shalat
-
-
 public function disetujui($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
@@ -106,13 +103,21 @@ public function disetujui($id)
     return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
 }
 
-public function ditolak($id)
+
+public function Ditolak($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
     $shalat->status = 'Ditolak';
     $shalat->save();
 
+
     return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak!');
+
+    // Menghapus data setelah ditolak
+    $shalat->delete();
+
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
+
 }
 
 }

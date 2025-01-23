@@ -5,3 +5,5 @@
     </svg>
     Home
 </a>
+</body>
+</html>

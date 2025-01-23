@@ -50,10 +50,10 @@ public function index()
 
 
 
-    public function edit(Daftarhdr $daftarhdr)
-    {
-        return view('daftarhdr.edit', compact('daftarhdr'));
-    }
+    // public function edit(Daftarhdr $daftarhdr)
+    // {
+    //     return view('daftarhdr.edit', compact('daftarhdr'));
+    // }
 
     public function update(Request $request, Daftarhdr $daftarhdr)
     {

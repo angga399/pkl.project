@@ -3,67 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Jurnal</title>
-    @vite('resources/css/app.css')
+    <title>Beranda Waktu Shalat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<div class="flex justify-center mb-4">
-    <x-back></x-back>
-</div>
-<body class="bg-gray-100">
-    <div class="min-h-screen flex flex-col">
-        <!-- Konten Utama -->
-        <div class="container mx-auto flex-grow">
-            <h1 class="text-center text-3xl font-bold mb-6">Daftar Jurnal</h1>
-            <div class="text-center mb-4">
-                <a href="{{ route('journals.create') }}" class="text-indigo-500 hover:underline">Tambah Jurnal</a>
-            </div>
-            <!-- Card Jurnal -->
-            @foreach ($journals as $journal)
-                <section class="text-gray-600 body-font">
-                    <div class="container mx-auto flex flex-col items-center mt-10">
-                        <div class="flex flex-col sm:flex-row w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mb-10">
-                            <div class="sm:w-1/3 text-center sm:pr-8 sm:py-8">
-                                <div class="w-20 h-20 rounded-full inline-flex items-center justify-center bg-gray-200 text-gray-400">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
-                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="flex flex-col items-center text-center justify-center">
-                                    <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">{{ $journal->nama }}</h2>
-                                    <div class="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
-                                    <p class="text-base">{{ $journal->tanggal }}</p>
-                                    <!-- Menampilkan Status -->
-                                    <p class="text-sm mt-4 font-semibold 
-                                        @if ($journal->status == 'Disetujui') text-green-500 
-                                        @elseif ($journal->status == 'Ditolak') text-red-500 
-                                        @else text-yellow-500 @endif">
-                                        Status: {{ $journal->status }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-                                <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">Isi jurnal:</h2>
-                                <p class="leading-relaxed text-lg mb-4">{{ $journal->uraian_konsentrasi }}</p>
-                                  
-                                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                          
-                                <!-- Tombol Setuju dan Tolak (hanya jika status belum disetujui atau ditolak) -->
-                                @if ($journal->status == 'Menunggu')
-                                  
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            @endforeach
-        </div>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Beranda Waktu Shalat</h1>
         
-        <!-- Footer di bagian bawah halaman -->
-        <x-footer class="bg-gray-800 text-white py-4 mt-auto"></x-footer>
+        <!-- Link untuk mengakses form pembuatan waktu shalat -->
+        <a href="{{ route('dftrshalats.create', ['type' => 'duha']) }}" class="btn btn-primary">Tambah Duha</a>
+        <a href="{{ route('dftrshalats.create', ['type' => 'dzuhur']) }}" class="btn btn-success">Tambah Dzuhur</a>
+        <a href="{{ route('dftrshalats.create', ['type' => 'ashar']) }}" class="btn btn-warning">Tambah Ashar</a>
+
+        <!-- Pesan sukses jika ada -->
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        
+        <!-- Tabel Daftar Waktu Shalat -->
+        <div class="mt-5">
+            <h2>Daftar Waktu Shalat</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tipe</th>
+                        <th>Tanggal</th>
+                        <th>Hari</th>
+                        <th>Waktu</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dftrshalats as $shalat)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $shalat->type }}</td>
+                            <td>{{ $shalat->tanggal }}</td>
+                            <td>{{ $shalat->hari }}</td>
+                            <td>{{ $shalat->waktu }}</td>
+                            <td>{{ $shalat->status }}</td>
+                            <td>
+                                <!-- Tombol Edit -->
+                                <a href="{{ route('dftrshalats.edit', ['dftrshalat' => $shalat->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                
+                                <!-- Tombol Delete -->
+                                <form action="{{ route('dftrshalats.destroy', ['dftrshalat' => $shalat->id]) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
