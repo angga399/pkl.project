@@ -1,16 +1,20 @@
 <?php
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Dftrshalat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log; // Tambahkan ini
 
 class DftrshalatController extends Controller
 {
     // Method untuk menampilkan daftar waktu shalat
     public function index()
     {
-        // Mengambil semua data waktu shalat
+        // Ambil data waktu shalat dari database
         $dftrshalats = Dftrshalat::all();
+    
+        // Kirim data ke view tanpa variabel showDuha, showDzuhur, showAshar
         return view('dftrshalats.index', compact('dftrshalats'));
     }
 
@@ -24,7 +28,7 @@ class DftrshalatController extends Controller
             abort(404, 'Tipe tidak valid.');
         }
 
-        // Mengirimkan tipe ke form
+        // Kirim tipe ke form
         return view('dftrshalats.create', compact('type'));
     }
 
@@ -39,16 +43,16 @@ class DftrshalatController extends Controller
             'waktu' => 'required|date_format:H:i', // Format waktu seperti HH:MM
         ]);
 
-        // Menyimpan data ke database
+        // Simpan data ke database
         Dftrshalat::create([
             'type' => $validated['type'],
             'tanggal' => $validated['tanggal'],
             'hari' => $validated['hari'],
             'waktu' => $validated['waktu'],
-            'status' => 'Menunggu', // Status default
+            'status' => 'Menunggu',
         ]);
 
-        // Redirect dengan pesan sukses
+        // Redirect ke index dengan pesan sukses
         return redirect()->route('dftrshalats.index')
             ->with('success', 'Waktu shalat berhasil disimpan!');
     }
@@ -56,33 +60,20 @@ class DftrshalatController extends Controller
     // Method untuk mengedit data waktu shalat
     public function edit($id)
     {
-        // Mengambil data berdasarkan ID
         $dftrshalat = Dftrshalat::findOrFail($id);
-
-        // Menampilkan form edit
         return view('dftrshalats.edit', compact('dftrshalat'));
     }
 
     public function destroy($id)
     {
-        // Cari data berdasarkan ID
         $dftrshalat = Dftrshalat::findOrFail($id);
-    
-        // Hapus data
         $dftrshalat->delete();
-    
-        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('dftrshalats.index')->with('success', 'Data berhasil dihapus!');
     }
-    
 
-    // Method untuk menampilkan arsip
     public function arsip()
     {
-        // Mengambil data dengan status 'arsip'
         $dftrshalatsArsip = Dftrshalat::where('status', 'arsip')->get();
-
-        // Menampilkan arsip
         return view('dftrshalats.arsip', compact('dftrshalatsArsip'));
     }
 }
