@@ -11,10 +11,8 @@
         <h1 class="text-center">Beranda Waktu Shalat</h1>
         
         <!-- Link untuk mengakses form pembuatan waktu shalat -->
-        <div class="mb-3 text-center">
-            <a href="{{ route('dftrshalats.create', ['type' => 'duha']) }}" class="btn btn-primary">Tambah Duha</a>
-            <a href="{{ route('dftrshalats.create', ['type' => 'dzuhur']) }}" class="btn btn-success">Tambah Dzuhur</a>
-            <a href="{{ route('dftrshalats.create', ['type' => 'ashar']) }}" class="btn btn-warning">Tambah Ashar</a>
+        <div class="mb-3 text-center" id="buttons-container">
+            <!-- Tombol akan ditambahkan di sini oleh JavaScript -->
         </div>
 
         <!-- Pesan sukses jika ada -->
@@ -40,29 +38,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($dftrshalats as $shalat)
+                    @if ($dftrshalats->isEmpty())
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $shalat->type }}</td>
-                            <td>{{ $shalat->tanggal }}</td>
-                            <td>{{ $shalat->hari }}</td>
-                            <td>{{ $shalat->waktu }}</td>
-                            <td>{{ $shalat->status }}</td>
-                            <td>
-                                <!-- Tombol Edit (bisa aktifkan jika diperlukan) -->
-                                {{-- <a href="{{ route('dftrshalats.edit', ['dftrshalat' => $shalat->id]) }}" class="btn btn-warning btn-sm">Edit</a> --}}
-                                
-                                <!-- Tombol Delete -->
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $shalat->id }}').submit();" class="btn btn-danger btn-sm">Hapus</a>
-
-                                <form id="delete-form-{{ $shalat->id }}" action="{{ route('dftrshalats.destroy', $shalat->id) }}" method="POST" style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                                
-                            </td>
+                            <td colspan="7" class="text-center">Tidak ada data waktu shalat.</td>
                         </tr>
-                    @endforeach
+                    @else
+                        @foreach ($dftrshalats as $shalat)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $shalat->type }}</td>
+                                <td>{{ $shalat->tanggal }}</td>
+                                <td>{{ $shalat->hari }}</td>
+                                <td>{{ $shalat->waktu }}</td>
+                                <td>{{ $shalat->status }}</td>
+                                <td>
+                                    <!-- Tombol Edit -->
+                                    {{-- <a href="{{ route('dftrshalats.edit', ['dftrshalat' => $shalat->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <!-- Tombol Delete --> --}}
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $shalat->id }}').submit();" class="btn btn-danger btn-sm">Hapus</a>
+
+                                    <form id="delete-form-{{ $shalat->id }}" action="{{ route('dftrshalats.destroy', $shalat->id) }}" method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -100,6 +102,31 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+    <script>
+        // Fungsi untuk menampilkan tombol berdasarkan waktu
+        function showButtonsBasedOnTime() {
+            const now = new Date();
+            const currentHour = now.getHours();
+
+            const buttonsContainer = document.getElementById('buttons-container');
+
+            if (currentHour >= 4 && currentHour < 1) { // Pagi (04:00 - 10:59)
+                buttonsContainer.innerHTML += '<a href="{{ route("dftrshalats.create", ["type" => "duha"]) }}" class="btn btn-primary">Tambah Duha</a>';
+            }
+            if (currentHour >= 11 && currentHour < 15) { // Siang (11:00 - 14:59)
+                buttonsContainer.innerHTML += '<a href="{{ route("dftrshalats.create", ["type" => "dzuhur"]) }}" class="btn btn-success">Tambah Dzuhur</a>';
+            }
+            if (currentHour >= 15 && currentHour < 18) { // Sore (15:00 - 17:59)
+                buttonsContainer.innerHTML += '<a href="{{ route("dftrshalats.create", ["type" => "ashar"]) }}" class="btn btn-warning">Tambah Ashar</a>';
+            }
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        window.onload = showButtonsBasedOnTime;
+    </script>
 
 </body>
 </html>

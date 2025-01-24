@@ -31,6 +31,15 @@
             Go Page
             <i class="fas fa-arrow-right ml-2"></i>
           </a>
+
+  <div class="min-h-screen">
+    <section class="text-gray-600 body-font py-24">
+      <div class="container px-5 mx-auto text-center">
+        <h1 class="sm:text-4xl text-3xl font-extrabold text-black mb-4">SELAMAT DATANG</h1>
+        <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-black">Silahkan isi kegiatan kalian selama PKL</p>
+        <div class="flex mt-8 justify-center">
+          <div class="w-20 h-1 rounded-full bg-indigo-300 inline-flex"></div>
+
         </div>
       </div>
 

@@ -13,7 +13,15 @@ class Journal extends Model
         'judul_jurnal',
         'tanggal',
         'nama',
+        'kelas',
+        'nik',
         'uraian_konsentrasi',
     ];
+
+    // Di model Journal.php
+public function histories()
+{
+    return $this->hasMany(JournalHistory::class);
+}
 }
 

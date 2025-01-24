@@ -3,68 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beranda Waktu Shalat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Daftar Jurnal</title>
+    @vite('resources/css/app.css')
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+            transition: box-shadow 0.3s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .card-content {
+            margin: 10px 0;
+        }
+        .btn {
+            background-color: #4f46e5;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #4338ca;
+        }
+        .dropdown-content {
+            display: none; /* Sembunyikan dropdown secara default */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+            background-color: #fff;
+        }
+    </style>
 </head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Beranda Waktu Shalat</h1>
-        
-        <!-- Link untuk mengakses form pembuatan waktu shalat -->
-        <a href="{{ route('dftrshalats.create', ['type' => 'duha']) }}" class="btn btn-primary">Tambah Duha</a>
-        <a href="{{ route('dftrshalats.create', ['type' => 'dzuhur']) }}" class="btn btn-success">Tambah Dzuhur</a>
-        <a href="{{ route('dftrshalats.create', ['type' => 'ashar']) }}" class="btn btn-warning">Tambah Ashar</a>
+<body class="bg-gray-100">
 
-        <!-- Pesan sukses jika ada -->
+    <div class="container mx-auto mt-5">
+        <h1 class="text-center text-3xl font-medium title-font mb-4 text-gray-900">Daftar Jurnal PKL</h1>
+
+        <!-- Pesan Sukses -->
         @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-md mx-auto mt-6" role="alert">
+                <strong class="font-bold">Sukses!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
             </div>
         @endif
-        
-        <!-- Tabel Daftar Waktu Shalat -->
-        <div class="mt-5">
-            <h2>Daftar Waktu Shalat</h2>
-            <table class="table">
+
+        <!-- Tabel Daftar Jurnal -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Tipe</th>
-                        <th>Tanggal</th>
-                        <th>Hari</th>
-                        <th>Waktu</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="py-2 px-4 border-b">#</th>
+                        <th class="py-2 px-4 border-b">Nama</th>
+                        <th class="py-2 px-4 border-b">Tanggal</th>
+                        <th class="py-2 px-4 border-b">Uraian Konsentrasi</th>
+                        <th class="py-2 px-4 border-b">Kelas</th>
+                        <th class="py-2 px-4 border-b">NIK</th>
+                        <th class="py-2 px-4 border-b">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($dftrshalats as $shalat)
+                    @if ($journals->isEmpty())
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $shalat->type }}</td>
-                            <td>{{ $shalat->tanggal }}</td>
-                            <td>{{ $shalat->hari }}</td>
-                            <td>{{ $shalat->waktu }}</td>
-                            <td>{{ $shalat->status }}</td>
-                            <td>
-                                <!-- Tombol Edit -->
-                                <a href="{{ route('dftrshalats.edit', ['dftrshalat' => $shalat->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
-                                <!-- Tombol Delete -->
-                                <form action="{{ route('dftrshalats.destroy', ['dftrshalat' => $shalat->id]) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</button>
-                                </form>
-                            </td>
+                            <td colspan="7" class="text-center py-4">Tidak ada data jurnal.</td>
                         </tr>
-                    @endforeach
+                    @else
+                        @foreach ($journals as $journal)
+                            <tr>
+                                <td class="py-2 px-4 border-b">{{ $loop->iteration }}</td>
+                                <td class="py-2 px-4 border-b">{{ $journal->nama }}</td>
+                                <td class="py-2 px-4 border-b">{{ $journal->tanggal }}</td>
+                                <td class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</td>
+                                <td class="py-2 px-4 border-b">{{ $journal->kelas }}</td>
+                                <td class="py-2 px-4 border-b">{{ $journal->nik }}</td>
+                                <td class="py-2 px-4 border-b">
+                                    <a href="{{ route('journals.edit', $journal->id) }}" class="text-blue-500 hover:text-blue-700">Edit</a>
+                                    <form action="{{ route('journals.destroy', $journal->id) }}" method="POST" style="display:inline;">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2">Hapus</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <div class="mt-6 text-center">
+            <a href="{{ route('journals.create') }}" class="text-indigo-500 hover:text-indigo-700">Tambah Jurnal</a>
+        </div>
+
+        <!-- Panel untuk Menampilkan Histori dalam Bentuk Kartu -->
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold">Histori Jurnal</h2>
+            @if ($histories->isEmpty())
+                <p>Tidak ada histori jurnal.</p>
+            @else
+                @foreach ($histories as $history)
+                    <div class="card">
+                        <div class="card-title">Jurnal ID: {{ $history->journal_id }}</div>
+                        <div class="card-content">
+                            <p>Aksi: {{ $history->action }}</p>
+                            <p>Tanggal Aksi: {{ $history->created_at }}</p>
+                        </div>
+                        <button class="btn" onclick="toggleDropdown(this)">Lihat Selengkapnya</button>
+                        <div class="dropdown-content">
+                            <h3 class="font-semibold">Detail Aksi:</h3>
+                            <ul>
+                                <li><strong>Nama:</strong> {{ json_decode($history->changes)->nama }}</li>
+                                <li><strong>Tanggal:</strong> {{ json_decode($history->changes)->tanggal }}</li>
+                                <li><strong>Kelas:</strong> {{ json_decode($history->changes)->kelas }}</li>
+                                <li><strong>NIK:</strong> {{ json_decode($history->changes)->nik }}</li>
+                                <li><strong>Uraian Konsentrasi:</strong> {{ json_decode($history->changes)->uraian_konsentrasi }}</li>
+                            </ul>
+                            <p><strong>Waktu Aksi:</strong> {{ $history->created_at->format('d-m-Y H:i:s') }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+    </div>
+    
+
+    <script>
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>
