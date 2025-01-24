@@ -23,30 +23,23 @@ public function index()
     {
         return view('daftarhdr.create');
     }
-
     public function store(Request $request)
-    {
-        // Validate required fields
-        $request->validate([
-            'hari' => 'required|string',
-            'tanggal' => 'required|string',
-            'dataGambar' => 'required|string',
-        ]);
+{
+    \Log::info('Data yang diterima:', $request->all());
 
+    $request->validate([
+        'tipe' => 'required',
+        'hari' => 'required',
+        'tanggal' => 'required|date',
+        'latitude' => 'required',
+        'longitude' => 'required',
+        'dataGambar' => 'required',
+    ]);
 
-        // Save data to the database
-        Daftarhdr::create([
-            'hari' => $request->hari,
-            'tanggal' => $request->tanggal,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'dataGambar' => $request->dataGambar,
-            'status' => 'Pending'
-        ]);
-        return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil disimpan dan menunggu persetujuan.');
+    DaftarHdr::create($request->all());
 
-
-    }
+    return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil disimpan.');
+}
 
 
 
