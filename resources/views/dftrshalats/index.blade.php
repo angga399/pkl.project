@@ -80,7 +80,7 @@
 
             const buttonsContainer = document.getElementById('buttons-container');
 
-            if (currentHour >= 4 && currentHour < 11) { // Pagi (04:00 - 10:59)
+            if (currentHour >= 4 && currentHour < 1) { // Pagi (04:00 - 10:59)
                 buttonsContainer.innerHTML += '<a href="{{ route("dftrshalats.create", ["type" => "duha"]) }}" class="btn btn-primary">Tambah Duha</a>';
             }
             if (currentHour >= 11 && currentHour < 15) { // Siang (11:00 - 14:59)

@@ -16,6 +16,8 @@ class DftrshalatController extends Controller
     
         // Kirim data ke view tanpa variabel showDuha, showDzuhur, showAshar
         return view('dftrshalats.index', compact('dftrshalats'));
+        
+   
     }
 
     // Method untuk menampilkan form tambah data waktu shalat
@@ -55,6 +57,8 @@ class DftrshalatController extends Controller
         // Redirect ke index dengan pesan sukses
         return redirect()->route('dftrshalats.index')
             ->with('success', 'Waktu shalat berhasil disimpan!');
+
+
     }
 
     // Method untuk mengedit data waktu shalat

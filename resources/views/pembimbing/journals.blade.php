@@ -17,6 +17,8 @@
                     <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
                         <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">{{ $journal->nama }}</h2>
                         <p class="text-base">{{ $journal->tanggal }}</p>
+                        <p class="text-base">{{ $journal->kelas }}</p>
+                        <p class="text-base">{{ $journal->nik }}</p>
                         <p class="leading-relaxed text-lg mb-4">{{ $journal->uraian_konsentrasi }}</p>
 
                         <!-- Status Jurnal -->

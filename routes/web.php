@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
@@ -35,12 +36,16 @@ Route::get('/', function () {
 // Rute resource untuk journals
 Route::resource('journals', JournalController::class);
 
+// Rute untuk menampilkan histori jurnal
+// Rute untuk menampilkan histori jurnal
+
 // Rute pembimbingpkl
 Route::get('/pembimbingpkl', function () {
     return view('pembimbingpkl');
 })->name('pembimbingpkl');
 
 // Pembimbing routes
+Route::get('/journals/histories', [JournalController::class, 'getAllHistories']);
 Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
     Route::get('journals', [PembimbingController::class, 'journals'])->name('journals');
     Route::post('journals/{id}/approve', [PembimbingController::class, 'setuju'])->name('setuju');

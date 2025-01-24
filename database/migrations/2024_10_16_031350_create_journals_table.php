@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->text('nama');
+            $table->text('kelas');
+            $table->text('nik');
             $table->text('uraian_konsentrasi')->nullable();
             $table->enum('status', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
             $table->timestamps();
