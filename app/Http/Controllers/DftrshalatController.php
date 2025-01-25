@@ -1,30 +1,22 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Dftrshalat;
 use Illuminate\Http\Request;
-
 use Carbon\Carbon;
-
-use Illuminate\Support\Facades\Log; // Tambahkan ini
-
+use Illuminate\Support\Facades\Log;
 
 class DftrshalatController extends Controller
 {
     // Method untuk menampilkan daftar waktu shalat
     public function index()
     {
-
-
         // Ambil data waktu shalat dari database
-
         $dftrshalats = Dftrshalat::all();
     
-        // Kirim data ke view tanpa variabel showDuha, showDzuhur, showAshar
+        // Kirim data ke view
         return view('dftrshalats.index', compact('dftrshalats'));
-        
-   
     }
 
     // Method untuk menampilkan form tambah data waktu shalat
@@ -36,9 +28,7 @@ class DftrshalatController extends Controller
             abort(404, 'Tipe tidak valid.');
         }
 
-
         // Kirim tipe ke form
-
         return view('dftrshalats.create', compact('type'));
     }
 
@@ -51,9 +41,8 @@ class DftrshalatController extends Controller
             'hari' => 'required|string',
             'waktu' => 'required|date_format:H:i',
         ]);
-
+    
         // Simpan data ke database
-
         Dftrshalat::create([
             'type' => $validated['type'],
             'tanggal' => $validated['tanggal'],
@@ -61,14 +50,10 @@ class DftrshalatController extends Controller
             'waktu' => $validated['waktu'],
             'status' => 'Menunggu',
         ]);
-
-
-
+    
         // Redirect ke index dengan pesan sukses
         return redirect()->route('dftrshalats.index')
             ->with('success', 'Waktu shalat berhasil disimpan!');
-
-
     }
 
     // Method untuk mengedit data waktu shalat
@@ -84,7 +69,7 @@ class DftrshalatController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'hari' => 'required',
-            'waktu' => 'required',
+            'waktu' => 'required|date_format:H:i',
             'status' => 'required',
         ]);
 
@@ -100,13 +85,10 @@ class DftrshalatController extends Controller
         return redirect()->route('dftrshalats.index')->with('success', 'Data berhasil dihapus!');
     }
 
-
     // Method untuk menampilkan detail data waktu shalat
     public function show($id)
     {
         $dftrshalat = Dftrshalat::findOrFail($id);
         return view('dftrshalats.show', compact('dftrshalat'));
-
-
-}
+    }
 }

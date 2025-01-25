@@ -13,77 +13,122 @@
     <div class="bg-green-200 text-green-700 px-4 py-2 rounded mb-4">
         {{ session('status') }}
     </div>
-@endif
+    @endif
 
-
-    <div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach ($daftarhdrs as $item)
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div class="relative">
-                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-full h-56 object-cover rounded-t-lg">
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4">
-                        <h2 class="text-lg font-medium text-white">{{ $item->hari }} - {{ $item->tanggal }}</h2>
-                    </div>
-                </div>
-
-<<<<<<< Updated upstream
-                <div class="text-center">
-                    <div class="text-center">
-                        @if($item->status)
-                            <!-- Jika sudah ada status, tampilkan status -->
-                          
-                            <!-- Jika status belum ada, tampilkan tombol Setuju dan Tolak -->
-                            <div class="flex justify-around mt-4">
-                                <!-- Setujui Form -->
-                                <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md w-28">
-                                        Setuju
-                                    </button>
-                                </form>
-                    
-                                <!-- Tolak Form -->
-                                <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md w-28">
-                                        Tolak
-                                    </button>
-                                </form>
-                            </div>
+    <div class="container mx-auto px-4">
+        <!-- Bagian Absen Datang -->
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Absen Datang</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600">
+                        <th class="py-3 px-4 border-b border-gray-300">Foto</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Tanggal</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Hari</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Status</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($daftarhdrs as $item)
+                        @if ($item->tipe === 'datang')
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-20 h-20 object-cover rounded">
+                                </td>
+                                <td class="py-2 px-4 border-b border-gray-300">{{ $item->tanggal }}</td>
+                                <td class="py-2 px-4 border-b border-gray-300">{{ $item->hari }}</td>
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    @if ($item->status === 'Disetujui')
+                                        <span class="text-green-500 font-bold">Disetujui</span>
+                                    @elseif ($item->status === 'Ditolak')
+                                        <span class="text-red-500 font-bold">Ditolak</span>
+                                    @else
+                                        <span class="text-yellow-500 font-bold">Menunggu Persetujuan</span>
+                                    @endif
+                                </td>
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    @if ($item->status === 'Menunggu Persetujuan')
+                                        <!-- Setujui Form -->
+                                        <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded-md">
+                                                Setuju
+                                            </button>
+                                        </form>
+                                        
+                                        <!-- Tolak Form -->
+                                        <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded-md">
+                                                Tolak
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
                         @endif
-                    </div>                    
-=======
-                <div class="p-4">
-                    <!-- Jika sudah ada status, tampilkan status -->
-                    @if($item->status)
-                        <div class="text-lg font-semibold text-gray-700">
-                            Status: <span class="text-green-500">{{ $item->status }}</span>
-                        </div>
-                    @else
-                        <!-- Jika status belum ada, tampilkan tombol Setuju dan Tolak -->
-                        <div class="flex justify-between mt-4">
-                            <!-- Setujui Form -->
-                            <form action="{{ route('pembimbing.aprove', $item->id) }}" method="POST" class="w-full">
-                                @csrf
-                                <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-md w-full hover:bg-green-600 focus:outline-none transition">
-                                    Setuju
-                                </button>
-                            </form>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-                            <!-- Tolak Form -->
-                            <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="w-full">
-                                @csrf
-                                <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded-md w-full hover:bg-red-600 focus:outline-none transition">
-                                    Tolak
-                                </button>
-                            </form>
-                        </div>
-                    @endif
->>>>>>> Stashed changes
-                </div>
-            </div>
-        @endforeach
+        <!-- Bagian Absen Pulang -->
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 mt-10">Absen Pulang</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600">
+                        <th class="py-3 px-4 border-b border-gray-300">Foto</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Tanggal</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Hari</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Status</th>
+                        <th class="py-3 px-4 border-b border-gray-300">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($daftarhdrs as $item)
+                        @if ($item->tipe === 'pulang')
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-20 h-20 object-cover rounded">
+                                </td>
+                                <td class="py-2 px-4 border-b border-gray-300">{{ $item->tanggal }}</td>
+                                <td class="py-2 px-4 border-b border-gray-300">{{ $item->hari }}</td>
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    @if ($item->status === 'Disetujui')
+                                        <span class="text-green-500 font-bold">Disetujui</span>
+                                    @elseif ($item->status === 'Ditolak')
+                                        <span class="text-red-500 font-bold">Ditolak</span>
+                                    @else
+                                        <span class="text-yellow-500 font-bold">Menunggu Persetujuan</span>
+                                    @endif
+                                </td>
+                                <td class="py-2 px-4 border-b border-gray-300">
+                                    @if ($item->status === 'Menunggu Persetujuan')
+                                        <!-- Setujui Form -->
+                                        <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded-md">
+                                                Setuju
+                                            </button>
+                                        </form>
+                                        
+                                        <!-- Tolak Form -->
+                                        <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded-md">
+                                                Tolak
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </body>
 </html>

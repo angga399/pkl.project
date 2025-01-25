@@ -66,33 +66,40 @@ public function shalat()
 //approvevals halaman
     // Proses persetujuan
   // Proses persetujuan
-  public function approve($id)
-  {
-      // Cari data berdasarkan ID
-      $item = Daftarhdr::findOrFail($id);
-      
-      // Update status menjadi 'Disetujui'
-      $item->status = 'Disetujui';
-      $item->save();
-      
-      // Redirect kembali dengan pesan sukses
-      return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil disetujui.');
-  }
+
+
+
+
+
+    public function approve($id)
+    {
+        $item = Daftarhdr::find($id);
+        if ($item) {
+            $item->status = 'Disetujui'; // Atur status sesuai kebutuhan
+            $item->save();
+
+            return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah disetujui.');
+        }
+
+        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
+    }
+
+    public function reject($id)
+    {
+        $item = Daftarhdr::find($id);
+        if ($item) {
+            $item->status = 'Ditolak'; // Atur status sesuai kebutuhan
+            $item->save();
+
+            return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah ditolak.');
+        }
+
+        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
+    }
+
+    // Metode lainnya...
+
   
-
-public function reject($id)
-{
-    // Cari data berdasarkan ID
-    $daftarhdrs = Daftarhdr::findOrFail($id);
-    
-    // Update status menjadi 'Ditolak'
-    $daftarhdrs->status = 'Ditolak';
-    $daftarhdrs->save();
-
-    
-    // Redirect kembali dengan pesan sukses
-    return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak dan dihapus.');
-}
 
 public function disetujui($id)
 {

@@ -20,18 +20,18 @@
         <table class="min-w-full bg-white border border-gray-200 mb-6">
             <thead>
                 <tr>
-                    <th class="px-4 py-2 border">#</th>
+    
                     <th class="px-4 py-2 border">Foto</th>
                     <th class="px-4 py-2 border">Hari</th>
                     <th class="px-4 py-2 border">Tanggal</th>
                     <th class="px-4 py-2 border">Lokasi</th>
+                    <th class="px-4 py-2 border">Status</th> <!-- Kolom Status -->
                 </tr>
             </thead>
             <tbody>
                 @foreach ($daftarhdrs as $item)
                     @if ($item->tipe === 'datang')
                     <tr>
-                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
                         <td class="px-4 py-2 border">
                             <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md">
                         </td>
@@ -40,6 +40,7 @@
                         <td class="px-4 py-2 border">
                             <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
                         </td>
+                        <td class="px-4 py-2 border">{{ $item->status }}</td> <!-- Menampilkan Status -->
                     </tr>
                     @endif
                 @endforeach
@@ -51,18 +52,18 @@
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr>
-                    <th class="px-4 py-2 border">#</th>
                     <th class="px-4 py-2 border">Foto</th>
                     <th class="px-4 py-2 border">Hari</th>
                     <th class="px-4 py-2 border">Tanggal</th>
                     <th class="px-4 py-2 border">Lokasi</th>
+                    <th class="px-4 py-2 border">Status</th> <!-- Kolom Status -->
                 </tr>
             </thead>
             <tbody>
                 @foreach ($daftarhdrs as $item)
                     @if ($item->tipe === 'pulang')
                     <tr>
-                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                       
                         <td class="px-4 py-2 border">
                             <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md">
                         </td>
@@ -71,6 +72,7 @@
                         <td class="px-4 py-2 border">
                             <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
                         </td>
+                        <td class="px-4 py-2 border">{{ $item->status }}</td> <!-- Menampilkan Status -->
                     </tr>
                     @endif
                 @endforeach

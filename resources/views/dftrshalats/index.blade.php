@@ -82,7 +82,7 @@
         </tr>
     </thead>
     <tbody>
-        @forelse($data as $item)
+        @forelse($dftrshalats as $item)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->type }}</td>

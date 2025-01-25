@@ -52,6 +52,13 @@ Route::post('/pembimbing/shalat/{id}/reject', [PembimbingController::class, 'dit
 Route::get('journals', [JournalController::class, 'index'])->name('journals.index');
 
 
+Route::get('/journals/create', [JournalController::class, 'create'])->name('journals.create');
+Route::post('/journals/store', [JournalController::class, 'store'])->name('journals.store');
+Route::get('/journals/{id}/edit', [JournalController::class, 'edit'])->name('journals.edit');
+Route::put('/journals/{id}', [JournalController::class, 'update'])->name('journals.update');
+Route::delete('/journals/{id}', [JournalController::class, 'destroy'])->name('journals.destroy'); // Pastikan ini ada
+Route::get('/journals', [JournalController::class, 'index'])->name('journals.index');
+
 Route::get('/Dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
 Route::get('/create', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
 Route::post('/store', [DftrshalatController::class, 'store'])->name('dftrshalats.store');
@@ -69,6 +76,10 @@ Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
     Route::post('shalat/{id}/approve', [PembimbingController::class, 'disetujui'])->name('disetujui');
     Route::post('shalat/{id}/reject', [PembimbingController::class, 'ditolak'])->name('ditolak');
 });
+
+Route::post('/pembimbing/approve/{id}', [PembimbingController::class, 'approve'])->name('pembimbing.approve');
+Route::post('/pembimbing/reject/{id}', [PembimbingController::class, 'reject'])->name('pembimbing.reject');
+
 
 
 
