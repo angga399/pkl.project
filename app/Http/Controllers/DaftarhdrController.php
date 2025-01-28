@@ -77,4 +77,11 @@ class DaftarhdrController extends Controller
         $daftarhdr->delete();
         return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil dihapus.');
     }
+
+    public function showGuru()
+{
+    $daftarhdrs = Daftarhdr::orderBy('tanggal')->get();
+    return view('guru.index', compact('daftarhdrs'));
+}
+
 }

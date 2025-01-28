@@ -93,3 +93,8 @@ Route::get('/absen-pulang', function () {
     return view('daftarhdr.absen-pulang'); // Halaman untuk absen pulang
 })->name('absen.pulang');
 
+
+Route::get('/guru/index', [DaftarhdrController::class, 'showGuru'])->name('guru.index');
+Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
+Route::get('/guru/journal', [JournalController::class, 'showGuru'])->name('guru.journal');
+

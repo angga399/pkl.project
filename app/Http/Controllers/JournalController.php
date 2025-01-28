@@ -119,4 +119,10 @@ class JournalController extends Controller
         dd($histories); // Debugging
         return response()->json($histories);
     }
+    public function showGuru()
+{
+    $journals = Journal::orderBy('tanggal')->get(); // Ubah $journal menjadi $journals
+    return view('guru.journal', compact('journals')); // Tetap gunakan compact('journals')
+}
+
 }
