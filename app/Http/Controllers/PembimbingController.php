@@ -146,7 +146,7 @@ class PembimbingController extends Controller
         $shalat->save();
 
         // Menghapus data setelah ditolak
-        // $shalat->delete();
+        $shalat->delete();
 
         return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
     }
