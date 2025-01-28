@@ -51,6 +51,7 @@ Route::post('/pembimbing/shalat/{id}/reject', [PembimbingController::class, 'dit
 // Rute untuk journals (daftar utama journals)
 Route::get('journals', [JournalController::class, 'index'])->name('journals.index');
 
+Route::post('dftrshalats/store', [PembimbingController::class, 'store'])->name('dftrshalats.store');
 
 Route::get('/journals/create', [JournalController::class, 'create'])->name('journals.create');
 Route::post('/journals/store', [JournalController::class, 'store'])->name('journals.store');

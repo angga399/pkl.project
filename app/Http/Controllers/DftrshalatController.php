@@ -53,25 +53,25 @@ class DftrshalatController extends Controller
     // Menyimpan data shalat
     public function store(Request $request)
     {
-        // Validasi input
-        $validated = $request->validate([
+        // Validasi data
+        $request->validate([
             'jenis' => 'required|string',
             'tanggal' => 'required|date',
             'hari' => 'required|string',
-            'waktu' => 'required|date_format:H:i',
-            'week' => 'required|string', // Pastikan week disertakan
+            'waktu' => 'required|date_format:H:i', // Menggunakan date_format untuk waktu
         ]);
-
-        // Menyimpan data ke dalam database
-        Dftrshalat::create([
-            'jenis' => $validated['jenis'],
-            'tanggal' => $validated['tanggal'],
-            'hari' => $validated['hari'],
-            'waktu' => $validated['waktu'],
-            'week' => $validated['week'], // Simpan minggu
-        ]);
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('dftrshalats.index')->with('success', 'Waktu shalat berhasil ditambahkan.');
+    
+        // Simpan data ke database
+        $shalat = new Dftrshalat();
+        $shalat->jenis = $request->jenis;
+        $shalat->tanggal = $request->tanggal;
+        $shalat->hari = $request->hari;
+        $shalat->waktu = $request->waktu;
+        $shalat->save();
+    
+        // Redirect dengan pesan
+        return redirect()->route('dftrshalats.index')->with('status', 'Data shalat berhasil disimpan!');
     }
+    
+    
 }

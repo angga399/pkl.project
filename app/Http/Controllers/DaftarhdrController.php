@@ -9,23 +9,30 @@ use Carbon\Carbon;
 class DaftarhdrController extends Controller
 {
     public function index(Request $request)
-{
-    $week = $request->get('week', Carbon::now()->format('Y-W'));
-    $startOfWeek = Carbon::parse($week)->startOfWeek();
-    $endOfWeek = Carbon::parse($week)->endOfWeek();
-
-    \Log::info("Start of Week: " . $startOfWeek);
-    \Log::info("End of Week: " . $endOfWeek);
-
-    $daftarhdrs = Daftarhdr::whereBetween('tanggal', [$startOfWeek, $endOfWeek])
-        ->orderBy('tanggal')
-        ->get();
-
-    \Log::info("Daftarhdrs: ", $daftarhdrs->toArray());
-
-    return view('daftarhdr.index', compact('daftarhdrs', 'startOfWeek', 'endOfWeek', 'week'));
-}
-
+    {
+        // Default: tanggal awal dan akhir minggu saat ini
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+    
+        // Jika parameter 'week' dikirim
+        if ($request->has('week') && $request->week) {
+            $date = Carbon::parse($request->week); // Parse tanggal yang dikirimkan
+            $startOfWeek = $date->startOfWeek(Carbon::MONDAY); // Mulai dari Senin
+            $endOfWeek = $date->endOfWeek(Carbon::SUNDAY); // Berakhir pada Minggu
+        }
+    
+        // Debug log untuk melihat nilai tanggal yang dihitung
+        \Log::info("Start of Week: $startOfWeek");
+        \Log::info("End of Week: $endOfWeek");
+    
+        // Ambil data berdasarkan tanggal dalam rentang minggu
+        $daftarhdrs = Daftarhdr::whereDate('tanggal', '>=', $startOfWeek)
+            ->whereDate('tanggal', '<=', $endOfWeek)
+            ->orderBy('tanggal')
+            ->get();
+    
+        return view('daftarhdr.index', compact('daftarhdrs', 'startOfWeek', 'endOfWeek'));
+    }
     
 
     public function create()
