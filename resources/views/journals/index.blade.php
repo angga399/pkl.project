@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Jurnal</title>
+    <title>Daftar Jurnal PKL</title>
     @vite('resources/css/app.css')
     <style>
         .card {
@@ -50,6 +50,21 @@
 
     <div class="container mx-auto mt-5">
         <h1 class="text-center text-3xl font-medium title-font mb-4 text-gray-900">Daftar Jurnal PKL</h1>
+
+        <!-- Filter Tanggal Mingguan -->
+        <div class="container mx-auto px-4 mb-6">
+            <form method="GET" action="{{ route('journals.index') }}" class="flex items-center">
+                <label for="week" class="mr-2 font-semibold text-gray-700">Pilih Minggu:</label>
+                <input type="week" id="week" name="week" class="border rounded-lg p-2"
+                    value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
+                <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                    Tampilkan
+                </button>
+            </form>
+            <p class="mt-2 text-gray-600">
+                Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+            </p>
+        </div>
 
         <!-- Pesan Sukses -->
         @if (session('success'))
@@ -113,7 +128,7 @@
             @else
                 @foreach ($histories as $history)
                     <div class="card">
-                        <div class="card-title">Jurnal ID: {{ $history->journal_id }}</div>
+                        <div class="card-title">Jurnal:{{ $history->journal_id }}</div>
                         <div class="card-content">
                             <p>Aksi: {{ $history->action }}</p>
                             <p>Tanggal Aksi: {{ $history->created_at }}</p>
@@ -135,7 +150,6 @@
             @endif
         </div>
     </div>
-    
 
     <script>
         function toggleDropdown(button) {

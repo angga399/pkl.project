@@ -5,58 +5,86 @@ namespace App\Http\Controllers;
 use App\Models\Journal;
 use App\Models\Daftarhdr;
 use App\Models\Dftrshalat;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PembimbingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil jurnal dengan status 'Menunggu'
-        $journals = Journal::where('status', 'Menunggu')->get();
+        // Filter berdasarkan minggu
+        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
+        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
+        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
 
-      // Mengambil semua data Daftarhdr
-    $daftarhdrs = Daftarhdr::all();
+        // Journals: Mengambil jurnal dengan status 'Menunggu' dalam minggu yang dipilih
+        $journals = Journal::where('status', 'Menunggu')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get();
 
-    // Mengelompokkan data berdasarkan minggu
-    $groupedByWeek = $daftarhdrs->groupBy(function ($item) {
-        // Menggunakan Carbon untuk mendapatkan format 'tahun-minggu' (misalnya 2025-05 untuk minggu 5 di tahun 2025)
-        return Carbon::parse($item->tanggal)->format('o-W');
-    });
-
-    // Mengirim data yang sudah dikelompokkan ke tampilan
-    return view('pembimbing.index', compact('groupedByWeek'));
-    
-        // Menyaring data 'Dftrshalat' dengan status 'Menunggu'
-        $dftrshalats = Dftrshalat::where('status', 'Menunggu')->get();
-
-        return view('pembimbing.index', compact('journals', 'daftarhdrs', 'dftrshalats'));
-    }
-
-    public function journals()
-    {
-        // Menampilkan semua jurnal
-        $journals = Journal::all();
-        return view('pembimbing.journals', compact('journals'));
-    }
-
-    public function approvals()
-    {
-        // Menampilkan data yang belum disetujui atau ditolak
+        // Approvals: Mengambil data dari Daftarhdr yang statusnya belum disetujui atau ditolak dalam minggu yang dipilih
         $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
             ->where('status', '!=', 'Ditolak')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->get();
-        return view('pembimbing.approvals', compact('daftarhdrs'));
+
+        // Shalat: Mengambil data yang statusnya 'Menunggu' dalam minggu yang dipilih
+        $dftrshalats = Dftrshalat::where('status', 'Menunggu')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        // Menampilkan data pada view
+        return view('pembimbing.index', compact('journals', 'daftarhdrs', 'dftrshalats', 'startOfWeek', 'endOfWeek'));
     }
 
-    public function shalat()
+    public function journals(Request $request)
     {
-        // Menampilkan data shalat yang belum disetujui atau ditolak
-        $dftrshalats = Dftrshalat::all();
-        return view('pembimbing.shalat', compact('dftrshalats'));
+        // Filter berdasarkan minggu
+        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
+        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
+        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
+
+        // Menampilkan jurnal berdasarkan minggu
+        $journals = Journal::where('status', 'Menunggu')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return view('pembimbing.journals', compact('journals', 'startOfWeek', 'endOfWeek'));
     }
 
-    // Proses persetujuan untuk jurnal
-    public function setujuJurnal($id)
+    public function approvals(Request $request)
+    {
+        // Filter berdasarkan minggu
+        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
+        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
+        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
+
+        // Menampilkan approval berdasarkan minggu
+        $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
+            ->where('status', '!=', 'Ditolak')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return view('pembimbing.approvals', compact('daftarhdrs', 'startOfWeek', 'endOfWeek'));
+    }
+
+    public function shalat(Request $request)
+    {
+        // Filter berdasarkan minggu
+        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
+        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
+        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
+
+        // Menampilkan data shalat berdasarkan minggu
+        $dftrshalats = Dftrshalat::where('status', 'Menunggu')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get();
+
+        return view('pembimbing.shalat', compact('dftrshalats', 'startOfWeek', 'endOfWeek'));
+    }
+
+    // Proses setuju dan tolak untuk jurnal
+    public function setuju($id)
     {
         $journal = Journal::findOrFail($id);
         $journal->status = 'Disetujui';
@@ -65,7 +93,7 @@ class PembimbingController extends Controller
         return redirect()->route('pembimbing.journals')->with('status', 'Jurnal disetujui!');
     }
 
-    public function tolakJurnal($id)
+    public function tolak($id)
     {
         $journal = Journal::findOrFail($id);
         $journal->status = 'Ditolak';
@@ -74,12 +102,12 @@ class PembimbingController extends Controller
         return redirect()->route('pembimbing.journals')->with('status', 'Jurnal ditolak!');
     }
 
-    // Proses persetujuan untuk Daftarhdr
-    public function approveDaftarhdr($id)
+    // Proses persetujuan untuk approvals
+    public function approve($id)
     {
         $item = Daftarhdr::find($id);
         if ($item) {
-            $item->status = 'Disetujui'; // Mengubah status menjadi Disetujui
+            $item->status = 'Disetujui';
             $item->save();
 
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah disetujui.');
@@ -88,11 +116,11 @@ class PembimbingController extends Controller
         return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
     }
 
-    public function rejectDaftarhdr($id)
+    public function reject($id)
     {
         $item = Daftarhdr::find($id);
         if ($item) {
-            $item->status = 'Ditolak'; // Mengubah status menjadi Ditolak
+            $item->status = 'Ditolak';
             $item->save();
 
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah ditolak.');
@@ -101,8 +129,8 @@ class PembimbingController extends Controller
         return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
     }
 
-    // Proses persetujuan untuk Shalat
-    public function disetujuiShalat($id)
+    // Proses persetujuan untuk shalat
+    public function disetujui($id)
     {
         $shalat = Dftrshalat::findOrFail($id);
         $shalat->status = 'Disetujui';
@@ -111,7 +139,7 @@ class PembimbingController extends Controller
         return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
     }
 
-    public function ditolakShalat($id)
+    public function Ditolak($id)
     {
         $shalat = Dftrshalat::findOrFail($id);
         $shalat->status = 'Ditolak';
@@ -123,4 +151,3 @@ class PembimbingController extends Controller
         return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
     }
 }
-

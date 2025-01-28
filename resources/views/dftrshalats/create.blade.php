@@ -3,7 +3,7 @@
 
     <div class="mb-4">
         <label for="jenis" class="block text-sm font-medium text-gray-700">Jenis Shalat</label>
-        <input type="text" id="jenis" name="jenis" value="duha" class="w-full border border-gray-300 rounded-md p-2" readonly>
+        <input type="text" id="jenis" name="jenis" class="w-full border border-gray-300 rounded-md p-2" readonly>
     </div>
 
     <div class="mb-4">
@@ -28,16 +28,37 @@
     function updateRealTime() {
         // Mendapatkan elemen input waktu
         const waktuInput = document.getElementById('waktu');
+        const jenisInput = document.getElementById('jenis');
         
         // Mendapatkan waktu saat ini
         const now = new Date();
-
+        
         // Format waktu ke dalam format yang sesuai (hh:mm)
         let hours = now.getHours().toString().padStart(2, '0');
         let minutes = now.getMinutes().toString().padStart(2, '0');
-
+        
         // Mengupdate input waktu
         waktuInput.value = hours + ':' + minutes;
+
+        // Tentukan jenis shalat berdasarkan waktu
+        let jenisShalat = '';
+        
+        if (hours >= 4 && hours < 5) {
+            jenisShalat = 'Subuh';
+        } else if (hours >= 12 && hours < 15) {
+            jenisShalat = 'Dzuhur';
+        } else if (hours >= 15 && hours < 18) {
+            jenisShalat = 'Ashar';
+        } else if (hours >= 18 && hours < 19) {
+            jenisShalat = 'Maghrib';
+        } else if (hours >= 19 && hours < 20) {
+            jenisShalat = 'Isya';
+        } else {
+            jenisShalat = 'Duha';  // Waktu shalat duha (pagi sebelum dzuhur)
+        }
+
+        // Mengupdate input jenis shalat
+        jenisInput.value = jenisShalat;
     }
 
     // Memperbarui waktu setiap detik

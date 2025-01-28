@@ -3,22 +3,30 @@
 namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Journal;
-use App\Models\JournalHistory; // Import model JournalHistory
+use App\Models\JournalHistory;
 use Illuminate\Http\Request;
-
 
 class JournalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil semua jurnal dari database
-    $journals = Journal::all();
-    
-    // Ambil semua histori dari database dengan informasi jurnal
-    $histories = JournalHistory::with('journal')->get(); // Ambil semua histori beserta jurnalnya
+        // Ambil minggu yang dipilih, atau defaultkan ke minggu ini
+        $week = $request->input('week', Carbon::now()->format('Y-\WW'));
 
-    // Kirim data ke view
-    return view('journals.index', compact('journals', 'histories'));
+        // Tentukan tanggal awal dan akhir dari minggu yang dipilih
+        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari Senin
+        $endOfWeek = Carbon::parse($week . '-7')->endOfWeek(); // Hari Minggu
+
+        // Ambil semua jurnal dalam rentang minggu
+        $journals = Journal::whereBetween('tanggal', [$startOfWeek, $endOfWeek])->get();
+
+        // Ambil semua histori yang terkait dengan jurnal dalam rentang minggu yang sama
+        $histories = JournalHistory::whereHas('journal', function ($query) use ($startOfWeek, $endOfWeek) {
+            $query->whereBetween('tanggal', [$startOfWeek, $endOfWeek]);
+        })->get();
+
+        // Kirim data ke view
+        return view('journals.index', compact('journals', 'histories', 'startOfWeek', 'endOfWeek'));
     }
 
     public function create()
@@ -101,16 +109,14 @@ class JournalController extends Controller
 
     public function history(Journal $journal)
     {
-        
         $histories = JournalHistory::where('journal_id', $journal->id)->get();
         return view('journals.index', compact('histories', 'journal'));
     }
+
     public function getAllHistories()
     {
         $histories = JournalHistory::all(); // Ambil semua histori
         dd($histories); // Debugging
         return response()->json($histories);
     }
-    
-
 }

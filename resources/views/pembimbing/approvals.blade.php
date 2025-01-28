@@ -15,6 +15,21 @@
     </div>
     @endif
 
+    <div class="container mx-auto px-4 mb-6">
+        <!-- Filter Tanggal Mingguan -->
+        <form method="GET" action="{{ route('pembimbing.approvals') }}" class="flex items-center">
+            <label for="week" class="mr-2 font-semibold text-gray-700">Pilih Minggu:</label>
+            <input type="week" id="week" name="week" class="border rounded-lg p-2" 
+                   value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
+            <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                Tampilkan
+            </button>
+        </form>
+        <p class="mt-2 text-gray-600">
+            Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+        </p>
+    </div>
+
     <div class="container mx-auto px-4">
         <!-- Bagian Absen Datang -->
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Absen Datang</h2>
@@ -56,7 +71,7 @@
                                                 Setuju
                                             </button>
                                         </form>
-                                        
+                                      
                                         <!-- Tolak Form -->
                                         <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline">
                                             @csrf
@@ -113,7 +128,7 @@
                                                 Setuju
                                             </button>
                                         </form>
-                                        
+                                      
                                         <!-- Tolak Form -->
                                         <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline">
                                             @csrf
