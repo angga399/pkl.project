@@ -11,71 +11,75 @@ class PembimbingController extends Controller
 {
     public function index()
     {
-        //jourmnals: Mengambil jurnal dengan status 'Menunggu'
+        // Mengambil jurnal dengan status 'Menunggu'
         $journals = Journal::where('status', 'Menunggu')->get();
-        return view('pembimbing.journals', compact('journals'));
 
-          // approvals: Filter hanya menampilkan data yang statusnya belum disetujui atau ditolak
-          $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
-          ->where('status', '!=', 'Ditolak')
-          ->get();
-return view('pembimbingd.approvals', compact('daftarhdrs'));
+      // Mengambil semua data Daftarhdr
+    $daftarhdrs = Daftarhdr::all();
 
-//shalat: Menyaring hanya data yang statusnya 'Menunggu'
- $dftrshalats = Dftrshalat::where('status', 'Menunggu')->get();
- return view('pembimbing.shalat', compact('dftrshalats'));
-        }
+    // Mengelompokkan data berdasarkan minggu
+    $groupedByWeek = $daftarhdrs->groupBy(function ($item) {
+        // Menggunakan Carbon untuk mendapatkan format 'tahun-minggu' (misalnya 2025-05 untuk minggu 5 di tahun 2025)
+        return Carbon::parse($item->tanggal)->format('o-W');
+    });
+
+    // Mengirim data yang sudah dikelompokkan ke tampilan
+    return view('pembimbing.index', compact('groupedByWeek'));
+    
+        // Menyaring data 'Dftrshalat' dengan status 'Menunggu'
+        $dftrshalats = Dftrshalat::where('status', 'Menunggu')->get();
+
+        return view('pembimbing.index', compact('journals', 'daftarhdrs', 'dftrshalats'));
+    }
 
     public function journals()
-{
-    $journals = Journal::all(); // Sesuaikan dengan model atau logika Anda
-    return view('pembimbing.journals', compact('journals'));
-}
+    {
+        // Menampilkan semua jurnal
+        $journals = Journal::all();
+        return view('pembimbing.journals', compact('journals'));
+    }
 
-public function approvals()
-{
-    $daftarhdrs = Daftarhdr::all(); // Sesuaikan dengan model atau logika Anda
-    return view('pembimbing.approvals', compact('daftarhdrs'));
-}
-public function shalat()
-{
-    $dftrshalats = Dftrshalat::all(); // Sesuaikan dengan model atau logika Anda
-    return view('pembimbing.shalat', compact('dftrshalats'));
-}
-//journal halaman
+    public function approvals()
+    {
+        // Menampilkan data yang belum disetujui atau ditolak
+        $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
+            ->where('status', '!=', 'Ditolak')
+            ->get();
+        return view('pembimbing.approvals', compact('daftarhdrs'));
+    }
 
-    public function setuju($id)
+    public function shalat()
+    {
+        // Menampilkan data shalat yang belum disetujui atau ditolak
+        $dftrshalats = Dftrshalat::all();
+        return view('pembimbing.shalat', compact('dftrshalats'));
+    }
+
+    // Proses persetujuan untuk jurnal
+    public function setujuJurnal($id)
     {
         $journal = Journal::findOrFail($id);
         $journal->status = 'Disetujui';
         $journal->save();
-    
+
         return redirect()->route('pembimbing.journals')->with('status', 'Jurnal disetujui!');
     }
 
-    public function tolak($id)
+    public function tolakJurnal($id)
     {
         $journal = Journal::findOrFail($id);
         $journal->status = 'Ditolak';
         $journal->save();
-    
+
         return redirect()->route('pembimbing.journals')->with('status', 'Jurnal ditolak!');
     }
 
-
-//approvevals halaman
-    // Proses persetujuan
-  // Proses persetujuan
-
-
-
-
-
-    public function approve($id)
+    // Proses persetujuan untuk Daftarhdr
+    public function approveDaftarhdr($id)
     {
         $item = Daftarhdr::find($id);
         if ($item) {
-            $item->status = 'Disetujui'; // Atur status sesuai kebutuhan
+            $item->status = 'Disetujui'; // Mengubah status menjadi Disetujui
             $item->save();
 
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah disetujui.');
@@ -84,11 +88,11 @@ public function shalat()
         return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
     }
 
-    public function reject($id)
+    public function rejectDaftarhdr($id)
     {
         $item = Daftarhdr::find($id);
         if ($item) {
-            $item->status = 'Ditolak'; // Atur status sesuai kebutuhan
+            $item->status = 'Ditolak'; // Mengubah status menjadi Ditolak
             $item->save();
 
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah ditolak.');
@@ -97,34 +101,26 @@ public function shalat()
         return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
     }
 
-    // Metode lainnya...
+    // Proses persetujuan untuk Shalat
+    public function disetujuiShalat($id)
+    {
+        $shalat = Dftrshalat::findOrFail($id);
+        $shalat->status = 'Disetujui';
+        $shalat->save();
 
-  
+        return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
+    }
 
-public function disetujui($id)
-{
-    $shalat = Dftrshalat::findOrFail($id);
-    $shalat->status = 'Disetujui';
-    $shalat->save();
+    public function ditolakShalat($id)
+    {
+        $shalat = Dftrshalat::findOrFail($id);
+        $shalat->status = 'Ditolak';
+        $shalat->save();
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
+        // Menghapus data setelah ditolak
+        $shalat->delete();
+
+        return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
+    }
 }
 
-
-public function Ditolak($id)
-{
-    $shalat = Dftrshalat::findOrFail($id);
-    $shalat->status = 'Ditolak';
-    $shalat->save();
-
-
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak!');
-
-    // Menghapus data setelah ditolak
-    $shalat->delete();
-
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
-
-}
-
-}
