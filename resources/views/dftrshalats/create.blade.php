@@ -1,49 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Waktu Shalat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-5">
-    <h1>Form Waktu Shalat: {{ ucfirst($type) }}</h1>
-   
+<form action="{{ route('dftrshalats.store') }}" method="POST">
+    @csrf
 
-    <form action="{{ route('dftrshalats.store') }}" method="POST">
-        @csrf
-        <input type="hidden" name="type" value="{{ $type }}">
+    <div class="mb-4">
+        <label for="jenis" class="block text-sm font-medium text-gray-700">Jenis Shalat</label>
+        <input type="text" id="jenis" name="jenis" value="duha" class="w-full border border-gray-300 rounded-md p-2" readonly>
+    </div>
 
-        <div class="form-group">
-            <label>Tanggal</label>
-            <input type="text" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}" readonly>
-        </div>
-        <div class="form-group">
-            <label>Hari</label>
-            <input type="text" name="hari" class="form-control" value="{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd') }}" readonly>
-        </div>
-        <div class="form-group">
+    <div class="mb-4">
+        <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal</label>
+        <input type="date" id="tanggal" name="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="w-full border border-gray-300 rounded-md p-2" readonly>
+    </div>
 
-    <label>Waktu</label>
-    <input type="time" name="time" class="form-control" value="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('H:i') }}" readonly>
-</div>
+    <div class="mb-4">
+        <label for="hari" class="block text-sm font-medium text-gray-700">Hari</label>
+        <input type="text" id="hari" name="hari" value="{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd') }}" class="w-full border border-gray-300 rounded-md p-2" readonly>
+    </div>
 
+    <div class="mb-4">
+        <label for="waktu" class="block text-sm font-medium text-gray-700">Waktu Shalat</label>
+        <input type="time" id="waktu" name="waktu" class="w-full border border-gray-300 rounded-md p-2" readonly>
+    </div>
 
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Simpan</button>
+</form>
 
-            <label>Waktu</label>
-            <!-- Gunakan readonly atau disabled -->
-            <input type="time" name="waktu" class="form-control" value="{{ \Carbon\Carbon::now()->format('H:i') }}" readonly>
-        </div>
+<script>
+    function updateRealTime() {
+        // Mendapatkan elemen input waktu
+        const waktuInput = document.getElementById('waktu');
         
-        
-        <div class="form-check">
-            <input type="checkbox" name="checked" id="checked" class="form-check-input" required>
-            <label for="checked" class="form-check-label">Centang untuk mencatat waktu {{ ucfirst($type) }}</label>
-        </div>
+        // Mendapatkan waktu saat ini
+        const now = new Date();
 
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
-    </form>
-</div>
-</body>
-</html>
+        // Format waktu ke dalam format yang sesuai (hh:mm)
+        let hours = now.getHours().toString().padStart(2, '0');
+        let minutes = now.getMinutes().toString().padStart(2, '0');
+
+        // Mengupdate input waktu
+        waktuInput.value = hours + ':' + minutes;
+    }
+
+    // Memperbarui waktu setiap detik
+    setInterval(updateRealTime, 1000);
+
+    // Panggil sekali saat pertama kali dimuat
+    updateRealTime();
+</script>

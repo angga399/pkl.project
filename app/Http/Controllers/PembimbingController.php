@@ -64,8 +64,7 @@ public function shalat()
 
 
 //approvevals halaman
-    // Proses persetujuan
-  // Proses persetujuan
+   
   public function approve($id)
   {
       // Cari data berdasarkan ID
@@ -94,30 +93,34 @@ public function reject($id)
     return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak dan dihapus.');
 }
 
+//shalat
 public function disetujui($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
     $shalat->status = 'Disetujui';
     $shalat->save();
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
+    // Kirim semua data dftrshalats ke view pembimbing.shalat
+    $dftrshalats = Dftrshalat::all();
+
+    return view('pembimbing.shalat', compact('dftrshalats'))->with('status', 'Shalat disetujui!');
 }
 
-
-public function Ditolak($id)
+public function ditolak($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
     $shalat->status = 'Ditolak';
     $shalat->save();
 
-
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak!');
-
-    // Menghapus data setelah ditolak
+    // Setelah ditolak, data dihapus
     $shalat->delete();
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
+    // Kirim semua data dftrshalats ke view pembimbing.shalat
+    $dftrshalats = Dftrshalat::all();
 
+    return view('pembimbing.shalat', compact('dftrshalats'))->with('status', 'Shalat ditolak dan data dihapus!');
 }
 
 }
+
+
