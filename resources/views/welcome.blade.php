@@ -7,8 +7,6 @@
 </head>
 
 <body class="bg-gradient-to-r from-teal-400 to-blue-500 text-white">
-  <x-navigasi></x-navigasi>
-
   <div class="min-h-screen">
     <section class="text-gray-600 body-font py-24">
       <div class="container px-5 mx-auto text-center">

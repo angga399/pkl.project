@@ -10,7 +10,7 @@
     <h1 class="text-4xl font-bold text-gray-800 mb-12 bg-white px-8 py-4 rounded-lg shadow-lg">Pengambilan Foto dengan Lokasi</h1>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2 mt-6 max-w-4xl">
-        <div class="p-8 bg-white rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-200">
+        <div id="absen-datang" class="p-8 bg-white rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-200 hidden">
             <a href="{{ route('absen.datang') }}" class="flex flex-col items-center">
                 <div class="w-20 h-20 bg-green-500 text-white flex items-center justify-center rounded-full mb-6 shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -21,7 +21,7 @@
             </a>
         </div>
 
-        <div class="p-8 bg-white rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-200">
+        <div id="absen-pulang" class="p-8 bg-white rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-200 hidden">
             <a href="{{ route('absen.pulang') }}" class="flex flex-col items-center">
                 <div class="w-20 h-20 bg-blue-500 text-white flex items-center justify-center rounded-full mb-6 shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -32,5 +32,26 @@
             </a>
         </div>
     </div>
+
+    <script>
+        function checkTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            // Jam datang: 5:59 - 12:00
+            if ((hours === 5 && minutes >= 59) || (hours < 12)) {
+                document.getElementById('absen-datang').classList.remove('hidden');
+            }
+
+            // Jam pulang: 24:59 - 6:30 (yang berarti 00:00 - 6:30)
+            if ((hours === 0 && minutes <= 30) || (hours === 6 && minutes < 30)) {
+                document.getElementById('absen-pulang').classList.remove('hidden');
+            }
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        window.onload = checkTime;
+    </script>
 </body>
 </html>

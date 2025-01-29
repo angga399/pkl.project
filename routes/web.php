@@ -94,7 +94,8 @@ Route::get('/absen-pulang', function () {
 })->name('absen.pulang');
 
 
-Route::get('/guru/index', [DaftarhdrController::class, 'showGuru'])->name('guru.index');
+Route::get('/guru', [DaftarhdrController::class, 'showGuru'])->name('guru.index');
+Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.absen');
 Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
 Route::get('/guru/journal', [JournalController::class, 'showGuru'])->name('guru.journal');
 
