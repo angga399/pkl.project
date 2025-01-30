@@ -34,6 +34,11 @@ Route::get('/', function () {
 })->name('welcome');
 
 
+// Halaman utama
+Route::get('/pembimbingpkl', function () {
+    return view('pembimbingpkl', ['title' => 'home page']);
+})->name('pembimbingpkl');
+
 Route::get('/pembimbing/journals', [PembimbingController::class, 'journals'])->name('pembimbing.journals');
 Route::post('/pembimbing/journals/{id}/approve', [PembimbingController::class, 'setuju'])->name('pembimbing.setuju');
 Route::post('/pembimbing/journals/{id}/reject', [PembimbingController::class, 'tolak'])->name('pembimbing.tolak');

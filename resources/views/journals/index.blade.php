@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -18,9 +14,9 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen">
-        <!-- Sidebar -->
-        <x-sidebar></x-sidebar>
-        <!-- Main Content -->
+           <div class="sidebar" style="width: 250px; background-color: #343a40;">
+            @include('sidebar')
+        </div>
         <div class="flex-1 flex flex-col">
             <!-- Header -->
             <div class="bg-white py-4 px-6 shadow-md flex justify-between items-center">
@@ -40,7 +36,7 @@
                         value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
                     </form>
                 </div>
-                <p>histori perminggu
+                <p>histori perminggu</p>
             </div>
 
             <!-- Table Section -->
@@ -48,34 +44,34 @@
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse border border-gray-400">
                         <thead class="bg-gray-300">
-                            <tr>
-                                <th class="border px-4 py-2">No</th>
-                                <th class="border px-4 py-2">Nama</th>
-                                <th class="border px-4 py-2">Tanggal</th>
-                                <th class="border px-4 py-2">Uraian</th>
-                                <th class="border px-4 py-2">jurusan</th>
-                                <th class="border px-4 py-2">NIK</th>
-                                <th class="border px-4 py-2">status</th>
+                            <tr class="text-black">
+                                <th class="border px-4 py-2 ">No</th>
+                                <th class="border px-4 py-2 ">Nama</th>
+                                <th class="border px-4 py-2 ">Tanggal</th>
+                                <th class="border px-4 py-2 ">Uraian</th>
+                                <th class="border px-4 py-2 ">Jurusan</th>
+                                <th class="border px-4 py-2 ">NIK</th>
+                                <th class="border px-4 py-2 ">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-gray-600 h-40">
+                        <tbody class="bg-gray-600">
                             @if ($journals->isEmpty())
                             <tr>
-                                <td colspan="7" class="text-center py-4">Tidak ada data jurnal.</td>
+                                <td colspan="7" class="text-center py-4 text-white">Tidak ada data jurnal.</td>
                             </tr>
-                        @else
-                            @foreach ($journals as $journal)
-                                <tr>
-                                    <th class="py-2 px-4 border-b">{{ $loop->iteration }}</th>
-                                    <th class="py-2 px-4 border-b">{{ $journal->nama }}</th>
-                                    <th class="py-2 px-4 border-b">{{ $journal->tanggal }}</th>
-                                    <th class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</th>
-                                    <th class="py-2 px-4 border-b">{{ $journal->kelas }}</th>
-                                    <th class="py-2 px-4 border-b">{{ $journal->nik }}</th>
+                            @else
+                                @foreach ($journals as $journal)
+                                    <tr class="text-white">
+                                        <th class="py-2 px-4 border-b">{{ $loop->iteration }}</th>
+                                        <th class="py-2 px-4 border-b">{{ $journal->nama }}</th>
+                                        <th class="py-2 px-4 border-b">{{ $journal->tanggal }}</th>
+                                        <th class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</th>
+                                        <th class="py-2 px-4 border-b">{{ $journal->kelas }}</th>
+                                        <th class="py-2 px-4 border-b">{{ $journal->nik }}</th>
                                         <th class="py-2 px-4 border-b">{{ $journal->status }}</th>
-                                </tr>
-                            @endforeach
-                        @endif
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -87,34 +83,36 @@
                 <div class="border border-gray-400 rounded p-4 bg-gray-200 mt-2">
                     <table class="w-full border-collapse border border-gray-400">
                         <thead class="bg-gray-300">
-                            <tr>
-                                <th class="border px-2 py-1">No</th>
-                                <th class="border px-2 py-1">Nama</th>
-                                <th class="border px-2 py-1">Tanggal</th>
-                                <th class="border px-2 py-1">Uraian</th>
-                                <th class="border px-2 py-1">jurusan</th>
-                                <th class="border px-2 py-1">NIK</th>
-                                <th class="border px-2 py-1">tanggal lengkap</th>
-                                <th class="border px-2 py-1">status</th>
+                            <tr class="text-black">
+                                <th class="border px-2 py-1 ">No</th>
+                                <th class="border px-2 py-1 ">Nama</th>
+                                <th class="border px-2 py-1 ">Tanggal</th>
+                                <th class="border px-2 py-1 ">Uraian</th>
+                                <th class="border px-2 py-1 ">Jurusan</th>
+                                <th class="border px-2 py-1 ">NIK</th>
+                                <th class="border px-2 py-1 ">Tanggal Lengkap</th>
+                                <th class="border px-2 py-1 ">Status</ </th>
                             </tr>
                         </thead>
                         <tbody>
                             @if ($histories->isEmpty())
-                        @else
-                            @foreach ($histories as $history)
                             <tr>
-                                <th class="border px-2 py-1" >{{ $history->journal_id }}</th>
-                                        <th class="border px-2 py-1"> {{ json_decode($history->changes)->nama }}</th>
-                                        <th class="border px-2 py-1"> {{ json_decode($history->changes)->tanggal }}</th>
-                                        <th class="border px-2 py-1">{{ json_decode($history->changes)->uraian_konsentrasi }}</th>
-                                        <th class="border px-2 py-1"> {{ json_decode($history->changes)->kelas }}</th>
-                                        <th class="border px-2 py-1"> {{ json_decode($history->changes)->nik }}</th>
-                                        <th class="border px-2 py-1"> {{ $history->created_at }}</th>
-                                        <th class="py-2 px-4 border-b">{{ $journal->status }}</th>
-                              
+                                <td colspan="8" class="text-center py-4 text-white">Tidak ada histori jurnal.</td>
+                            </tr>
+                            @else
+                                @foreach ($histories as $history)
+                                <tr class="text-black">
+                                    <th class="border px-2 py-1">{{ $history->journal_id }}</th>
+                                    <th class="border px-2 py-1">{{ json_decode($history->changes)->nama }}</th>
+                                    <th class="border px-2 py-1">{{ json_decode($history->changes)->tanggal }}</th>
+                                    <th class="border px-2 py-1">{{ json_decode($history->changes)->uraian_konsentrasi }}</th>
+                                    <th class="border px-2 py-1">{{ json_decode($history->changes)->kelas }}</th>
+                                    <th class="border px-2 py-1">{{ json_decode($history->changes)->nik }}</th>
+                                    <th class="border px-2 py-1">{{ $history->created_at }}</th>
+                                    <th class="border px-2 py-1">{{ $journal->status }}</th>
                                 </tr>
                                 @endforeach
-                        @endif
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -124,5 +122,6 @@
             <div class="text-center py-4 text-sm">footer</div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
