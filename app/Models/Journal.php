@@ -14,7 +14,6 @@ class Journal extends Model
         'tanggal',
         'nama',
         'kelas',
-        'nik',
         'uraian_konsentrasi',
     ];
 

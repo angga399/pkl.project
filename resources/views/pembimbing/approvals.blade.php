@@ -120,8 +120,6 @@
                                     <p>Status: {{ $item->status }}</p>
                                 @endif
                             </td>
-                            
-                            
                         </tr>
                     @endif
                 @endforeach

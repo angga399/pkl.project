@@ -108,29 +108,29 @@ class PembimbingController extends Controller
     public function approve($id)
     {
         $item = Daftarhdr::find($id);
-        if ($item) {
+        if ($item && strtolower(trim($item->status)) === 'pending') {
             $item->status = 'Disetujui';
             $item->save();
     
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah disetujui.');
         }
     
-        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
+        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan atau sudah diproses.');
     }
     
     public function reject($id)
     {
         $item = Daftarhdr::find($id);
-        if ($item) {
+        if ($item && strtolower(trim($item->status)) === 'pending') {
             $item->status = 'Ditolak';
             $item->save();
     
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah ditolak.');
         }
-      
     
-        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
+        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan atau sudah diproses.');
     }
+    
 
     // Proses persetujuan untuk shalat
     public function disetujui($id)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Daftarhdr;
+use App\Models\HistoriAbsen;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -33,7 +34,12 @@ class DaftarhdrController extends Controller
     
         return view('daftarhdr.index', compact('daftarhdrs', 'startOfWeek', 'endOfWeek'));
     }
-    
+
+    public function show(Daftarhdr $daftarhdr)
+{
+    return view('daftarhdr.show', compact('daftarhdr'));
+}
+
 
     public function create()
     {
@@ -44,7 +50,6 @@ class DaftarhdrController extends Controller
     {
         \Log::info('Data yang diterima:', $request->all());
         
-
         $request->validate([
             'tipe' => 'required',
             'hari' => 'required',
@@ -79,9 +84,27 @@ class DaftarhdrController extends Controller
     }
 
     public function showGuru()
-{
-    $daftarhdrs = Daftarhdr::orderBy('tanggal')->get();
-    return view('guru.index', compact('daftarhdrs'));
-}
+    {
+        $daftarhdrs = Daftarhdr::orderBy('tanggal')->get();
+        return view('guru.index', compact('daftarhdrs'));
+    }
 
+    // Method untuk mengambil histori terkait Daftarhdr (journal)
+    public function history(Daftarhdr $daftarhdr)
+    {
+        // Asumsi HistoriAbsen memiliki 'journal_id' yang menghubungkan ke Daftarhdr
+        $histories = HistoriAbsen::where('journal_id', $daftarhdr->id)->get();
+        
+        // Kirim data ke view, termasuk histori dan data daftarhdr
+        return view('daftarhdr.histori', compact('histories', 'daftarhdr'));
+    }
+
+    // Method untuk mengambil seluruh histori absen (berguna untuk admin atau laporan)
+    public function getAllHistories()
+    {
+        $histori = HistoriAbsen::all(); // Mengambil semua histori
+        
+        // Mengembalikan data dalam format JSON (atau bisa dikembalikan dalam format lain)
+        return response()->json($histori);
+    }
 }

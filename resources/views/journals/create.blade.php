@@ -42,7 +42,7 @@
                         <div class="p-2 w-1/2">
                             <div class="relative">
                                 <label for="tanggal" class="leading-7 text-sm text-gray-600">Tanggal</label>
-                                <input type="date" id="tanggal" name="tanggal" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required>
+                                <input type="date" id="tanggal" name="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="w-full border border-gray-300 rounded-md p-2" readonly>
                             </div>
                         </div>
                         <!-- Kelas -->
@@ -61,13 +61,6 @@
                                     <option value="an">AK</option>
                                     <option value="an">AN</option>
                                 </select>
-                            </div>
-                        </div>
-                        <!-- NIK -->
-                        <div class="p-2 w-1/2">
-                            <div class="relative">
-                                <label for="nik" class="leading-7 text-sm text-gray-600">NIK</label>
-                                <input type="text" id="nik" name="nik" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required>
                             </div>
                         </div>
                         <!-- Uraian Konsentrasi -->

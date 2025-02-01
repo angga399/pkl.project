@@ -7,6 +7,15 @@ use App\Http\Controllers\DftrshalatController;
 use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\ShalatController;
 
+
+
+
+Route::get('/daftarhdr/create', [DaftarhdrController::class, 'create'])->name('daftarhdr.create');
+
+Route::get('/histori/{daftarhdr}', [DaftarhdrController::class, 'histori'])->name('daftarhdr.histori');
+Route::get('/histori-all', [DaftarhdrController::class, 'getAllHistories'])->name('daftarhdr.allHistories');
+Route::get('/daftarhdr/{daftarhdr}', [DaftarhdrController::class, 'show'])->name('daftarhdr.show');
+
 // Rute utama untuk daftarhdr
 Route::resource('daftarhdr', DaftarhdrController::class);
 
@@ -68,7 +77,6 @@ Route::get('/journals', [JournalController::class, 'index'])->name('journals.ind
 Route::get('/Dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
 Route::get('/create', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
 Route::post('/store', [DftrshalatController::class, 'store'])->name('dftrshalats.store');
-
 Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
     Route::get('journals', [PembimbingController::class, 'journals'])->name('journals');
     Route::post('journals/{id}/approve', [PembimbingController::class, 'setuju'])->name('setuju');

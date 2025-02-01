@@ -30,7 +30,7 @@
             
             <!-- Buttons & Filters -->
             <div class="p-6 flex flex-col md:flex-row items-center gap-4">
-                <button class="bg-gray-500 text-white px-4 py-2 rounded">Tambah Jurnal</button>
+                <a class="bg-gray-500 text-white px-4 py-2 rounded"href="{{route('journals.create')}}">Tambah Jurnal</a>
                 <div>
                     <form method="GET" action="{{ route('journals.index') }}">
                         <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
@@ -54,7 +54,6 @@
                                 <th class="border px-4 py-2 ">Tanggal</th>
                                 <th class="border px-4 py-2 ">Uraian</th>
                                 <th class="border px-4 py-2 ">Jurusan</th>
-                                <th class="border px-4 py-2 ">NIK</th>
                                 <th class="border px-4 py-2 ">Status</th>
                             </tr>
                         </thead>
@@ -71,7 +70,6 @@
                                         <th class="py-2 px-4 border-b">{{ $journal->tanggal }}</th>
                                         <th class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</th>
                                         <th class="py-2 px-4 border-b">{{ $journal->kelas }}</th>
-                                        <th class="py-2 px-4 border-b">{{ $journal->nik }}</th>
                                         <th class="py-2 px-4 border-b">{{ $journal->status }}</th>
                                     </tr>
                                 @endforeach
