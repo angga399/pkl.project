@@ -20,7 +20,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">PKL siswa <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">PKL siswa <sup></sup></div>
     </a>
 
     <!-- Divider -->
@@ -65,7 +65,7 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="journals.index" data-toggle="collapse" data-target="#collapseUtilities"
+        <a class="nav-link collapsed" href="{{route('daftarhdr.index')}}" data-toggle="collapse" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fa-solid fa-eye"></i>
             <span>absensi</span>

@@ -58,16 +58,18 @@ class PembimbingController extends Controller
         $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
         $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
         $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
-
+    
         // Menampilkan approval berdasarkan minggu
         $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
             ->where('status', '!=', 'Ditolak')
             ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->get();
-
+    
+        // dd($daftarhdrs); // Debugging untuk melihat data yang dikirim
+    
         return view('pembimbing.approvals', compact('daftarhdrs', 'startOfWeek', 'endOfWeek'));
     }
-
+    
     public function shalat(Request $request)
     {
         // Filter berdasarkan minggu
@@ -109,23 +111,24 @@ class PembimbingController extends Controller
         if ($item) {
             $item->status = 'Disetujui';
             $item->save();
-
+    
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah disetujui.');
         }
-
+    
         return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
     }
-
+    
     public function reject($id)
     {
         $item = Daftarhdr::find($id);
         if ($item) {
             $item->status = 'Ditolak';
             $item->save();
-
+    
             return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah ditolak.');
         }
-
+      
+    
         return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan.');
     }
 

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Waktu Shalat</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen">
@@ -28,7 +31,7 @@
             <div class="mb-4">
                 <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="bg-cyan-500 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Duha</a>
                 <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="bg-yellow-400 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Dzuhur</a>
-                <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="bg-amber-400 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Ashar</a>
+                <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="bg-yellow-400 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Ashar</a>
             </div>
 
             <form method="GET" action="{{ route('dftrshalats.index') }}" class="flex items-center mb-4">
@@ -42,92 +45,92 @@
 
             <!-- Tabel Shalat -->
             <div class="flex flex-wrap -mx-2">
-                <!-- Tabel Shalat Duha -->
-                <div class="w-full md:w-1/3 px-2 mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Waktu Shalat Duha</h2>
-                    <table class="table-auto w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">No</th>
-                                <th class="border border-gray-300 px-4 py-2">Jenis</th>
-                                <th class="border border-gray-300 px-4 py-2">Tanggal</th>
-                                <th class="border border-gray-300 px-4 py-2">Hari</th>
-                                <th class="border border-gray-300 px-4 py-2">Waktu</th>
-                                <th class="border border-gray-300 px-4 py-2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($dftrshalats->where('jenis', 'Duha') as $index => $shalat)
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ ucfirst($shalat->jenis) }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->tanggal }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->hari }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->waktu }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ ucfirst($shalat->status) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+              <!-- Tabel Shalat Duha -->
+<div class="w-full md:w-1/3 px-2 mb-4">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Waktu Shalat Duha</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-2 py-1 text-sm">No</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Jenis</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Tanggal</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Hari</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Waktu</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($dftrshalats->where('jenis', 'Duha') as $index => $shalat)
+                <tr>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ ucfirst($shalat->jenis) }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->tanggal }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->hari }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->waktu }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ ucfirst($shalat->status) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-                <!-- Tabel Shalat Dzuhur -->
-                <div class="w-full md:w-1/3 px-2 mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Waktu Shalat Dzuhur</h2>
-                    <table class="table-auto w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">No</th>
-                                <th class="border border-gray-300 px-4 py-2">Jenis</th>
-                                <th class="border border-gray-300 px-4 py-2">Tanggal</th>
-                                <th class="border border-gray-300 px-4 py-2">Hari</th>
-                                <th class="border border-gray-300 px-4 py-2">Waktu</th>
-                                <th class="border border-gray-300 px-4 py-2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($dftrshalats->where('jenis', 'Dzuhur') as $index => $shalat)
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ ucfirst($shalat->jenis) }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->tanggal }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->hari }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->waktu }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ ucfirst($shalat->status) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+<!-- Tabel Shalat Dzuhur -->
+<div class="w-full md:w-1/3 px-2 mb-4">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Waktu Shalat Dzuhur</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-2 py-1 text-sm">No</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Jenis</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Tanggal</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Hari</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Waktu</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($dftrshalats->where('jenis', 'Dzuhur') as $index => $shalat)
+                <tr>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ ucfirst($shalat->jenis) }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->tanggal }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->hari }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->waktu }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ ucfirst($shalat->status) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-                <!-- Tabel Shalat Ashar -->
-                <div class="w-full md:w-1/3 px-2 mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Waktu Shalat Ashar</h2>
-                    <table class="table-auto w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">No</th>
-                                <th class="border border-gray-300 px-4 py-2">Jenis</th>
-                                <th class="border border-gray-300 px-4 py-2">Tanggal</th>
-                                <th class="border border-gray-300 px-4 py-2">Hari</th>
-                                <th class="border border-gray-300 px-4 py-2">Waktu</th>
-                                <th class="border border-gray-300 px-4 py-2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($dftrshalats->where('jenis', 'Ashar') as $index => $shalat)
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ ucfirst($shalat->jenis) }}</td>
-                                    <td class="border border -gray-300 px-4 py-2">{{ $shalat->tanggal }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->hari }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $shalat->waktu }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ ucfirst($shalat->status) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+<!-- Tabel Shalat Ashar -->
+<div class="w-full md:w-1/3 px-2 mb-4">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Waktu Shalat Ashar</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-2 py-1 text-sm">No</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Jenis</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Tanggal</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Hari</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Waktu</th>
+                <th class="border border-gray-300 px-2 py-1 text-sm">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($dftrshalats->where('jenis', 'Ashar') as $index => $shalat)
+                <tr>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ ucfirst($shalat->jenis) }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->tanggal }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->hari }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ $shalat->waktu }}</td>
+                    <td class="border border-gray-300 px-2 py-1 text-sm">{{ ucfirst($shalat->status) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
             </div>
         </div>
     </div>

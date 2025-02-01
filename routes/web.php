@@ -83,11 +83,6 @@ Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
     Route::post('shalat/{id}/reject', [PembimbingController::class, 'ditolak'])->name('ditolak');
 });
 
-Route::post('/pembimbing/approve/{id}', [PembimbingController::class, 'approve'])->name('pembimbing.approve');
-Route::post('/pembimbing/reject/{id}', [PembimbingController::class, 'reject'])->name('pembimbing.reject');
-
-
-
 
 
 Route::get('/absen-datang', function () {

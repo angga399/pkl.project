@@ -40,12 +40,12 @@
             const minutes = now.getMinutes();
 
             // Jam datang: 5:59 - 12:00
-            if ((hours === 5 && minutes >= 59) || (hours < 12)) {
+            if ((hours === 5 && minutes >= 59) || (hours < 23)) {
                 document.getElementById('absen-datang').classList.remove('hidden');
             }
 
             // Jam pulang: 24:59 - 6:30 (yang berarti 00:00 - 6:30)
-            if ((hours === 0 && minutes <= 30) || (hours === 6 && minutes < 30)) {
+            if ((hours === 0 && minutes <= 30) || (hours === 18 && minutes < 30)) {
                 document.getElementById('absen-pulang').classList.remove('hidden');
             }
         }

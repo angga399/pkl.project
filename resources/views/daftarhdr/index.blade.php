@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Pengambilan Foto</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"> 
     <style>
         .modal {
             display: none;
@@ -13,7 +16,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 50;
@@ -28,7 +30,7 @@
 <body class="bg-gray-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-gray-800 text-white">
+        <div class="w-64 text-white">
             @include('sidebar')
         </div>
 
