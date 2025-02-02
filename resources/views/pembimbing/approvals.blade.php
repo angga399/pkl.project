@@ -9,11 +9,6 @@
 <body class="bg-gray-100 py-10">
 
     <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Halaman Persetujuan</h1>
-    @if(session('status'))
-    <div class="bg-green-200 text-green-700 px-4 py-2 rounded mb-4">
-        {{ session('status') }}
-    </div>
-    @endif
 
     <div class="container mx-auto px-4 mb-6">
         <!-- Filter Tanggal Mingguan -->
@@ -63,23 +58,27 @@
                                     @endif
                                 </td>
                                 <td class="py-2 px-4 border-b border-gray-300">
-                                    @if ($item->status === 'Menunggu Persetujuan')
-                                        <!-- Setujui Form -->
-                                        <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded-md">
-                                                Setuju
-                                            </button>
-                                        </form>
-                                      
-                                        <!-- Tolak Form -->
-                                        <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded-md">
-                                                Tolak
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <!-- Setujui Form -->
+                                    <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button 
+                                            type="submit" 
+                                            class="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600" 
+                                            onclick="return confirm('Apakah Anda yakin ingin menyetujui item ini?')">
+                                            Setuju
+                                        </button>
+                                    </form>
+                                  
+                                    <!-- Tolak Form -->
+                                    <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline ml-2">
+                                        @csrf
+                                        <button 
+                                            type="submit" 
+                                            class="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600" 
+                                            onclick="return confirm('Apakah Anda yakin ingin menolak item ini?')">
+                                            Tolak
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endif
@@ -128,7 +127,7 @@
                                                 Setuju
                                             </button>
                                         </form>
-                                      
+                                  
                                         <!-- Tolak Form -->
                                         <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline">
                                             @csrf

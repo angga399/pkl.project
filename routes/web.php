@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
 use App\Http\Controllers\DftrshalatController;
 use App\Http\Controllers\PembimbingController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ShalatController;
 
 // Rute utama untuk daftarhdr
@@ -51,7 +55,6 @@ Route::post('/pembimbing/shalat/{id}/reject', [PembimbingController::class, 'dit
 // Rute untuk journals (daftar utama journals)
 Route::get('journals', [JournalController::class, 'index'])->name('journals.index');
 
-Route::post('dftrshalats/store', [PembimbingController::class, 'store'])->name('dftrshalats.store');
 
 Route::get('/journals/create', [JournalController::class, 'create'])->name('journals.create');
 Route::post('/journals/store', [JournalController::class, 'store'])->name('journals.store');
@@ -92,4 +95,54 @@ Route::get('/absen-datang', function () {
 Route::get('/absen-pulang', function () {
     return view('daftarhdr.absen-pulang'); // Halaman untuk absen pulang
 })->name('absen.pulang');
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
+
+
+
+// Menampilkan form login
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+
+// Menangani login
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+// Logout
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+
+
+
+
+Route::middleware('auth')->group(function () {
+    // Menampilkan halaman edit profil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    
+    // Mengupdate profil
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // Menghapus akun
+    Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
+
+
+        // Menampilkan halaman Detail Akun
+        Route::get('/profile/details', [ProfileController::class, 'show'])->name('profile.details');
+});
+
+// routes/web.php
+// routes/web.php
+
+Route::get('/pembimbingpkl', function () {
+    return view('pembimbingpkl'); // Ganti dengan nama view yang sesuai
+})->name('pembimbingpkl');
+
+
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
 
