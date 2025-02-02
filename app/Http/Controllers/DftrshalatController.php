@@ -73,5 +73,9 @@ class DftrshalatController extends Controller
         return redirect()->route('dftrshalats.index')->with('status', 'Data shalat berhasil disimpan!');
     }
     
-    
+    public function showGuru()
+    {
+        $dftrshalats = Dftrshalat::orderBy('tanggal')->get();
+        return view('guru.shalats', compact('dftrshalats'));
+    }
 }
