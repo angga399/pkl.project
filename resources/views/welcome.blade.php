@@ -24,7 +24,7 @@
                     <div class="flex-grow">
                         <h2 class="text-lg font-semibold mb-3">Jurnal</h2>
                         <p class="leading-relaxed text-base">Isi Jurnal kegiatan kamu</p>
-                        <a class="mt-3 text-teal-400 inline-flex items-center hover:text-teal-600 transition-all duration-300 transition-page" href="{{ route('journals.index') }}">
+                        <a class="mt-3 x`   text-teal-400 inline-flex items-center hover:text-teal-600 transition-all duration-300 transition-page" href="{{ route('journals.index') }}">
                             Go Page
                             <i class="fas fa-arrow-right ml-2"></i>
                         </a>
