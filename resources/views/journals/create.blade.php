@@ -35,7 +35,21 @@
                         <div class="p-2 w-1/2">
                             <div class="relative">
                                 <label for="nama" class="leading-7 text-sm text-gray-600">Nama</label>
-                                <input type="text" id="nama" name="nama" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required>
+                                <input type="text" id="nama" name="nama" value="{{ Auth::user()->full_name }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
+                            </div>
+                        </div>
+                        <!-- NIK -->
+                        <div class="p-2 w-1/2">
+                            <div class="relative">
+                                <label for="nik" class="leading-7 text-sm text-gray-600">NIK</label>
+                                <input type="text" id="nik" name="nik" value="{{ Auth::user()->nik }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
+                            </div>
+                        </div>
+                        <!-- Kelas -->
+                        <div class="p-2 w-1/2">
+                            <div class="relative">
+                                <label for="kelas" class="leading-7 text-sm text-gray-600">Kelas</label>
+                                <input type="text" id="kelas" name="kelas" value="{{ Auth::user()->major }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
                             </div>
                         </div>
                         <!-- Tanggal -->
@@ -43,24 +57,6 @@
                             <div class="relative">
                                 <label for="tanggal" class="leading-7 text-sm text-gray-600">Tanggal</label>
                                 <input type="date" id="tanggal" name="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="w-full border border-gray-300 rounded-md p-2" readonly>
-                            </div>
-                        </div>
-                        <!-- Kelas -->
-                        <div class="p-2 w-1/2">
-                            <div class="relative">
-                                <label for="kelas" class="leading-7 text-sm text-gray-600">Kelas</label>
-                                <select id="kelas" name="kelas" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required>
-                                    <option value="">Pilih Kelas</option>
-                                    <option value="pplg">PPLG</option>
-                                    <option value="tkj">TKJ</option>
-                                    <option value="an">DPB</option>
-                                    <option value="an">BR</option>
-                                    <option value="an">TB</option>
-                                    <option value="an">LPS</option>
-                                    <option value="an">MP</option>
-                                    <option value="an">AK</option>
-                                    <option value="an">AN</option>
-                                </select>
                             </div>
                         </div>
                         <!-- Uraian Konsentrasi -->

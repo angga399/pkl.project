@@ -152,5 +152,16 @@ Route::get('/pembimbingpkl', function () {
 })->name('pembimbingpkl');
 
 
+Route::get('/awal', function () {
+    return view('awal'); // Ganti dengan nama view yang sesuai
+})->name('awal');
+
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
 
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome')->middleware('auth');
+
+Route::get('/pembimbingpkl', function () {
+    return view('.pembimbingpkl');
+})->name('pembimbingpkl')->middleware('auth');

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('daftarhdr', function (Blueprint $table) { // Gunakan 'daftarhdr' sesuai dengan nama tabel
+        Schema::create('daftarhdrs', function (Blueprint $table) { // Gunakan 'daftarhdr' sesuai dengan nama tabel
             $table->id();
             $table->string('hari'); // Stores the day
             $table->string('tanggal'); // Stores the date
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daftarhdr'); // Sesuaikan dengan nama tabel yang dibuat
+        Schema::dropIfExists('daftarhdrs'); // Sesuaikan dengan nama tabel yang dibuat
     }
 };

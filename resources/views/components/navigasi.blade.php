@@ -1,35 +1,55 @@
-<nav class="bg-gradient-to-r from-[#0a192f] to-[#1c1c1c] p-4">
-  <div class="container mx-auto flex justify-end items-center"> <!-- Mengubah justify-between menjadi justify-end -->
-    <!-- Bagian Kiri Navigasi (Kosong karena hanya logo profile di kanan) -->
-    <div></div>
-    
-    <!-- Profil Pengguna di Kanan Atas -->
+<nav class="bg-gradient-to-r from-teal-400 to-blue-500 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <div></div> <!-- Kosong, hanya ikon profil di kanan -->
+
     <div class="relative">
       @auth
-        <!-- Ikon Profil -->
-        <button class="flex items-center space-x-2 text-white" id="profileDropdownButton">
-          <i class="fas fa-user-circle text-3xl"></i> <!-- Ukuran diperbesar menjadi 3xl -->
+        <button class="flex items-center space-x-2 text-white cursor-pointer" id="profileDropdownButtonSiswa">
+          <i class="fas fa-user-circle text-3xl"></i>
         </button>
 
-        <!-- Dropdown Profil -->
-        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md text-gray-700">
+        <!-- Dropdown Profile -->
+        <div id="profileDropdownSiswa" class="hidden absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-md text-gray-700 z-50">
           <div class="p-4">
-            <p class="font-semibold">{{ auth()->user()->supervisor_name }}</p>
-            <p class="text-sm">{{ auth()->user()->email }}</p>
-            <p class="text-sm">{{ auth()->user()->rank }}</p>
-            <p class="text-sm">{{ auth()->user()->phone_number }}</p>
-            <p class="text-sm">{{ auth()->user()->company_address }}</p>
+            <p class="font-semibold">{{ auth()->user()->full_name }}</p>
+            <p class="text-sm text-gray-500">{{ auth()->user()->email }}</p>
+            <p class="text-sm text-gray-500">{{ auth()->user()->major }}</p> <!-- Jurusan -->
+            <p class="text-sm text-gray-500">{{ auth()->user()->phone_number }}</p> <!-- No Telepon -->
+            <p class="text-sm text-gray-500">{{ auth()->user()->location_pkl }}</p> <!-- Lokasi PKL -->
           </div>
           <div class="border-t">
-            <!-- Link untuk menuju halaman Detail Akun -->
             <a href="{{ route('profile.details') }}" class="block px-4 py-2 text-teal-600 hover:bg-gray-100">Detail Akun</a>
-            <a href="{{ route('login') }}" class="block px-4 py-2 text-red-600 hover:bg-gray-100">Logout</a>
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">Logout</button>
+            </form>
           </div>
         </div>
       @else
-        <a href="{{ route('login') }}" class="text-white">Login</a>
-        <a href="{{ route('register') }}" class="text-white">Register</a>
+        <a href="{{ route('login') }}" class="text-white px-2">Login</a>
+        <a href="{{ route('register') }}" class="text-white px-2">Register</a>
       @endauth
     </div>
   </div>
 </nav>
+
+<!-- Script untuk Dropdown -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const profileButton = document.getElementById('profileDropdownButtonSiswa');
+    const dropdown = document.getElementById('profileDropdownSiswa');
+
+    if (profileButton) {
+      profileButton.addEventListener('click', function (event) {
+        dropdown.classList.toggle('hidden');
+        event.stopPropagation();
+      });
+
+      document.addEventListener('click', function (event) {
+        if (!dropdown.contains(event.target) && !profileButton.contains(event.target)) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    }
+  });
+</script>

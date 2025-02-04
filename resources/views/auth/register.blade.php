@@ -54,7 +54,7 @@
             <x-input-label for="nip" :value="__('NIP Pembimbing')" />
             <x-text-input id="nip" name="nip" type="text" value="{{ old('nip') }}" required />
 
-            <x-input-label for="birth_date_pembimbing" :value="__('Tempat, Tanggal Lahir Pembimbing')" />
+            <x-input-label for="birth_date_pembimbing" :value="__('Tanggal Lahir Pembimbing')" />
             <x-text-input id="birth_date_pembimbing" name="birth_date_pembimbing" type="date" value="{{ old('birth_date_pembimbing') }}" required />
 
             <x-input-label for="rank" :value="__('Pangkat Pembimbing')" />

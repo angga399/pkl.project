@@ -11,7 +11,7 @@ class AuthenticatedSessionController extends Controller
     // Menampilkan form login
     public function create()
     {
-        return view('auth.login'); // pastikan ada view 'auth.login'
+        return view('auth.login'); // Pastikan ada view 'auth.login'
     }
 
     // Menangani login
@@ -25,21 +25,22 @@ class AuthenticatedSessionController extends Controller
 
         // Cek kredensial dan login
         if (Auth::attempt($request->only('email', 'password'))) {
-            // Cek jenis pengguna setelah login
+            // Ambil data user yang sedang login
+            //dd(Auth::user());
+
             $user = Auth::user();
-            
-            // Jika pengguna adalah siswa
-            if ($user->register_option == 'siswa') {
-                return redirect()->route('/'); // Halaman untuk siswa setelah login
+
+            // Cek jenis pengguna berdasarkan kolom 'role'
+            if ($user->role == 'siswa') {
+                return redirect()->route('welcome'); // Ubah ke rute dashboard siswa
             }
 
-            // Jika pengguna adalah pembimbing PKL
-            if ($user->register_option == 'pembimbingpkl') {
-                return redirect()->route('pembimbingpkl'); // Halaman untuk pembimbing PKL setelah login
+            if ($user->role == 'pembimbingpkl') {
+                return redirect()->route('pembimbingpkl'); // Ubah ke rute dashboard pembimbing
             }
 
-            // Default arahkan ke halaman utama jika tidak dikenali
-            return redirect()->route('awal');
+            // Default redirect jika role tidak dikenali
+            return redirect('/');
         }
 
         // Jika login gagal, kembalikan ke halaman login dengan pesan error
