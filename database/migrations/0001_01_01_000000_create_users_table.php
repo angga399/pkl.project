@@ -13,23 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', ['siswa', 'pembimbingpkl']);
-            $table->string('full_name')->nullable(); // Nama Lengkap Siswa
-            $table->date('birth_date')->nullable(); // Tanggal Lahir Siswa
-            $table->string('nik')->nullable(); // NIK Peserta Didik (Siswa)
-            $table->string('major')->nullable(); // Jurusan Siswa
-            $table->string('phone_number')->nullable(); // No Telepon Siswa atau Pembimbing
-            $table->string('location_pkl')->nullable(); // Lokasi PKL Siswa
-
-            // Kolom untuk Pembimbing PKL
-            $table->string('supervisor_name')->nullable(); // Nama Lengkap Pembimbing
-            $table->string('nip')->nullable(); // Nomor Induk Perusahaan (Pembimbing)
-            $table->date('birth_date_pembimbing')->nullable(); // Tanggal Lahir Pembimbing
-            $table->string('rank')->nullable(); // Pangkat Pembimbing
-            $table->string('company_address')->nullable(); // Alamat Perusahaan Pembimbing
-            
-            // Kolom umum
-            $table->string('email')->unique(); // Email pengguna
+            $table->string('nama');
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

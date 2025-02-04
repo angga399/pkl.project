@@ -105,27 +105,31 @@ class PembimbingController extends Controller
     }
 
     // Proses persetujuan untuk approvals
-// Proses persetujuan untuk approvals
-public function approve($id)
-{
-    $item = Daftarhdr::findOrFail($id);
-    $item->status = 'Disetujui';
-    $item->save();
-
-    return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil disetujui!');
-}
-
-public function reject($id)
-{
-    $item = Daftarhdr::findOrFail($id);
-    $item->status = 'Ditolak';
-    $item->save();
-
-    return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak!');
-}
-
+    public function approve($id)
+    {
+        $item = Daftarhdr::find($id);
+        if ($item && strtolower(trim($item->status)) === 'pending') {
+            $item->status = 'Disetujui';
+            $item->save();
     
+            return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah disetujui.');
+        }
     
+        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan atau sudah diproses.');
+    }
+    
+    public function reject($id)
+    {
+        $item = Daftarhdr::find($id);
+        if ($item && strtolower(trim($item->status)) === 'pending') {
+            $item->status = 'Ditolak';
+            $item->save();
+    
+            return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto telah ditolak.');
+        }
+    
+        return redirect()->route('pembimbing.approvals')->with('status', 'Pengambilan foto tidak ditemukan atau sudah diproses.');
+    }
     
 
     // Proses persetujuan untuk shalat
