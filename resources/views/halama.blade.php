@@ -52,7 +52,7 @@
 
         .regulation-list li {
             padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #000000;
             display: flex;
             align-items: center;
         }
