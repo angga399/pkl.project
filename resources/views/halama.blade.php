@@ -148,10 +148,10 @@
                     <h2 class="text-center mb-4">Login Peserta</h2>
                     <form>
                         <div class="form-group">
-                            <label>NIS/NIM</label>
+                            <label>email</label>
                             <input type="text" 
                                    class="form-control" 
-                                   placeholder="Masukkan NIS/NIM"
+                                   placeholder="Masukkan email"
                                    required>
                         </div>
                         <div class="form-group">
