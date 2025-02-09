@@ -23,7 +23,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         // Debug: Tampilkan semua data yang dikirim dari form
-        // dd($request->all()); 
+        //dd($request->all()); 
 
         $validated = $request->validate([
             'register_option' => 'required|in:siswa,pembimbingpkl',

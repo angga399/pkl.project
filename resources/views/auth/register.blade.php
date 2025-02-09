@@ -49,7 +49,7 @@
         <!-- Formulir Pembimbing PKL -->
         <div id="pembimbing-form" style="display: none;">
             <x-input-label for="supervisor_name" :value="__('Nama Pembimbing')" />
-            <x-text-input id="supervisor_name" name="supervisor_name" type="text" value="{{ old('supervisor_name') }}" required />
+            <x-text-input id="supervisor_name"  name="supervisor_name" type="text" value="{{ old('supervisor_name') }}" required />
 
             <x-input-label for="nip" :value="__('NIP Pembimbing')" />
             <x-text-input id="nip" name="nip" type="text" value="{{ old('nip') }}" required />
