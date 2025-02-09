@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\DaftarhdrController;
 use App\Http\Controllers\DftrshalatController;
 use App\Http\Controllers\PembimbingController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ShalatController;
 
@@ -38,15 +41,8 @@ Route::delete('dftrshalats/{id}', [DftrshalatController::class, 'destroy'])->nam
 // Rute untuk melihat arsip waktu shalat
 Route::get('/dftrshalats/arsip', [DftrshalatController::class, 'arsip'])->name('dftrshalats.arsip');
 
-
-
 // Halaman utama
 Route::get('/', function () {
-    return view('halama', ['title' => 'home page']);
-})->name('halama');
-
-
-Route::get('/welcome', function () {
     return view('welcome', ['title' => 'home page']);
 })->name('welcome');
 
@@ -73,7 +69,6 @@ Route::post('/pembimbing/shalat/{id}/reject', [PembimbingController::class, 'dit
 // Rute untuk journals (daftar utama journals)
 Route::get('journals', [JournalController::class, 'index'])->name('journals.index');
 
-Route::post('dftrshalats/store', [PembimbingController::class, 'store'])->name('dftrshalats.store');
 
 Route::get('/journals/create', [JournalController::class, 'create'])->name('journals.create');
 Route::post('/journals/store', [JournalController::class, 'store'])->name('journals.store');
@@ -91,7 +86,8 @@ Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
     Route::post('journals/{id}/reject', [PembimbingController::class, 'tolak'])->name('tolak');
 
     Route::get('approvals', [PembimbingController::class, 'approvals'])->name('approvals');
-    Route::post('approvals/{id}/approve', [PembimbingController::class, 'approve'])->name('approve');
+    Route::post('approvals/{id}/approve', [PembimbingController::class, 'approve'])->name('approve');'[=]'
+    o;il9
     Route::post('approvals/{id}/reject', [PembimbingController::class, 'reject'])->name('reject');
 
     Route::get('shalat', [PembimbingController::class, 'shalat'])->name('shalat');
@@ -109,6 +105,11 @@ Route::get('/absen-pulang', function () {
     return view('daftarhdr.absen-pulang'); // Halaman untuk absen pulang
 })->name('absen.pulang');
 
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');

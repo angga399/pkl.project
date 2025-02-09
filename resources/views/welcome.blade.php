@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
+<!-- resources/views/welcome.blade.php -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,58 +63,5 @@
     </section>
   </div>
 
-        .text-white {
-            color: #ffffff;
-        }
-
-        .transition-transform {
-            transition: transform 0.3s ease;
-        }
-
-        .hover\:scale-105:hover {
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 768px) {
-            .text-lg {
-                font-size:  1.25rem;
-            }
-        }
-
-        /* CSS untuk halaman transisi */
-        .transition-page {
-            position: relative;
-            display: inline-block;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-        }
-
-        /* Transisi aktif saat diklik */
-        .transition-page.clicked {
-            transform: scale(1.2); /* Membesarkan halaman */
-            opacity: 0.8; /* Mengurangi opacity */
-        }
-
-        /* Efek hover pada transisi */
-        .transition-page:hover {
-            transform: scale(1.1);
-        }
-    </style>
-
-    <script>
-        document.querySelectorAll('.transition-page').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault(); // Mencegah navigasi langsung
-
-                // Menambahkan kelas untuk animasi transisi
-                this.classList.add('clicked');
-
-                // Menunggu transisi selesai (500ms), lalu berpindah halaman
-                setTimeout(() => {
-                    window.location.href = this.href; // Pindah ke halaman yang dituju
-                }, 500); // Waktu yang sama dengan durasi animasi
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <x-footer></x-footer>
 </body>
-</html>

@@ -40,7 +40,7 @@
             const minutes = now.getMinutes();
 
             // Jam datang: 5:59 - 12:00
-            if ((hours === 5 && minutes >= 59) || (hours < 12)) {
+            if ((hours === 5 && minutes >= 59) || (hours < 23)) {
                 document.getElementById('absen-datang').classList.remove('hidden');
             }
 

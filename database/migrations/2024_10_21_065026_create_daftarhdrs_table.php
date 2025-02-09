@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('daftarhdr', function (Blueprint $table) { // Gunakan 'daftarhdr' sesuai dengan nama tabel
+        Schema::create('daftarhdrs', function (Blueprint $table) { // Gunakan 'daftarhdr' sesuai dengan nama tabel
             $table->id();
             $table->string('hari'); // Stores the day
             $table->string('tanggal'); // Stores the date
-            $table->decimal('latitude', 10, 8)->nullable(); // Stores latitude
-            $table->decimal('longitude', 11, 8)->nullable(); // Stores longitude
+            $table->decimal('latitude', 10, 8)->nullable(); // Koordinat Latitude
+            $table->decimal('longitude', 11, 8)->nullable(); // Koordinat Longitude
             $table->text('dataGambar'); // Stores the photo data as base64
             $table->string('jenisAbsen')->default('default_value');
             $table->string('tipe');
@@ -28,8 +28,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down():void
+    public function down(): void
     {
-        Schema::dropIfExists('daftarhdr'); // Sesuaikan dengan nama tabel yang dibuat
+        Schema::dropIfExists('daftarhdrs'); // Sesuaikan dengan nama tabel yang dibuat
     }
 };
