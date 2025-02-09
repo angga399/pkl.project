@@ -1,59 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembimbing PKL</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    @vite('resources/css/app.css')
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jurnal yang Menunggu Persetujuan</title>
+  <!-- Tailwind CSS (via CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  @vite('resources/css/app.css')
+  <style>
+    /* Background halaman: gradasi biru tua ke hitam */
+    body {
+      background: linear-gradient(to right, #0a192f, #1c1c1c);
+      color: white;
+    }
+    /* Sidebar styling agar selalu tampak */
+    #sideb {
+      width: 250px;
+      background: linear-gradient(135deg, #0a192f, #001b42);
+      color: white;
+      /* Sidebar tetap terlihat, tanpa toggle - dihilangkan class -translate-x-full */
+    }
+    /* Styling sidebar brand & navigation */
+    .sidebar-brand {
+      padding: 1.5rem;
+      font-size: 1.75rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px solid #00f2ff;
+    }
+    .sidebar-nav li a {
+      padding: 0.75rem 1.5rem;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-nav li a:hover {
+      background: rgba(0, 242, 255, 0.1);
+    }
+    /* Tabel custom styling */
+    .table-custom {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table-custom th,
+    .table-custom td {
+      border: 2px solid #00f2ff !important;
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
+    .table-custom thead {
+      background-color: #001b42;
+    }
+    .table-custom tbody tr:hover {
+      background: rgba(0, 242, 255, 0.1);
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto">
-        <h1 class="text-center text-3xl font-bold my-6">Jurnal yang Menunggu Persetujuan</h1>
-        
-        @foreach ($journals as $journal)
-        <section class="text-gray-600 body-font mb-6">
-            <div class="container mx-auto flex flex-col items-center">
-                <div class="flex flex-col sm:flex-row w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
-                    <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-                        <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">{{ $journal->nama }}</h2>
-                        <p class="text-base">{{ $journal->tanggal }}</p>
-                        <p class="text-base">{{ $journal->kelas }}</p>
-                        <p class="text-base">{{ $journal->nik }}</p>
-                        <p class="leading-relaxed text-lg mb-4">{{ $journal->uraian_konsentrasi }}</p>
-
-                        <!-- Status Jurnal -->
-                        <p class="text-sm text-gray-500 mb-4">
-                            <strong>Status: </strong>
-                            @if($journal->status == 'Disetujui')
-                                <span class="text-green-500">Disetujui</span>
-                            @elseif($journal->status == 'Ditolak')
-                                <span class="text-red-500">Ditolak</span>
-                            @else
-                                <span class="text-yellow-500">Menunggu</span>
-                            @endif
-                        </p>
-
-                        <!-- Tombol Setuju dan Tolak -->
-                        @if($journal->status == 'Menunggu')
-                        <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST" style="display:inline;">
-    @csrf
-    <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Setuju</button>
-</form>
-
-<form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST" style="display:inline;">
-    @csrf
-    <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Tolak</button>
-</form>
-
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </section>
-        @endforeach
+<body>
+  <div class="flex h-screen">
+    <!-- Sidebar Always Visible -->
+    <div id="sideb">
+      <!-- Sidebar Brand -->
+      <div class="sidebar-brand">
+        <i class="fas fa-laugh-wink text-cyan-400"></i>
+        <span class="ml-2">PKL Siswa</span>
+      </div>
+      <!-- Sidebar Navigation -->
+      <ul class="sidebar-nav">
+        <li>
+          <a href="{{ route('pembimbing.journals') }}">
+            <i class="fa-solid fa-address-book text-cyan-400"></i>
+            <span class="ml-2">Journal</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('pembimbing.approvals') }}">
+            <i class="fa-solid fa-eye text-cyan-400"></i>
+            <span class="ml-2">Absensi</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('pembimbing.shalat') }}">
+            <i class="fa-solid fa-mosque text-cyan-400"></i>
+            <span class="ml-2">Absen Shalat</span>
+          </a>
+        </li>
+      </ul>
     </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-5 overflow-auto">
+      <h1 class="text-2xl font-bold mb-5">JURNAL YANG MENUNGGU PERSETUJUAN</h1>
+      
+      <!-- Filter Form: Pilih Minggu -->
+      <div class="mb-4">
+        <form method="GET" action="{{ route('pembimbing.journals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <label for="week" class="font-semibold text-white">Pilih Minggu:</label>
+          <input type="week" id="week" name="week" class="border rounded-lg p-2 text-black"
+                 value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
+          <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            Tampilkan
+          </button>
+        </form>
+        <p class="mt-2 text-gray-300">
+          Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+        </p>
+      </div>
+      
+      <!-- Tabel Jurnal -->
+      <div class="overflow-x-auto">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Tanggal</th>
+              <th>Uraian</th>
+              <th>Jurusan</th>
+              <th>NIK</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse ($journals as $journal)
+              <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $journal->nama }}</td>
+                <td>{{ $journal->tanggal }}</td>
+                <td>{{ $journal->uraian_konsentrasi }}</td>
+                <td>{{ $journal->kelas }}</td>
+                <td>{{ $journal->nik }}</td>
+                <td>
+                  @if($journal->status == 'Disetujui')
+                    <span class="text-green-500 font-bold">Disetujui</span>
+                  @elseif($journal->status == 'Ditolak')
+                    <span class="text-red-500 font-bold">Ditolak</span>
+                  @else
+                    <span class="text-yellow-500 font-bold">Menunggu</span>
+                  @endif
+                </td>
+                <td>
+                  @if($journal->status == 'Menunggu')
+                    <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST" class="inline-block">
+                      @csrf
+                      <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                              onclick="return confirm('Apakah Anda yakin ingin menyetujui jurnal ini?')">
+                        Setuju
+                      </button>
+                    </form>
+                    <form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST" class="inline-block ml-2">
+                      @csrf
+                      <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                              onclick="return confirm('Apakah Anda yakin ingin menolak jurnal ini?')">
+                        Tolak
+                      </button>
+                    </form>
+                  @endif
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="8" class="text-center py-4">Tidak ada jurnal yang menunggu persetujuan.</td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Komponen Navigasi Kembali -->
+
+  <!-- Bootstrap JavaScript Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
