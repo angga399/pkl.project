@@ -118,3 +118,9 @@
        </li>
      </ul>
    </div>
+
+<script>
+   function toggleSidebar() {
+    document.getElementById('sideb').classList.toggle('open');
+  }
+  </script>

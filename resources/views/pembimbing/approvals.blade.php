@@ -14,46 +14,79 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   @vite('resources/css/app.css')
   <style>
-    /* Background halaman: gradasi dari biru tua ke hitam */
-    body {
+       /* Background halaman */
+       body {
       background: linear-gradient(to right, #0a192f, #1c1c1c);
       color: white;
     }
-    /* Sidebar styling agar selalu terlihat */
-    #sideb {
-      width: 250px;
-      background: linear-gradient(135deg, #0a192f, #001b42);
-      color: white;
+
+    /* Sidebar */
+    #sidebar {
+      width: 60px;
+      min-height: 100vh;
+      background-color: #111827;
+      transition: width 0.3s;
+      position: relative;
     }
-    /* Styling sidebar brand & navigation */
-    .sidebar-brand {
-      padding: 1.5rem;
-      font-size: 1.75rem;
-      font-weight: bold;
+
+    /* Saat sidebar terbuka */
+    #sidebar.open {
+      width: 200px;
+    }
+
+    /* Tombol toggle */
+    .toggle-btn {
+      position: absolute;
+      top: 10px;
+      right: -15px;
+      background: #1f2937;
+      color: white;
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* Styling menu sidebar */
+    .sidebar-nav li a {
+      padding: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-bottom: 2px solid #00f2ff;
-    }
-    .sidebar-nav li a {
-      padding: 0.75rem 1.5rem;
-      display: block;
+      color: white;
       transition: background 0.3s;
     }
+
+    /* Saat sidebar terbuka, ikon dan teks sejajar */
+    #sidebar.open .sidebar-nav li a {
+      justify-content: flex-start;
+      padding-left: 20px;
+    }
+
+    /* Hover effect */
     .sidebar-nav li a:hover {
       background: rgba(0, 242, 255, 0.1);
     }
-    /* Tabel custom styling sesuai tema */
+
+    /* Animasi sidebar */
+    .sidebar-nav li a span {
+      display: none;
+    }
+
+    #sidebar.open .sidebar-nav li a span {
+      display: inline;
+      margin-left: 10px;
+    }
+
+    /* Tabel custom styling */
     .table-custom {
       width: 100%;
       border-collapse: collapse;
     }
-    .table-custom th,
-    .table-custom td {
+    .table-custom th, .table-custom td {
       border: 2px solid #00f2ff !important;
-      padding: 0.75rem 1rem;
+      padding: 0.5rem 1rem;
       text-align: center;
-      color: white;
     }
     .table-custom thead {
       background-color: #001b42;
@@ -61,69 +94,43 @@
     .table-custom tbody tr:hover {
       background: rgba(0, 242, 255, 0.1);
     }
-    /* Modal untuk Zoom Gambar */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      justify-content: center;
-      align-items: center;
-      z-index: 50;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .modal img {
-      max-width: 95%;
-      max-height: 95%;
-      border-radius: 0.5rem;
-    }
   </style>
   <script>
-    function showModal(img) {
-      const modal = document.getElementById('imageModal');
-      const modalImage = document.getElementById('modalImage');
-      modalImage.src = img.src;
-      modal.style.display = 'flex';
-    }
-    function hideModal() {
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'none';
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
     }
   </script>
 </head>
 <body>
-  <div class="flex h-screen">
-    <!-- Sidebar Always Visible -->
-    <div id="sideb">
-      <!-- Sidebar Brand -->
-      <div class="sidebar-brand">
-        <i class="fas fa-laugh-wink text-cyan-400"></i>
-        <span class="ml-2">PKL Siswa</span>
-      </div>
-      <!-- Sidebar Navigation -->
-      <ul class="sidebar-nav">
-        <li>
-          <a href="{{ route('pembimbing.journals') }}">
-            <i class="fa-solid fa-address-book text-cyan-400"></i>
-            <span class="ml-2">Journal</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('pembimbing.approvals') }}">
-            <i class="fa-solid fa-eye text-cyan-400"></i>
-            <span class="ml-2">Absensi</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('pembimbing.shalat') }}">
-            <i class="fa-solid fa-mosque text-cyan-400"></i>
-            <span class="ml-2">Absen Shalat</span>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <div class="flex h-screen">
+  
+        <!-- Sidebar -->
+        <div id="sidebar" class="flex-none flex flex-col items-center">
+          <button onclick="toggleSidebar()" class="toggle-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+      
+          <ul class="sidebar-nav space-y-4 mt-10">
+            <li>
+              <a href="#">
+                <i class="fas fa-home text-xl"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-book text-xl"></i>
+                <span>Jurnal</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-cog text-xl"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
     
     <!-- Main Content -->
     <div class="flex-1 p-5 overflow-auto">
