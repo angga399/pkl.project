@@ -86,8 +86,7 @@ Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
     Route::post('journals/{id}/reject', [PembimbingController::class, 'tolak'])->name('tolak');
 
     Route::get('approvals', [PembimbingController::class, 'approvals'])->name('approvals');
-    Route::post('approvals/{id}/approve', [PembimbingController::class, 'approve'])->name('approve');'[=]'
-    o;il9
+    Route::post('approvals/{id}/approve', [PembimbingController::class, 'approve'])->name('approve');
     Route::post('approvals/{id}/reject', [PembimbingController::class, 'reject'])->name('reject');
 
     Route::get('shalat', [PembimbingController::class, 'shalat'])->name('shalat');
