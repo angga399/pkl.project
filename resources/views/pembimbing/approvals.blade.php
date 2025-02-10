@@ -112,21 +112,21 @@
       
           <ul class="sidebar-nav space-y-4 mt-10">
             <li>
-              <a href="#">
-                <i class="fas fa-home text-xl"></i>
-                <span>Dashboard</span>
+              <a href="{{ route('pembimbing.approvals') }}">
+                <i class="fas fa-eye text-xl"></i>
+                <span class="ml-2">Absensi</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="{{ route('pembimbing.journals') }}">
                 <i class="fas fa-book text-xl"></i>
-                <span>Jurnal</span>
+                <span class="ml-2">Jurnal</span>
               </a>
             </li>
             <li>
-              <a href="#">
-                <i class="fas fa-cog text-xl"></i>
-                <span>Settings</span>
+              <a href="{{ route('pembimbing.shalat') }}">
+                <i class="fas fa-mosque text-xl"></i>
+                <span class="ml-2">shalat</span>
               </a>
             </li>
           </ul>
@@ -274,11 +274,6 @@
   </div>
   
   <!-- Modal untuk Zoom Gambar -->
-  <div id="imageModal" class="modal flex">
-    <span class="absolute top-4 right-4 text-white text-3xl cursor-pointer" onclick="hideModal()">&times;</span>
-    <img id="modalImage" src="" alt="Zoomed Foto" />
-  </div>
-  
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
