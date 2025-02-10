@@ -87,7 +87,6 @@ Route::prefix('pembimbing')->name('pembimbing.')->group(function() {
 
     Route::get('approvals', [PembimbingController::class, 'approvals'])->name('approvals');
     Route::post('approvals/{id}/approve', [PembimbingController::class, 'approve'])->name('approve');
-
     Route::post('approvals/{id}/reject', [PembimbingController::class, 'reject'])->name('reject');
 
     Route::get('shalat', [PembimbingController::class, 'shalat'])->name('shalat');
