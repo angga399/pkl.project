@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar Waktu Shalat - Persetujuan</title>
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS (via CDN) -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -14,22 +14,79 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   @vite('resources/css/app.css')
   <style>
-    /* Background halaman: gradasi dari biru tua ke hitam */
-    body {
+       /* Background halaman */
+       body {
       background: linear-gradient(to right, #0a192f, #1c1c1c);
       color: white;
     }
-    /* Styling tabel khusus agar sesuai tema */
+
+    /* Sidebar */
+    #sidebar {
+      width: 60px;
+      min-height: 100vh;
+      background-color: #111827;
+      transition: width 0.3s;
+      position: relative;
+    }
+
+    /* Saat sidebar terbuka */
+    #sidebar.open {
+      width: 200px;
+    }
+
+    /* Tombol toggle */
+    .toggle-btn {
+      position: absolute;
+      top: 10px;
+      right: -15px;
+      background: #1f2937;
+      color: white;
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* Styling menu sidebar */
+    .sidebar-nav li a {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    /* Saat sidebar terbuka, ikon dan teks sejajar */
+    #sidebar.open .sidebar-nav li a {
+      justify-content: flex-start;
+      padding-left: 20px;
+    }
+
+    /* Hover effect */
+    .sidebar-nav li a:hover {
+      background: rgba(0, 242, 255, 0.1);
+    }
+
+    /* Animasi sidebar */
+    .sidebar-nav li a span {
+      display: none;
+    }
+
+    #sidebar.open .sidebar-nav li a span {
+      display: inline;
+      margin-left: 10px;
+    }
+
+    /* Tabel custom styling */
     .table-custom {
       width: 100%;
       border-collapse: collapse;
     }
-    .table-custom th,
-    .table-custom td {
+    .table-custom th, .table-custom td {
       border: 2px solid #00f2ff !important;
-      padding: 0.75rem 1rem;
+      padding: 0.5rem 1rem;
       text-align: center;
-      color: white;
     }
     .table-custom thead {
       background-color: #001b42;
@@ -37,44 +94,45 @@
     .table-custom tbody tr:hover {
       background: rgba(0, 242, 255, 0.1);
     }
-    /* Modal untuk Zoom Gambar */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      justify-content: center;
-      align-items: center;
-      z-index: 50;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .modal img {
-      max-width: 95%;
-      max-height: 95%;
-      border-radius: 0.5rem;
-    }
   </style>
   <script>
-    function showModal(img) {
-      const modal = document.getElementById('imageModal');
-      const modalImage = document.getElementById('modalImage');
-      modalImage.src = img.src;
-      modal.style.display = 'flex';
-    }
-    function hideModal() {
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'none';
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
     }
   </script>
+ 
 </head>
 <body class="bg-gray-100">
-  <div class="flex h-screen">
-    <!-- Sidebar (selalu terlihat) -->
-    <div class="w-64 bg-gray-800 text-white">
-      @include('sideb')
-    </div>
+    <div class="flex h-screen">
+  
+        <!-- Sidebar -->
+        <div id="sidebar" class="flex-none flex flex-col items-center">
+          <button onclick="toggleSidebar()" class="toggle-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+      
+          <ul class="sidebar-nav space-y-4 mt-10">
+            <li>
+              <a href="#">
+                <i class="fas fa-home text-xl"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-book text-xl"></i>
+                <span>Jurnal</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-cog text-xl"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
     
     <!-- Main Content -->
     <div class="flex-1 p-5 overflow-auto">
