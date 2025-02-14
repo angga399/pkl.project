@@ -18,18 +18,17 @@
                     <th class="py-2 px-4 border-b">Tanggal</th>
                     <th class="py-2 px-4 border-b">Uraian Konsentrasi</th>
                     <th class="py-2 px-4 border-b">Kelas</th>
-                    <th class="py-2 px-4 border-b">NIK</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($journals as $index => $journal)
                     <tr>
-                        <td class="py-2 px-4 border-b">{{ $index + 1 }}</td>
-                        <td class="py-2 px-4 border-b">{{ $journal->nama }}</td>
-                        <td class="py-2 px-4 border-b">{{ $journal->tanggal }}</td>
-                        <td class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</td>
-                        <td class="py-2 px-4 border-b">{{ $journal->kelas }}</td>
-                        <td class="py-2 px-4 border-b">{{ $journal->nik }}</td>
+                        <th class="py-2 px-4 border-b">{{ $index + 1 }}</th>
+                        <th class="py-2 px-4 border-b">{{ $journal->nama }}</th>
+                        <th class="py-2 px-4 border-b">{{ $journal->tanggal }}</th>
+                        <th class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</th>
+                        <th class="py-2 px-4 border-b">{{ $journal->kelas }}</th>
+
                     </tr>
                 @empty
                     <tr>

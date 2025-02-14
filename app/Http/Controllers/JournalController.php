@@ -58,6 +58,7 @@ class JournalController extends Controller
         ]);
 
         return redirect()->route('journals.index')->with('status', 'Jurnal berhasil dikirim dan menunggu persetujuan!');
+        return redirect()->route('guru.journals')->with('success', 'Jurnal berhasil disimpan');
     }
 
     public function show(Journal $journal)
@@ -119,7 +120,9 @@ class JournalController extends Controller
     public function showGuru()
 {
     $journals = Journal::orderBy('tanggal')->get(); // Ubah $journal menjadi $journals
-    return view('guru.journal', compact('journals')); // Tetap gunakan compact('journals')
+  return view('guru.journal', compact('journals'));
+
+
 }
 
 }

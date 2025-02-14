@@ -17,6 +17,8 @@
     },
     "dependencies": {
         "bootstrap": "^3.4.1",
+        "laravel-echo": "^2.0.0",
+        "pusher-js": "^8.4.0",
         "webcamjs": "^1.0.26"
     }
 }

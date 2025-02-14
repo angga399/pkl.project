@@ -75,7 +75,7 @@ class DaftarhdrController extends Controller
     public function showGuru()
     {
         $daftarhdrs = Daftarhdr::orderBy('tanggal')->get();
-        return view('guru.index', compact('daftarhdrs'));
+        return view('guru.absen', compact('daftarhdrs'));
     }
 
     // Method untuk mengambil histori terkait Daftarhdr (journal)
@@ -96,4 +96,7 @@ class DaftarhdrController extends Controller
         // Mengembalikan data dalam format JSON (atau bisa dikembalikan dalam format lain)
         return response()->json($histori);
     }
+
+
 }
+
