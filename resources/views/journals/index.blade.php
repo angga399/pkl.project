@@ -55,7 +55,7 @@
                                     <td class="py-2 px-4 border-b">{{ $journal->tanggal }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->kelas }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $journal->nik }}</td>
+                                    <td class="py-2 px-4 border-b">{{ Auth::user()->nik }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->status }}</td>
                                 </tr>
                             @empty

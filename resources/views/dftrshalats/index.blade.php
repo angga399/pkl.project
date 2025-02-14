@@ -29,9 +29,9 @@
 
             <!-- Tombol Filter Jenis Shalat -->
             <div class="mb-4">
-                <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="bg-cyan-500 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Duha</a>
-                <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="bg-yellow-400 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Dzuhur</a>
-                <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="bg-yellow-400 text-white px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;">Tambah Waktu Shalat Ashar</a>
+                <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="bg-yellow-400  text-gray-700 px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none;  text-decoration: none;">Tambah Waktu Shalat Duha</a>
+                <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="bg-yellow-400  text-gray-700 px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none; text-decoration: none;">Tambah Waktu Shalat Dzuhur</a>
+                <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="bg-yellow-400  text-gray-700 px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none; text-decoration: none;">Tambah Waktu Shalat Ashar</a>
             </div>
 
             <form method="GET" action="{{ route('dftrshalats.index') }}" class="flex items-center mb-4">

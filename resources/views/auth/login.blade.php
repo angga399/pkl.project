@@ -199,6 +199,11 @@
             <button type="submit" class="btn btn-login btn-block text-white mt-4">
               <i class="fas fa-sign-in-alt"></i> Masuk
             </button>
+
+            <div class="text-center mt-3">
+              <p>Belum punya akun? <a href="{{ route('register') }}" class="text-primary font-weight-bold">Daftar di sini</a></p>
+          </div>
+          
           </form>
         </div>
       </div>
