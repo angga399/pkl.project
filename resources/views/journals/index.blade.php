@@ -9,6 +9,53 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     @vite('resources/css/app.css')
+    <style>
+        /* CSS untuk tabel tetap */
+        .table-fixed {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .table-fixed th, .table-fixed td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* CSS untuk sidebar tetap */
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+        }
+
+        /* CSS untuk notifikasi */
+        .alert {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+    </style>
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
@@ -17,34 +64,57 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen">
-        <div class="sidebar" style="width: 250px; background-color: #343a40;">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
             @include('sidebar')
         </div>
-        <div class="flex-1 flex flex-col">
+
+        <!-- Konten Utama -->
+        <div class="main-content">
+            <!-- Notifikasi -->
+            <div class="p-4">
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Header -->
             <div class="bg-white py-4 px-6 shadow-md flex justify-between items-center">
                 <button class="text-lg font-bold md:hidden" onclick="toggleSidebar()">☰</button>
                 <div class="text-center font-bold text-lg flex-1">JOURNAL KEGIATAN</div>
             </div>
+
+            <!-- Tombol Tambah Jurnal dan Filter Minggu -->
             <div class="p-6 flex flex-col md:flex-row items-center gap-4">
-                <a class="bg-gray-500 text-white px-4 py-2 rounded" href="{{route('journals.create')}}">Tambah Jurnal</a>
+                <a class="bg-gray-500 text-white px-4 py-2 rounded" href="{{ route('journals.create') }}">Tambah Jurnal</a>
                 <form method="GET" action="{{ route('journals.index') }}">
-                    <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Minggu</button>
+                    <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Tampilkan</button>
                     <input type="week" id="week" name="week" class="border rounded-lg p-2" value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
                 </form>
                 <p>Histori Perminggu</p>
             </div>
+
+            <!-- Tabel Jurnal -->
             <div class="p-6">
                 <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-400">
+                    <table class="w-full border-collapse border border-gray-400 table-fixed">
                         <thead class="bg-gray-300">
                             <tr class="text-black">
-                                <th class="border px-4 py-2">No</th>
-                                <th class="border px-4 py-2">Nama</th>
-                                <th class="border px-4 py-2">Tanggal</th>
-                                <th class="border px-4 py-2">Uraian</th>
-                                <th class="border px-4 py-2">Jurusan</th>
-                                <th class="border px-4 py-2">Nik</th>
-                                <th class="border px-4 py-2">Status</th>
+                                <th class="border px-4 py-2 w-1/12">No</th>
+                                <th class="border px-4 py-2 w-2/12">Nama</th>
+                                <th class="border px-4 py-2 w-2/12">Tanggal</th>
+                                <th class="border px-4 py-2 w-3/12">Uraian</th>
+                                <th class="border px-4 py-2 w-2/12">Jurusan</th>
+                                <th class="border px-4 py-2 w-1/12">Nik</th>
+                                <th class="border px-4 py-2 w-1/12">Status</th>
                             </tr>
                         </thead>
                         <tbody class="bg-gray-600">
@@ -60,13 +130,15 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-white">Tidak ada data jurnal.</td>
+                                    <td colspan="7" class="text-center py-4 text-white">Tidak ada data jurnal.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <!-- Histori Jurnal -->
             <div class="p-6">
                 <h2 class="text-lg font-semibold">Histori Jurnal</h2>
                 <div class="border border-gray-400 rounded p-4 bg-gray-200 mt-2">
@@ -103,13 +175,14 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" target="_blank" class="btn btn-primary mt-4">Ekspor ke PDF</a>
                 </div>
             </div>
+
+            <!-- Footer -->
             <div class="text-center py-4 text-sm">Footer</div>
         </div>
     </div>
-    <x-back>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</x-back>
 </body>
 </html>

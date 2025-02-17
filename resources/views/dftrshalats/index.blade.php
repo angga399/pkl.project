@@ -33,7 +33,9 @@
                 <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="bg-yellow-400  text-gray-700 px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none; text-decoration: none;">Tambah Waktu Shalat Dzuhur</a>
                 <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="bg-yellow-400  text-gray-700 px-4 py-2 rounded mb-5 inline-block mr-2" style="display: none; text-decoration: none;">Tambah Waktu Shalat Ashar</a>
             </div>
-
+            <div class="mb-4">
+                <a href="{{ route('dftrshalats.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-5 inline-block mr-2">Tambah Data Shalat</a>
+                <div>
             <form method="GET" action="{{ route('dftrshalats.index') }}" class="flex items-center mb-4">
                 <label for="week" class="mr-2 font-semibold text-gray-700">Pilih Minggu:</label>
                 <input type="week" id="week" name="week" class="border rounded-lg p-2" 

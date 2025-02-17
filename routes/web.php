@@ -166,5 +166,4 @@ Route::get('/pembimbingpkl', function () {
     return view('.pembimbingpkl');
 })->name('pembimbingpkl')->middleware('auth');
 
-
-Route::get('/pembimbing/journals/pdf', [PembimbingController::class, 'downloadJournalsPdf'])->name('pembimbing.journals.pdf');
+Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
