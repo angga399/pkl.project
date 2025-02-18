@@ -14,6 +14,8 @@ class Daftarhdr extends Model
     protected $fillable = [
         'tipe',
         'hari',
+        'nama',
+        'pt',
         'tanggal',
         'latitude',
         'longitude',

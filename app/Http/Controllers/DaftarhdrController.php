@@ -42,6 +42,8 @@ class DaftarhdrController extends Controller
         $request->validate([
             'tipe' => 'required',
             'hari' => 'required',
+            'nama' => 'required|string',
+            'pt' => 'required|string',
             'tanggal' => 'required|date',
             'latitude' => 'required',
             'longitude' => 'required',

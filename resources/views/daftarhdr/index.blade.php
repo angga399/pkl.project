@@ -25,6 +25,20 @@
             max-height: 95%;
             border-radius: 0.5rem;
         }
+        .table-container {
+            overflow-x: auto; /* Scroll horizontal jika diperlukan */
+            margin-bottom: 1rem; /* Jarak antar tabel */
+        }
+        .compact-table {
+            font-size: 0.875rem; /* Ukuran font lebih kecil */
+        }
+        .compact-table th,
+        .compact-table td {
+            padding: 0.25rem 0.5rem; /* Padding lebih kecil */
+        }
+        .compact-table th {
+            white-space: nowrap; /* Mencegah text wrapping di header */
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -69,67 +83,79 @@
                     <!-- Tabel Absen Datang -->
                     <div class="bg-white p-4 rounded-lg shadow">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Absen Datang</h2>
-                        <table class="min-w-full bg-white border border-gray-200">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 border">Foto</th>
-                                    <th class="px-4 py-2 border">Hari</th>
-                                    <th class="px-4 py-2 border">Tanggal</th>
-                                    <th class="px-4 py-2 border">Lokasi</th>
-                                    <th class="px-4 py-2 border">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($daftarhdrs as $item)
-                                    @if ($item->tipe === 'datang')
+                        <div class="table-container">
+                            <table class="compact-table min-w-full bg-white border border-gray-200">
+                                <thead>
                                     <tr>
-                                        <td class="px-4 py-2 border">
-                                            <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md cursor-pointer" onclick="showModal(this)">
-                                        </td>
-                                        <td class="px-4 py-2 border">{{ $item->hari }}</td>
-                                        <td class="px-4 py-2 border">{{ $item->tanggal }}</td>
-                                        <td class="px-4 py-2 border">
-                                            <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
-                                        </td>
-                                        <td class="px-4 py-2 border">{{ $item->status }}</td>
+                                        <th class="px-4 py-2 border">Foto</th>
+                                        <th class="px-4 py-2 border">Hari</th>
+                                        <th class="px-4 py-2 border">Nama</th>
+                                        <th class="px-4 py-2 border">Perusahaan</th>
+                                        <th class="px-4 py-2 border">Tanggal</th>
+                                        <th class="px-4 py-2 border">Lokasi</th>
+                                        <th class="px-4 py-2 border">Status</th>
                                     </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($daftarhdrs as $item)
+                                        @if ($item->tipe === 'datang')
+                                        <tr>
+                                            <td class="px-4 py-2 border">
+                                                <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md cursor-pointer" onclick="showModal(this)">
+                                            </td>
+                                            <td class="px-4 py-2 border">{{ $item->hari }}</td>
+                                            <td class="px-4 py-2 border">{{ $item->nama }}</td>
+                                            <td class="px-4 py-2 border">{{ $item->pt }}</td>
+                                            <td class="px-4 py-2 border">{{ $item->tanggal }}</td>
+                                            <td class="px-4 py-2 border">
+                                                <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
+                                            </td>
+                                            <td class="px-4 py-2 border">{{ $item->status }}</td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Tabel Absen Pulang -->
                     <div class="bg-white p-4 rounded-lg shadow">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Absen Pulang</h2>
-                        <table class="min-w-full bg-white border border-gray-200">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2 border">Foto</th>
-                                    <th class="px-4 py-2 border">Hari</th>
-                                    <th class="px-4 py-2 border">Tanggal</th>
-                                    <th class="px-4 py-2 border">Lokasi</th>
-                                    <th class="px-4 py-2 border">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($daftarhdrs as $item)
-                                    @if ($item->tipe === 'pulang')
+                        <div class="table-container">
+                            <table class="compact-table min-w-full bg-white border border-gray-200">
+                                <thead>
                                     <tr>
-                                        <td class="px-4 py-2 border">
-                                            <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md cursor-pointer" onclick="showModal(this)">
-                                        </td>
-                                        <td class="px-4 py-2 border">{{ $item->hari }}</td>
-                                        <td class="px-4 py-2 border">{{ $item->tanggal }}</td>
-                                        <td class="px-4 py-2 border">
-                                            <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
-                                        </td>
-                                        <td class="px-4 py-2 border">{{ $item->status }}</td>
+                                        <th class="px-4 py-2 border">Foto</th>
+                                        <th class="px-4 py-2 border">Hari</th>
+                                        <th class="px-4 py-2 border">Nama</th>
+                                        <th class="px-4 py-2 border">Perusahaan</th>
+                                        <th class="px-4 py-2 border">Tanggal</th>
+                                        <th class="px-4 py-2 border">Lokasi</th>
+                                        <th class="px-4 py-2 border">Status</th>
                                     </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($daftarhdrs as $item)
+                                        @if ($item->tipe === 'pulang')
+                                        <tr>
+                                            <td class="px-4 py-2 border">
+                                                <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md cursor-pointer" onclick="showModal(this)">
+                                            </td>
+                                            <td class="px-4 py-2 border">{{ $item->hari }}</td>
+                                            <td class="px-4 py-2 border">{{ $item->nama }}</td>
+                                            <td class="px-4 py-2 border">{{ $item->pt }}</td>
+                                            <td class="px-4 py-2 border">{{ $item->tanggal }}</td>
+                                            <td class="px-4 py-2 border">
+                                                <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
+                                            </td>
+                                            <td class="px-4 py-2 border">{{ $item->status }}</td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -155,6 +181,6 @@
             modal.style.display = 'none';
         }
     </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

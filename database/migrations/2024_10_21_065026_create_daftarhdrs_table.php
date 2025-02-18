@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('hari'); // Stores the day
             $table->string('tanggal'); // Stores the date
+            $table->string('nama'); // Jenis Shalat: Duha, Dzuhur, Ashar
+            $table->string('pt'); // Jenis Shalat: Duha, Dzuhur, Ashar
             $table->decimal('latitude', 10, 8)->nullable(); // Koordinat Latitude
             $table->decimal('longitude', 11, 8)->nullable(); // Koordinat Longitude
             $table->text('dataGambar'); // Stores the photo data as base64

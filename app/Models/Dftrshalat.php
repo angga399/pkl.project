@@ -8,5 +8,5 @@ class Dftrshalat extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['jenis', 'tanggal', 'hari', 'waktu', 'status'];
+    protected $fillable = ['jenis','nama', 'perusahaan','tanggal', 'hari', 'waktu', 'status'];
 }

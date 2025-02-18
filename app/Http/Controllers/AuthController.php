@@ -14,7 +14,6 @@ class AuthController extends Controller
     $request->validate([
         'full_name' => 'required|string|max:255',
         'birth_date' => 'required|date',
-        'nik' => 'required|unique:users',
         'major' => 'required|string|max:100',
         'PT' => 'required|string|max:100',
         'phone_number' => 'required|string|max:15',
@@ -27,7 +26,6 @@ class AuthController extends Controller
     User::create([
         'full_name' => $request->full_name,
         'birth_date' => $request->birth_date,
-        'nik' => $request->nik,
         'major' => $request->major,
         'PT' => $request->PT,
         'phone_number' => $request->phone_number,

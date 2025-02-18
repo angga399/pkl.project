@@ -6,6 +6,16 @@
         <input type="text" id="jenis" name="jenis" class="w-full border border-gray-300 rounded-md p-2 bg-gray-100" readonly>
     </div>
 
+        <div class="relative">
+            <label for="nama" class="leading-7 text-sm text-gray-600">Nama</label>
+            <input type="text" id="nama" name="nama" value="{{ Auth::user()->full_name }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
+        </div>
+
+        <div class="relative">
+            <label for="perusahaan" class="leading-7 text-sm text-gray-600">perusahaan</label>
+            <input type="text" id="perusahaan" name="perusahaan" value="{{ Auth::user()->PT }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
+        </div>
+        
     <div class="mb-4">
         <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal</label>
         <input type="date" id="tanggal" name="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="w-full border border-gray-300 rounded-md p-2 bg-gray-100" readonly>

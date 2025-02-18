@@ -11,6 +11,8 @@ class CreateDftrshalatsTable extends Migration
         Schema::create('dftrshalats', function (Blueprint $table) {
             $table->id(); // Primary Key
             $table->string('jenis'); // Jenis Shalat: Duha, Dzuhur, Ashar
+            $table->string('nama'); // Jenis Shalat: Duha, Dzuhur, Ashar
+            $table->string('perusahaan'); // Jenis Shalat: Duha, Dzuhur, Ashar
             $table->date('tanggal'); // Tanggal shalat
             $table->string('hari'); // Hari shalat
             $table->time('waktu'); // Waktu otomatis dicatat

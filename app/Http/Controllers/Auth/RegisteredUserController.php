@@ -29,7 +29,6 @@ class RegisteredUserController extends Controller
             'register_option' => 'required|in:siswa,pembimbingpkl',
             'full_name' => 'required_if:register_option,siswa|nullable',
             'birth_date' => 'required_if:register_option,siswa|nullable|date',
-            'nik' => 'required_if:register_option,siswa|nullable',
             'major' => 'required_if:register_option,siswa|nullable',
             'PT' => 'required_if:register_option,siswa|nullable',
             'phone_number' => 'required_if:register_option,siswa|nullable',
@@ -49,7 +48,7 @@ class RegisteredUserController extends Controller
         $user->role = $validated['register_option'];
         $user->full_name = $validated['full_name'] ?? $validated['supervisor_name'] ?? null;
         $user->birth_date = $validated['birth_date'] ?? $validated['birth_date_pembimbing'] ?? null;
-        $user->nik = $validated['nik'] ?? null;
+
         $user->major = $validated['major'] ?? null;
         $user->PT = $validated['PT'] ?? null;
         $user->phone_number = $validated['phone_number'] ?? $validated['phone_number_pembimbing']; // Menggunakan phone_number_pembimbing jika ada

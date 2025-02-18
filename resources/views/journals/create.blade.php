@@ -38,13 +38,7 @@
                                 <input type="text" id="nama" name="nama" value="{{ Auth::user()->full_name }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
                             </div>
                         </div>
-                        <!-- NIK -->
-                        <div class="p-2 w-1/2">
-                            <div class="relative">
-                                <label for="nik" class="leading-7 text-sm text-gray-600">NIK</label>
-                                <input type="text" id="nik" name="nik" value="{{ Auth::user()->nik }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" readonly>
-                            </div>
-                        </div>
+        
                         <!-- Kelas -->
                         <div class="p-2 w-1/2">
                             <div class="relative">

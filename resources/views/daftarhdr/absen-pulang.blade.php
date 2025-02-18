@@ -46,6 +46,8 @@
         @csrf
         <input type="hidden" name="tipe" value="pulang"> <!-- Menambahkan input tipe -->
         <input type="hidden" name="hari" id="hari" required>
+        <input type="hidden" name="nama" id="nama" value="{{ Auth::user()->full_name }}" required>
+        <input type="hidden" name="pt" id="pt" value="{{ Auth::user()->PT }}" required>
         <input type="hidden" name="tanggal" id="tanggal" required>
         <input type="hidden" name="latitude" id="latitude">
         <input type="hidden" name="longitude" id="longitude">

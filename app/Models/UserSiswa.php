@@ -10,6 +10,6 @@ class UserSiswa extends Model
     use HasFactory;
 
     protected $fillable = [
-        'full_name', 'birth_date', 'nik', 'major','PT', 'phone_number', 'location_pkl', 'email', 'password'
+        'full_name', 'birth_date',  'major','PT', 'phone_number', 'location_pkl', 'email', 'password'
     ];
 }
