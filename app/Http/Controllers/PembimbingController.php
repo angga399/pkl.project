@@ -34,20 +34,45 @@ class PembimbingController extends Controller
 
 
 
-    public function journals(Request $request)
-    {
-        // Filter berdasarkan minggu
-        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
-        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
-        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
-
-        // Menampilkan jurnal berdasarkan minggu
-        $journals = Journal::where('status', 'Menunggu')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get();
-
-        return view('pembimbing.journals', compact('journals', 'startOfWeek', 'endOfWeek'));
+public function journals(Request $request)
+{
+    // Jika week dipilih, gunakan tanggal dari minggu yang dipilih
+    // Jika tidak, gunakan minggu ini sebagai default
+    if ($request->has('week')) {
+        $selectedWeek = $request->week;
+        $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
+        $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
+    } else {
+        $selectedWeek = Carbon::now()->format('Y-\WW');
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
     }
+
+    // Mulai query
+    $journals = Journal::query();
+
+    // Terapkan filter tanggal berdasarkan minggu yang dipilih
+    $journals->whereBetween('tanggal', [
+        $startOfWeek->format('Y-m-d'),
+        $endOfWeek->format('Y-m-d')
+    ]);
+
+    // Filter berdasarkan perusahaan jika dipilih
+    if ($request->has('PT') && $request->PT != '') {
+        $journals->where('PT', $request->PT);
+    }
+
+    // Ambil data
+    $journals = $journals->get();
+
+    // Kirim data ke view dengan parameter yang dipilih
+    return view('pembimbing.journals', compact(
+        'journals',
+        'startOfWeek',
+        'endOfWeek',
+        'selectedWeek'
+    ));
+}
 
     public function approvals(Request $request)
     {

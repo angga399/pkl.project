@@ -143,19 +143,43 @@
     <h1 class="text-2xl font-bold mb-5">JURNAL YANG MENUNGGU PERSETUJUAN</h1>
 
     <!-- Filter Form -->
-    <div class="mb-4">
-      <form method="GET" action="{{ route('pembimbing.journals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-        <label for="week" class="font-semibold text-white">Pilih Minggu:</label>
-        <input type="week" id="week" name="week" class="border rounded-lg p-2 text-black"
-               value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
-        <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
-          Tampilkan
-        </button>
-      </form>
-      <p class="mt-2 text-gray-300">
-        Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
-      </p>
-    </div>
+   <!-- Filter Form -->
+<div class="mb-4">
+  <form method="GET" action="{{ route('pembimbing.journals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+    <label for="week" class="font-semibold text-white">Pilih Minggu:</label>
+    <input type="week" id="week" name="week" class="border rounded-lg p-2 text-black"
+           value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
+    <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+      Tampilkan
+    </button>
+  </form>
+  <p class="mt-2 text-gray-300">
+    Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+  </p>
+</div>
+
+<!-- Form Pencarian Berdasarkan Perusahaan -->
+<div class="mb-4">
+  <form method="GET" action="{{ route('pembimbing.journals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+    <!-- Hidden input untuk menyimpan minggu yang dipilih -->
+    <input type="hidden" name="week" value="{{ request('week', $selectedWeek) }}">
+    
+    <label for="PT" class="font-semibold text-white">Pilih Perusahaan:</label>
+    <select name="PT" id="PT" class="border rounded-lg p-2 text-black">
+      <option value="" disabled {{ request('PT') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
+      <option value="Perusahaan A" {{ request('PT') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
+      <option value="Perusahaan B" {{ request('PT') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
+      <option value="Perusahaan C" {{ request('PT') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
+      <option value="Perusahaan D" {{ request('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
+    </select>
+    <button type="submit" class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+      Cari
+    </button>
+  </form>
+  <p class="mt-2 text-gray-300">
+    Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+  </p>
+</div>
 
     <!-- Tabel Jurnal -->
     <div class="overflow-x-auto">
