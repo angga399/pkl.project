@@ -153,6 +153,30 @@
         </p>
       </div>
       
+      <!-- Form Pencarian Berdasarkan Perusahaan -->
+      <div class="mb-4">
+        <form method="GET" action="{{ route('pembimbing.approvals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <!-- Hidden input untuk menyimpan minggu yang dipilih -->
+          <input type="hidden" name="week" value="{{ request('week', $selectedWeek) }}">
+          
+          <label for="PT" class="font-semibold text-white">Pilih Perusahaan:</label>
+          <select name="PT" id="PT" class="border rounded-lg p-2 text-black">
+            <option value="" disabled {{ request('PT') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
+            <option value="Perusahaan A" {{ request('PT') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
+            <option value="Perusahaan B" {{ request('PT') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
+            <option value="Perusahaan C" {{ request('PT') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
+            <option value="Perusahaan D" {{ request('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
+          </select>
+          <button type="submit" class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Cari
+          </button>
+        </form>
+        <p class="mt-2 text-gray-300">
+          Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+        </p>
+      </div>
+      
+      
       <!-- Tabel Absen Datang -->
       <h2 class="text-xl font-semibold text-gray-200 mb-4">Absen Datang</h2>
       <div class="overflow-x-auto mb-8">
@@ -162,6 +186,7 @@
               <th>Foto</th>
               <th>Hari</th>
               <th>Tanggal</th>
+              <th>Perusahaan</th>
               <th>Lokasi</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -176,6 +201,7 @@
                   </td>
                   <td>{{ $item->hari }}</td>
                   <td>{{ $item->tanggal }}</td>
+                  <td>{{ $item->pt }}</td>
                   <td>
                     <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">
                       Lihat Lokasi
@@ -222,6 +248,7 @@
               <th>Foto</th>
               <th>Hari</th>
               <th>Tanggal</th>
+              <th>Perusahaan</th>
               <th>Lokasi</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -236,6 +263,7 @@
                   </td>
                   <td>{{ $item->hari }}</td>
                   <td>{{ $item->tanggal }}</td>
+                  <td>{{ $item->pt }}</td>
                   <td>
                     <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">
                       Lihat Lokasi

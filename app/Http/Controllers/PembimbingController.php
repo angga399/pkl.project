@@ -74,38 +74,84 @@ public function journals(Request $request)
     ));
 }
 
-    public function approvals(Request $request)
-    {
-        // Filter berdasarkan minggu
-        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
-        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
-        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
-    
-        // Menampilkan approval berdasarkan minggu
-        $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
-            ->where('status', '!=', 'Ditolak')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get();
-    
-        // dd($daftarhdrs); // Debugging untuk melihat data yang dikirim
-    
-        return view('pembimbing.approvals', compact('daftarhdrs', 'startOfWeek', 'endOfWeek'));
+public function approvals(Request $request)
+{
+    // Jika week dipilih, gunakan tanggal dari minggu yang dipilih
+    // Jika tidak, gunakan minggu ini sebagai default
+    if ($request->has('week')) {
+        $selectedWeek = $request->week;
+        $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
+        $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
+    } else {
+        $selectedWeek = Carbon::now()->format('Y-\WW');
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
     }
-    
-    public function shalat(Request $request)
-    {
-        // Filter berdasarkan minggu
-        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
-        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
-        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
 
-        // Menampilkan data shalat berdasarkan minggu
-        $dftrshalats = Dftrshalat::where('status', 'Menunggu')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get();
+    // Mulai query
+    $daftarhdrs = Daftarhdr::query();
 
-        return view('pembimbing.shalat', compact('dftrshalats', 'startOfWeek', 'endOfWeek'));
+    // Terapkan filter tanggal berdasarkan minggu yang dipilih
+    $daftarhdrs->whereBetween('tanggal', [
+        $startOfWeek->format('Y-m-d'),
+        $endOfWeek->format('Y-m-d')
+    ]);
+
+    // Filter berdasarkan perusahaan jika dipilih
+    if ($request->has('PT') && $request->PT != '') {
+        $daftarhdrs->where('PT', $request->PT);
     }
+
+    // Ambil data
+    $daftarhdrs = $daftarhdrs->get();
+
+    // Kirim data ke view dengan parameter yang dipilih
+    return view('pembimbing.approvals', compact(
+        'daftarhdrs',
+        'startOfWeek',
+        'endOfWeek',
+        'selectedWeek'
+    ));
+}
+public function shalat(Request $request)
+{
+    // Jika week dipilih, gunakan tanggal dari minggu yang dipilih
+    // Jika tidak, gunakan minggu ini sebagai default
+    if ($request->has('week')) {
+        $selectedWeek = $request->week;
+        $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
+        $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
+    } else {
+        $selectedWeek = Carbon::now()->format('Y-\WW');
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+    }
+
+    // Mulai query
+    $dftrshalats = Dftrshalat::query();
+
+    // Terapkan filter tanggal berdasarkan minggu yang dipilih
+    $dftrshalats->whereBetween('tanggal', [
+        $startOfWeek->format('Y-m-d'),
+        $endOfWeek->format('Y-m-d')
+    ]);
+
+    // Filter berdasarkan perusahaan jika dipilih
+    if ($request->has('PT') && $request->PT != '') {
+        $dftrshalats->where('PT', $request->PT);
+    }
+
+    // Ambil data
+    $dftrshalats = $dftrshalats->get();
+
+    // Kirim data ke view dengan parameter yang dipilih
+    return view('pembimbing.shalat', compact(
+        'dftrshalats',
+        'startOfWeek',
+        'endOfWeek',
+        'selectedWeek'
+    ));
+}
 
     // Proses setuju dan tolak untuk jurnal
     public function setuju($id)

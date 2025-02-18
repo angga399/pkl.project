@@ -162,6 +162,29 @@
         </p>
       </div>
 
+       <!-- Form Pencarian Berdasarkan Perusahaan -->
+       <div class="mb-4">
+        <form method="GET" action="{{ route('pembimbing.shalat') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <!-- Hidden input untuk menyimpan minggu yang dipilih -->
+          <input type="hidden" name="week" value="{{ request('week', $selectedWeek) }}">
+          
+          <label for="perusahaan" class="font-semibold text-white">Pilih Perusahaan:</label>
+          <select name="PT" id="PT" class="border rounded-lg p-2 text-black">
+            <option value="" disabled {{ request('perusahaan') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
+            <option value="Perusahaan A" {{ request('perusahaan') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
+            <option value="Perusahaan B" {{ request('perusahaan') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
+            <option value="Perusahaan C" {{ request('perusahaan') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
+            <option value="Perusahaan D" {{ request('perusahaan') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
+          </select>
+          <button type="submit" class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Cari
+          </button>
+        </form>
+        <p class="mt-2 text-gray-300">
+          Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+        </p>
+      </div>
+
       <!-- Tabel Waktu Shalat Duha -->
       <h2 class="text-xl font-semibold text-gray-200 mb-4">Waktu Shalat Duha</h2>
       <div class="overflow-x-auto mb-8">
