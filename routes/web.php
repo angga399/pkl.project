@@ -47,8 +47,8 @@ Route::get('/dftrshalats/arsip', [DftrshalatController::class, 'arsip'])->name('
 
 // Halaman utama
 Route::get('/', function () {
-    return view('welcome', ['title' => 'home page']);
-})->name('welcome');
+    return view('awal', ['title' => 'home page']);
+})->name('awal');
 
 
 // Halaman utama
@@ -172,3 +172,5 @@ Route::get('/welcome', function () {
 Route::get('/pembimbingpkl', function () {
     return view('.pembimbingpkl');
 })->name('pembimbingpkl')->middleware('auth');
+
+Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');

@@ -16,86 +16,90 @@
   <style>
     /* Background halaman */
     body {
-      background: linear-gradient(to right, #0a192f, #1c1c1c);
-      color: white;
-    }
+   background: linear-gradient(to right, #0a192f, #1c1c1c);
+   color: white;
+ }
 
-    /* Sidebar */
-    #sidebar {
-      width: 60px;
-      min-height: 100vh;
-      background-color: #111827;
-      transition: width 0.3s;
-      position: relative;
-    }
+ /* Sidebar */
+ #sidebar {
+   width: 60px;
+   min-height: 100vh;
+   background-color: #111827;
+   transition: width 0.3s;
+   position: relative;
+ }
 
-    /* Saat sidebar terbuka */
-    #sidebar.open {
-      width: 200px;
-    }
+ /* Saat sidebar terbuka */
+ #sidebar.open {
+   width: 200px;
+ }
 
-    /* Tombol toggle */
-    .toggle-btn {
-      position: absolute;
-      top: 10px;
-      right: -15px;
-      background: #1f2937;
-      color: white;
-      border-radius: 50%;
-      padding: 5px;
-      cursor: pointer;
-      z-index: 10;
-    }
+ /* Tombol toggle */
+ .toggle-btn {
+   position: absolute;
+   top: 10px;
+   right: -15px;
+   background: #1f2937;
+   color: white;
+   border-radius: 50%;
+   padding: 5px;
+   cursor: pointer;
+   z-index: 10;
+ }
 
-    /* Styling menu sidebar */
-    .sidebar-nav li a {
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: white;
-      transition: background 0.3s;
-    }
+ /* Styling menu sidebar */
+ .sidebar-nav li a {
+   padding: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: white;
+   transition: background 0.3s;
+ }
 
-    /* Saat sidebar terbuka, ikon dan teks sejajar */
-    #sidebar.open .sidebar-nav li a {
-      justify-content: flex-start;
-      padding-left: 20px;
-    }
+ /* Saat sidebar terbuka, ikon dan teks sejajar */
+ #sidebar.open .sidebar-nav li a {
+   justify-content: flex-start;
+   padding-left: 20px;
+ }
 
-    /* Hover effect */
-    .sidebar-nav li a:hover {
-      background: rgba(0, 242, 255, 0.1);
-    }
+ /* Hover effect */
+ .sidebar-nav li a:hover {
+   background: rgba(0, 242, 255, 0.1);
+ }
 
-    /* Animasi sidebar */
-    .sidebar-nav li a span {
-      display: none;
-    }
+ /* Animasi sidebar */
+ .sidebar-nav li a span {
+   display: none;
+ }
 
-    #sidebar.open .sidebar-nav li a span {
-      display: inline;
-      margin-left: 10px;
-    }
+ #sidebar.open .sidebar-nav li a span {
+   display: inline;
+   margin-left: 10px;
+ }
 
-    /* Tabel custom styling */
-    .table-custom {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .table-custom th, .table-custom td {
-      border: 2px solid #00f2ff !important;
-      padding: 0.5rem 1rem;
-      text-align: center;
-    }
-    .table-custom thead {
-      background-color: #001b42;
-    }
-    .table-custom tbody tr:hover {
-      background: rgba(0, 242, 255, 0.1);
-    }
-  </style>
+ /* Tabel custom styling */
+ .table-custom {
+   width: 100%;
+   border-collapse: collapse;
+ }
+ .table-custom th, .table-custom td {
+   border: 2px solid #00f2ff !important;
+   padding: 0.5rem 1rem;
+   text-align: center;
+ }
+ .table-custom thead {
+   background-color: #001b42;
+ }
+ .table-custom tbody tr:hover {
+   background: rgba(0, 242, 255, 0.1);
+ }
+</style>
+<script>
+ function toggleSidebar() {
+   document.getElementById('sidebar').classList.toggle('open');
+ }
+</script>
 
   <script>
     function toggleSidebar() {

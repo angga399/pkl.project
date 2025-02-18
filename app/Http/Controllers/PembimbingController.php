@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Journal;
 use App\Models\Daftarhdr;
 use App\Models\Dftrshalat;
@@ -11,31 +11,28 @@ use Illuminate\Http\Request;
 class PembimbingController extends Controller
 {
     public function index(Request $request)
-    {
-        // Filter berdasarkan minggu
-        $week = $request->input('week', Carbon::now()->format('Y-\WW')); // default minggu saat ini
-        $startOfWeek = Carbon::parse($week . '-1')->startOfWeek(); // Hari pertama dalam minggu
-        $endOfWeek = Carbon::parse($week . '-1')->endOfWeek(); // Hari terakhir dalam minggu
+{
+    $week = $request->input('week', Carbon::now()->format('Y-\WW'));
+    $startOfWeek = Carbon::createFromFormat('Y-\WW', $week)->startOfWeek();
+    $endOfWeek = Carbon::createFromFormat('Y-\WW', $week)->endOfWeek();
 
-        // Journals: Mengambil jurnal dengan status 'Menunggu' dalam minggu yang dipilih
-        $journals = Journal::where('status', 'Menunggu')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get();
+    $journals = Journal::where('status', 'Menunggu')
+        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+        ->get();
 
-        // Approvals: Mengambil data dari Daftarhdr yang statusnya belum disetujui atau ditolak dalam minggu yang dipilih
-        $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
-            ->where('status', '!=', 'Ditolak')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get();
+    $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
+        ->where('status', '!=', 'Ditolak')
+        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+        ->get();
 
-        // Shalat: Mengambil data yang statusnya 'Menunggu' dalam minggu yang dipilih
-        $dftrshalats = Dftrshalat::where('status', 'Menunggu')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get();
+    $dftrshalats = Dftrshalat::where('status', 'Menunggu')
+        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+        ->get();
 
-        // Menampilkan data pada view
-        return view('pembimbing.index', compact('journals', 'daftarhdrs', 'dftrshalats', 'startOfWeek', 'endOfWeek'));
-    }
+    return view('pembimbing.index', compact('journals', 'daftarhdrs', 'dftrshalats', 'startOfWeek', 'endOfWeek'));
+}
+
+
 
     public function journals(Request $request)
     {
