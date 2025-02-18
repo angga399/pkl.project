@@ -28,6 +28,11 @@
         <label class="font-semibold">Jurusan</label>
         <p>{{ $user->major }}</p>
       </div>
+
+      <div class="mb-4">
+        <label class="font-semibold">Perusahaan</label>
+        <p>{{ $user->PT }}</p>
+      </div>
       
       <div class="mb-4">
         <label class="font-semibold">No Telepon</label>

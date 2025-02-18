@@ -15,6 +15,7 @@
             <p class="font-semibold">{{ auth()->user()->full_name }}</p>
             <p class="text-sm text-gray-500">{{ auth()->user()->email }}</p>
             <p class="text-sm text-gray-500">{{ auth()->user()->major }}</p> <!-- Jurusan -->
+            <p class="text-sm text-gray-500">{{ auth()->user()->PT }}</p> <!-- perusahaan -->
             <p class="text-sm text-gray-500">{{ auth()->user()->phone_number }}</p> <!-- No Telepon -->
             <p class="text-sm text-gray-500">{{ auth()->user()->location_pkl }}</p> <!-- Lokasi PKL -->
           </div>

@@ -39,6 +39,15 @@
             </select>
             
 
+            <x-input-label for="PT" :value="__('Perusahaan')" />
+            <select name="PT" id="PT" required>
+                <option value="" disabled {{ old('PT') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
+                <option value="Perusahaan A" {{ old('PT') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
+                <option value="Perusahaan B" {{ old('PT') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
+                <option value="Perusahaan C" {{ old('PT') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
+                <option value="Perusahaan D" {{ old('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
+            </select>
+
             <x-input-label for="phone_number" :value="__('No Telepon')" />
             <x-text-input id="phone_number" name="phone_number" type="text" value="{{ old('phone_number') }}" required />
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable(); // Tanggal Lahir Siswa
             $table->string('nik')->nullable(); // NIK Peserta Didik (Siswa)
             $table->string('major')->nullable(); // Jurusan Siswa
+            $table->string('PT')->nullable(); // PT Siswa
             $table->string('phone_number')->nullable(); // No Telepon Siswa atau Pembimbing
             $table->string('location_pkl')->nullable(); // Lokasi PKL Siswa
 

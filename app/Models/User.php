@@ -14,6 +14,7 @@ class User extends Authenticatable
             'birth_date',
             'nik',
             'major',
+            'PT',
             'phone_number',
             'location_pkl',
             'company_name',

@@ -163,6 +163,7 @@
             <th>Tanggal</th>
             <th>Uraian</th>
             <th>Jurusan</th>
+            <th>Perusahaan</th>
             <th>NIK</th>
             <th>Status</th>
             <th>Aksi</th>
@@ -176,6 +177,7 @@
               <td>{{ $journal->tanggal }}</td>
               <td>{{ $journal->uraian_konsentrasi }}</td>
               <td>{{ $journal->kelas }}</td>
+              <td>{{ $journal->PT }}</td>
               <td>{{ $journal->nik }}</td>
               <td>
                 @if($journal->status == 'Disetujui')

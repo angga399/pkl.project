@@ -31,6 +31,7 @@ class RegisteredUserController extends Controller
             'birth_date' => 'required_if:register_option,siswa|nullable|date',
             'nik' => 'required_if:register_option,siswa|nullable',
             'major' => 'required_if:register_option,siswa|nullable',
+            'PT' => 'required_if:register_option,siswa|nullable',
             'phone_number' => 'required_if:register_option,siswa|nullable',
             'location_pkl' => 'required_if:register_option,siswa|nullable',
             'supervisor_name' => 'required_if:register_option,pembimbingpkl|nullable',
@@ -50,6 +51,7 @@ class RegisteredUserController extends Controller
         $user->birth_date = $validated['birth_date'] ?? $validated['birth_date_pembimbing'] ?? null;
         $user->nik = $validated['nik'] ?? null;
         $user->major = $validated['major'] ?? null;
+        $user->PT = $validated['PT'] ?? null;
         $user->phone_number = $validated['phone_number'] ?? $validated['phone_number_pembimbing']; // Menggunakan phone_number_pembimbing jika ada
         $user->location_pkl = $validated['location_pkl'] ?? null;
         $user->nip = $validated['nip'] ?? null;

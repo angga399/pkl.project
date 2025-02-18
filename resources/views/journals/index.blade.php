@@ -43,6 +43,7 @@
                                 <th class="border px-4 py-2">Tanggal</th>
                                 <th class="border px-4 py-2">Uraian</th>
                                 <th class="border px-4 py-2">Jurusan</th>
+                                <th class="border px-4 py-2">perusahaan</th>
                                 <th class="border px-4 py-2">Nik</th>
                                 <th class="border px-4 py-2">Status</th>
                             </tr>
@@ -55,6 +56,7 @@
                                     <td class="py-2 px-4 border-b">{{ $journal->tanggal }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->uraian_konsentrasi }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->kelas }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $journal->PT }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->nik }}</td>
                                     <td class="py-2 px-4 border-b">{{ $journal->status }}</td>
                                 </tr>

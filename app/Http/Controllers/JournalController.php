@@ -40,6 +40,7 @@ class JournalController extends Controller
             'nama' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'kelas' => 'required',
+            'PT' => 'required',
             'uraian_konsentrasi' => 'required|string|max:500',
         ]);
 
@@ -47,6 +48,7 @@ class JournalController extends Controller
             'nama' => $request->nama,
             'tanggal' => $request->tanggal,
             'kelas' => $request->kelas,
+            'PT' => $request->PT,
             'uraian_konsentrasi' => $request->uraian_konsentrasi,
             'status' => 'Menunggu',
         ]);
@@ -77,6 +79,7 @@ class JournalController extends Controller
             'tanggal' => 'required|date',
             'nama' => 'required',
             'kelas' => 'required',
+            'PT' => 'required',
             'uraian_konsentrasi' => 'nullable|string',
         ]);
 
