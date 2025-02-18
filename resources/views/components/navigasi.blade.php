@@ -1,4 +1,5 @@
-<nav class="bg-gradient-to-r from-teal-400 to-blue-500 p-4">
+<nav class="bg-gradient-to-b from-blue-900 to-gray-800 text-white">
+
   <div class="container mx-auto flex justify-between items-center">
     <div></div> <!-- Kosong, hanya ikon profil di kanan -->
 

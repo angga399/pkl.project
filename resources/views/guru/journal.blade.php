@@ -13,7 +13,7 @@
         <table class="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">#</th>
+                    <th class="py-2 px-4 border-b">No</th>
                     <th class="py-2 px-4 border-b">Nama</th>
                     <th class="py-2 px-4 border-b">Tanggal</th>
                     <th class="py-2 px-4 border-b">Uraian Konsentrasi</th>

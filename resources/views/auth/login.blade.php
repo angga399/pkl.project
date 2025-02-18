@@ -4,214 +4,200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login PKL</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
       min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     }
-    
-    .welcome-header {
-      text-align: center;
-      padding: 40px 0;
-      color: #2c3e50;
-      margin-bottom: 30px;
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     }
-    
-    .info-card {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
-      transition: transform 0.3s ease;
-      backdrop-filter: blur(5px);
+
+    .custom-input {
+      transition: all 0.3s ease;
+      border: 2px solid #e2e8f0;
     }
-    
-    .info-card:hover {
-      transform: translateY(-5px);
+
+    .custom-input:focus {
+      border-color: #4F46E5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
     }
-    
-    .info-card h3 {
-      color: #2c3e50;
-      border-bottom: 2px solid #4e73df;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
+
+    .collapse {
+      transition: all 0.3s ease;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
     }
-    
-    .regulation-list {
-      list-style: none;
-      padding-left: 0;
+
+    .collapse.show {
+      max-height: 500px;
+      opacity: 1;
     }
-    
-    .regulation-list li {
-      padding: 10px 0;
-      border-bottom: 1px solid #000000;
-      display: flex;
-      align-items: center;
-    }
-    
-    .regulation-list li:last-child {
-      border-bottom: none;
-    }
-    
-    .regulation-list i {
-      color: #4e73df;
-      margin-right: 15px;
-      font-size: 1.2rem;
-    }
-    
-    .login-card {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 5px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5px);
-      border: 1px solid #ddd;
-    }
-    
-    .btn-login {
-      background: #4e73df;
-      border: none;
-      border-radius: 5px;
-      padding: 12px;
+
+    .custom-button {
+      background: linear-gradient(45deg, #4F46E5, #6366F1);
       transition: all 0.3s ease;
     }
-    
-    .btn-login:hover {
-      background: #3b5998;
+
+    .custom-button:hover {
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
-    
-    /* Override warna teks di dalam info-card agar terlihat jelas */
-    .info-card,
-    .info-card h3,
-    .info-card p,
-    .info-card a,
-    .info-card li {
-      color: #2c3e50 !important;
+
+    .info-icon {
+      color: #4F46E5;
+      transition: all 0.3s ease;
     }
-    
-    @media (max-width: 768px) {
-      .welcome-header {
-        padding: 30px 15px;
-      }
-      
-      .info-card {
-        margin: 15px;
-      }
+
+    .info-icon:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
-<body class="bg-gradient-to-r from-teal-400 to-blue-500 text-white">
-  <!-- Header Selamat Datang -->
-  <div class="welcome-header">
-    <h1>Selamat Datang Peserta PKL</h1>
-    <p class="lead">Sistem Informasi Praktek Kerja Lapangan</p>
-  </div>
-  
-  <div class="container">
-    <div class="row">
-      <!-- Kolom Kiri: Kartu Informasi -->
-      <div class="col-lg-5 mb-4">
-        <!-- Kartu Pendahuluan -->
-        <div class="info-card">
-          <h3><i class="fas fa-info-circle"></i> Pendahuluan</h3>
-          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#introduction" aria-expanded="false" aria-controls="introduction">
-            <i class="fas fa-chevron-down"></i> Lihat Pendahuluan
-          </button>
-          <div class="collapse" id="introduction">
-            <p class="mt-3">
-              Selamat datang di sistem informasi Praktek Kerja Lapangan (PKL). Sistem ini dirancang untuk membantu peserta PKL dalam mengelola kegiatan dan informasi terkait PKL. Pastikan untuk mematuhi semua peraturan yang telah ditetapkan.
-            </p>
+<body class="text-gray-800">
+  <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold text-white mb-4">Selamat Datang</h1>
+      <p class="text-xl text-gray-200">Sistem Informasi Praktek Kerja Lapangan</p>
+    </div>
+    
+    <div class="max-w-7xl mx-auto w-full">
+      <div class="flex flex-wrap -mx-4">
+        <!-- Left Column -->
+        <div class="w-full lg:w-5/12 px-4 mb-8">
+          <div class="space-y-6">
+            <!-- Introduction Card -->
+            <div class="glass-card rounded-xl p-6">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-book-open text-2xl info-icon mr-3"></i>
+                <h3 class="text-xl font-semibold text-gray-800">Pendahuluan</h3>
+              </div>
+              <button class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200" id="toggleIntro">
+                <span>Baca Selengkapnya</span>
+                <i class="fas fa-chevron-down ml-2 transform transition-transform duration-200"></i>
+              </button>
+              <div class="collapse mt-4" id="introContent">
+                <p class="text-gray-600 leading-relaxed">
+                  Selamat datang di sistem informasi Praktek Kerja Lapangan. Di sini, Anda akan menemukan informasi penting mengenai PKL dan panduan lengkap untuk mengoptimalkan pengalaman pembelajaran Anda.
+                </p>
+              </div>
+            </div>
+
+            <!-- Regulations Card -->
+            <div class="glass-card rounded-xl p-6">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-clipboard-list text-2xl info-icon mr-3"></i>
+                <h3 class="text-xl font-semibold text-gray-800">Peraturan PKL</h3>
+              </div>
+              <button class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200" id="toggleRegulation">
+                <span>Baca Selengkapnya</span>
+                <i class="fas fa-chevron-down ml-2 transform transition-transform duration-200"></i>
+              </button>
+              <div class="collapse mt-4" id="regulationContent">
+                <ul class="space-y-3">
+                  <li class="flex items-center text-gray-600">
+                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                    <span>Hadir tepat waktu sesuai jadwal yang ditentukan</span>
+                  </li>
+                  <li class="flex items-center text-gray-600">
+                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                    <span>Mengikuti arahan pembimbing dengan seksama</span>
+                  </li>
+                  <li class="flex items-center text-gray-600">
+                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                    <span>Memahami dan mengimplementasikan materi yang disampaikan</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <!-- Kartu Peraturan -->
-        <div class="info-card">
-          <h3><i class="fas fa-scroll"></i> Peraturan PKL</h3>
-          <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#regulationList" aria-expanded="false" aria-controls="regulationList">
-            <i class="fas fa-chevron-down"></i> Lihat Peraturan
-          </button>
-          <div class="collapse" id="regulationList">
-            <ul class="regulation-list">
-              <li><i class="fas fa-check-circle"></i> Wajib hadir tepat waktu</li>
-              <li><i class="fas fa-check-circle"></i> Menggunakan pakaian sopan dan rapi</li>
-              <li><i class="fas fa-check-circle"></i> Membawa perlengkapan kerja lengkap</li>
-              <li><i class="fas fa-check-circle"></i> Mematuhi tata tertib perusahaan</li>
-              <li><i class="fas fa-check-circle"></i> Lapor kepada pembimbing harian</li>
-              <li><i class="fas fa-check-circle"></i> Dilarang meninggalkan lokasi tanpa izin</li>
-            </ul>
+
+        <!-- Right Column - Login Form -->
+        <div class="w-full lg:w-7/12 px-4">
+          <div class="glass-card rounded-xl p-8">
+            <div class="text-center mb-8">
+              <i class="fas fa-user-circle text-5xl text-indigo-600 mb-4"></i>
+              <h2 class="text-3xl font-bold text-gray-800">Login Peserta</h2>
+            </div>
+
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+              @csrf
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <div class="relative">
+                  <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                  <input type="email" 
+                         class="custom-input block w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none" 
+                         id="email"
+                         name="email" 
+                         placeholder="Masukkan email Anda"
+                         value="{{ old('email') }}"
+                         required>
+                </div>
+              </div>
+              
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <div class="relative">
+                  <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                  <input type="password" 
+                         class="custom-input block w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none" 
+                         id="password"
+                         name="password" 
+                         placeholder="Masukkan password Anda"
+                         required>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <input type="checkbox" 
+                         class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" 
+                         id="remember" 
+                         name="remember">
+                  <label class="ml-2 text-sm text-gray-600" for="remember">Remember me</label>
+                </div>
+                
+                @if (Route::has('password.request'))
+                  <a href="{{ route('password.request') }}" 
+                     class="text-sm text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
+                    Lupa password?
+                  </a>
+                @endif
+              </div>
+              
+              <button type="submit" 
+                      class="custom-button w-full py-3 px-4 rounded-lg text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <i class="fas fa-sign-in-alt mr-2"></i> Masuk
+              </button>
+            </form>
           </div>
-        </div>
-      </div>
-      
-      <!-- Kolom Kanan: Kartu Login -->
-      <div class="col-lg-7">
-        <div class="login-card text-dark">
-          <h2 class="text-center mb-4">Login Peserta</h2>
-          <x-auth-session-status class="mb-4" :status="session('status')" />
-          
-          <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" 
-                     class="form-control" 
-                     id="email"
-                     name="email" 
-                     placeholder="Masukkan email"
-                     value="{{ old('email') }}"
-                     required autofocus>
-              <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            </div>
-            
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" 
-                     class="form-control" 
-                     id="password"
-                     name="password" 
-                     placeholder="Masukkan password"
-                     required>
-              <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-            
-            <div class="form-check mt-3">
-              <input type="checkbox" class="form-check-input" id="remember" name="remember">
-              <label class="form-check-label" for="remember">Remember me</label>
-            </div>
-            
-            <div class="text-right mt-2">
-              @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="small text-primary">
-                  {{ __('Forgot your password?') }}
-                </a>
-              @endif
-            </div>
-            
-            <button type="submit" class="btn btn-login btn-block text-white mt-4">
-              <i class="fas fa-sign-in-alt"></i> Masuk
-            </button>
-          </form>
         </div>
       </div>
     </div>
   </div>
-  
-  <!-- Bootstrap JS dan dependensinya -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
-  <br><br><br><br><br>
-  
-  <x-footer></x-footer>
+
+  <script>
+    $(document).ready(function() {
+      $('#toggleIntro, #toggleRegulation').click(function() {
+        const content = $(this).next('.collapse');
+        const icon = $(this).find('.fa-chevron-down');
+        
+        content.toggleClass('show');
+        icon.toggleClass('rotate-180');
+      });
+    });
+  </script>
 </body>
 </html>

@@ -25,7 +25,10 @@
   </script>
 </head>
 
-<body class="bg-gradient-to-r from-teal-400 to-blue-500 text-white">
+
+<!-- Gradasi vertikal dari atas ke bawah -->
+<body class="bg-gradient-to-b from-blue-900 to-gray-800 text-white">
+
   <x-navigasi></x-navigasi>
 
   <div class="min-h-screen flex flex-col justify-center items-center">
@@ -43,7 +46,7 @@
         @foreach ([
           ['title' => 'Jurnal', 'desc' => 'Isi Jurnal kegiatan kamu', 'route' => 'journals.index', 'color' => 'bg-teal-600', 'img' => 'image/bee.png'],
           ['title' => 'Absensi', 'desc' => 'Absen Hadir kegiatan PKL', 'route' => 'daftarhdr.index', 'color' => 'bg-blue-600', 'img' => 'image/we.png'],
-          ['title' => 'Absen Shalat', 'desc' => 'Absen Shalat selama PKL', 'route' => 'dftrshalats.index', 'color' => 'bg-blue-800', 'img' => 'image/me.png']
+          ['title' => 'Absen Shalat', 'desc' => 'Absen Shalat selama PKL', 'route' => 'dftrshalats.index', 'color' => 'bg-blue-800', 'img' => 'image/monitor.png']
         ] as $item)
         <div class="p-6 w-80 flex flex-col text-center items-center transition-transform transform hover:scale-110 bg-white rounded-lg shadow-lg text-gray-900">
           <div class="w-24 h-24 inline-flex items-center justify-center rounded-full {{ $item['color'] }} mb-5 shadow-lg">
@@ -65,3 +68,7 @@
 
   <x-footer></x-footer>
 </body>
+
+
+
+

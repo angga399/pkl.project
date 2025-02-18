@@ -22,9 +22,13 @@ Route::get('/daftarhdr/{daftarhdr}', [DaftarhdrController::class, 'show'])->name
 
 // Rute utama untuk daftarhdr
 Route::resource('daftarhdr', DaftarhdrController::class);
+Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.absen');
+
 
 // Route untuk menampilkan daftar waktu shalat
 Route::get('dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
+Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
+
 
 // Route untuk menampilkan form create berdasarkan tipe waktu shalat
 Route::get('dftrshalats/create/{type?}', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
@@ -76,6 +80,9 @@ Route::get('/journals/{id}/edit', [JournalController::class, 'edit'])->name('jou
 Route::put('/journals/{id}', [JournalController::class, 'update'])->name('journals.update');
 Route::delete('/journals/{id}', [JournalController::class, 'destroy'])->name('journals.destroy'); // Pastikan ini ada
 Route::get('/journals', [JournalController::class, 'index'])->name('journals.index');
+Route::get('guru/journal', [JournalController::class, 'showGuru'])->name('guru.journal');
+
+
 
 Route::get('/Dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
 Route::get('/create', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
@@ -152,7 +159,7 @@ Route::get('/pembimbingpkl', function () {
 })->name('pembimbingpkl');
 
 
-Route::get('/awal', function () {
+Route::get('/', function () {
     return view('awal'); // Ganti dengan nama view yang sesuai
 })->name('awal');
 
