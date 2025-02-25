@@ -173,4 +173,7 @@ Route::get('/pembimbingpkl', function () {
     return view('.pembimbingpkl');
 })->name('pembimbingpkl')->middleware('auth');
 
+<<<<<<< Updated upstream
 Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
+=======
+>>>>>>> Stashed changes
