@@ -375,20 +375,8 @@
             <h3>Selamat Datang, Pembimbing!</h3>
             <p>Dashboard monitoring kegiatan siswa PKL</p>
             
-            <div class="stats-container">
-                <div class="stat-item">
-                    <h4>24</h4>
-                    <p>Siswa Aktif</p>
-                </div>
-                <div class="stat-item">
-                    <h4>98%</h4>
-                    <p>Tingkat Kehadiran</p>
-                </div>
-                <div class="stat-item">
-                    <h4>12</h4>
-                    <p>Laporan Pending</p>
-                </div>
-            </div>
+        
+           
         </div>
 
         <header class="header">
@@ -406,7 +394,7 @@
                     <h2 class="card-title">Absensi Kehadiran Siswa</h2>
                 </div>
                 <div class="card-content">
-                    <p>Isi dan kelola absensi kehadiran siswa secara efisien dan terorganisir</p>
+                    <p>Isi dan kelola absensi kehadiran siswa secara efisien/p>
                     <a href="{{ route('pembimbing.approvals') }}" class="card-link">
                         Buka Halaman <i class="fas fa-arrow-right"></i>
                     </a>

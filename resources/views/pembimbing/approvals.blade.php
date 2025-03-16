@@ -9,159 +9,109 @@
     
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-            --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-            --text-primary: #1a5f7a;
-            --accent-color: #00c2cb;
+            --bg-primary: #1a202e;
+            --bg-secondary: #232836;
+            --purple-primary: #9966cc;
+            --purple-light: #b388ff;
+            --blue-primary: #4dc4d2;
+            --blue-light: #64dfdf;
+            --pink-primary: #ff66b2;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-color: #4dc4d2;
+            --accent-hover: #64dfdf;
         }
 
         body {
-            background: var(--primary-gradient);
-            color: white;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
         }
 
-        /* Animated Background */
-        .bg-circles {
+        /* Sidebar Styling */
+        #sidebar {
+            background-color: var(--bg-secondary);
+            width: 60px;
+            min-height: 100vh;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: fixed;
-            top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
+            top: 0;
+            z-index: 1000;
+            overflow-x: hidden;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .bg-circles li {
-            position: absolute;
-            display: block;
-            list-style: none;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            animation: animate 25s linear infinite;
-            bottom: -150px;
-            border-radius: 50%;
+        #sidebar.expanded {
+            width: 200px;
         }
 
-        .bg-circles li:nth-child(1) {
-            left: 25%;
-            width: 80px;
-            height: 80px;
-            animation-delay: 0s;
+        .sidebar-text {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
-        .bg-circles li:nth-child(2) {
-            left: 10%;
-            width: 20px;
-            height: 20px;
-            animation-delay: 2s;
-            animation-duration: 12s;
+        #sidebar.expanded .sidebar-text {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        .bg-circles li:nth-child(3) {
-            left: 70%;
-            width: 20px;
-            height: 20px;
-            animation-delay: 4s;
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 60px;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: calc(100% - 60px);
+            position: relative;
+            background-color: var(--bg-primary);
         }
 
-        @keyframes animate {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
+        .main-content.sidebar-expanded {
+            margin-left: 200px;
+            width: calc(100% - 200px);
         }
 
-         /* Sidebar Styling */
-    #sidebar {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-        width: 60px;
-        min-height: 100vh;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: fixed;
-        left: 0;
-        top: 0;
-        z-index: 1000;
-        overflow-x: hidden;
-    }
+        /* Add animations for sidebar items */
+        #sidebar .sidebar-nav li {
+            transition: transform 0.2s ease;
+        }
 
-    #sidebar.expanded {
-        width: 200px;
-    }
+        #sidebar .sidebar-nav li:hover {
+            transform: translateX(5px);
+        }
 
-    .sidebar-text {
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: all 0.3s ease;
-        white-space: nowrap;
-    }
+        #sidebar .sidebar-nav i {
+            transition: all 0.3s ease;
+        }
 
-    #sidebar.expanded .sidebar-text {
-        opacity: 1;
-        transform: translateX(0);
-    }
+        #sidebar .sidebar-nav li:hover i {
+            color: var(--accent-color);
+        }
 
-    /* Main Content Styling */
-    .main-content {
-        margin-left: 60px;
-        transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        width: calc(100% - 60px);
-        position: relative;
-    }
+        /* Button animation */
+        #toggleBtn {
+            transition: all 0.3s ease;
+        }
 
-    .main-content.sidebar-expanded {
-        margin-left: 200px;
-        width: calc(100% - 200px);
-    }
+        #toggleBtn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-    /* Add animations for sidebar items */
-    #sidebar .sidebar-nav li {
-        transition: transform 0.2s ease;
-    }
+        #toggleBtn i {
+            transition: transform 0.3s ease;
+        }
 
-    #sidebar .sidebar-nav li:hover {
-        transform: translateX(5px);
-    }
-
-    #sidebar .sidebar-nav i {
-        transition: all 0.3s ease;
-    }
-
-    #sidebar .sidebar-nav li:hover i {
-        color: var(--accent-color);
-    }
-
-    /* Button animation */
-    #toggleBtn {
-        transition: all 0.3s ease;
-    }
-
-    #toggleBtn:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    #toggleBtn i {
-        transition: transform 0.3s ease;
-    }
-
-    #sidebar.expanded #toggleBtn i {
-        transform: rotate(90deg);
-    }
+        #sidebar.expanded #toggleBtn i {
+            transform: rotate(90deg);
+        }
 
         /* Content Card Styling */
         .content-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background-color: var(--bg-secondary);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
         }
@@ -171,34 +121,34 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(5px);
             border-radius: 15px;
             overflow: hidden;
         }
 
         .table-custom th {
-            background: rgba(0, 194, 203, 0.2);
-            color: white;
+            background-color: rgba(77, 196, 210, 0.2);
+            color: var(--text-primary);
             padding: 1rem;
             font-weight: 600;
         }
 
         .table-custom td {
             padding: 1rem;
-            color: white;
+            color: var(--text-primary);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .table-custom tbody tr:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         /* Form Controls */
         .form-control {
-            background: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            color: var(--text-primary);
             padding: 0.5rem 1rem;
             border-radius: 8px;
             backdrop-filter: blur(5px);
@@ -219,23 +169,23 @@
         }
 
         .btn-primary {
-            background: var(--accent-color);
-            color: white;
+            background-color: var(--accent-color);
+            color: var(--text-primary);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 194, 203, 0.3);
+            box-shadow: 0 4px 12px rgba(77, 196, 210, 0.3);
         }
 
         .btn-success {
-            background: #10B981;
-            color: white;
+            background-color: #2ecc71;
+            color: var(--text-primary);
         }
 
         .btn-danger {
-            background: #EF4444;
-            color: white;
+            background-color: #e74c3c;
+            color: var(--text-primary);
         }
 
         /* Status Badges */
@@ -247,18 +197,18 @@
         }
 
         .status-pending {
-            background: rgba(234, 179, 8, 0.2);
-            color: #FCD34D;
+            background-color: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
         }
 
         .status-approved {
-            background: rgba(16, 185, 129, 0.2);
-            color: #6EE7B7;
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
         }
 
         .status-rejected {
-            background: rgba(239, 68, 68, 0.2);
-            color: #FCA5A5;
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
         }
 
         /* Images */
@@ -283,19 +233,12 @@
         }
 
         .location-link:hover {
-            color: #6dd5ed;
+            color: var(--accent-hover);
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <ul class="bg-circles">
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
-
     <div class="flex h-screen">
         <!-- Sidebar -->
         <div id="sidebar" class="flex-none flex flex-col items-center">
@@ -387,47 +330,47 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($daftarhdrs as $item)
-                                        @if ($item->tipe === 'datang')
-                                            <tr>
-                                                <td>
-                                                    <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
-                                                </td>
-                                                <td>{{ $item->hari }}</td>
-                                                <td>{{ $item->tanggal }}</td>
-                                                <td>{{ $item->pt }}</td>
-                                                <td>
-                                                    <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
-                                                       target="_blank" 
-                                                       class="location-link">
-                                                        Lihat Lokasi
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
-                                                        {{ $item->status }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    @if ($item->status === 'Menunggu Persetujuan')
-                                                        <div class="flex gap-2">
-                                                            <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
-                                                                    Setujui
-                                                                </button>
-                                                            </form>
-                                                            <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                                    Tolak
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
+                                    @if ($item->tipe === 'datang')
+                                        <tr>
+                                            <td>
+                                                <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
+                                            </td>
+                                            <td>{{ $item->hari }}</td>
+                                            <td>{{ $item->tanggal }}</td>
+                                            <td>{{ $item->pt }}</td>
+                                            <td>
+                                                <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
+                                                   target="_blank" 
+                                                   class="location-link">
+                                                    Lihat Lokasi
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
+                                                    {{ $item->status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if ($item->status === 'Menunggu Persetujuan')
+                                                    <div class="flex gap-2">
+                                                        <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
+                                                                Setujui
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
+                                                                Tolak
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -441,8 +384,8 @@
                               <thead>
                                   <tr>
                                       <th>Foto</th>
-                                      <th>Hari</th>
-                                      <th>Tanggal</th>
+                                      <th>Hari</th
+                                        <th>Tanggal</th>
                                       <th>Perusahaan</th>
                                       <th>Lokasi</th>
                                       <th>Status</th>
@@ -495,36 +438,36 @@
                               </tbody>
                           </table>
                       </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get references to the sidebar and main content
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggleBtn');
-            const mainContent = document.getElementById('mainContent');
-            
-            // Add click event listener to the toggle button
-            toggleBtn.addEventListener('click', function() {
-                // Toggle the 'expanded' class on the sidebar
-                sidebar.classList.toggle('expanded');
-                
-                // Toggle the 'sidebar-expanded' class on the main content
-                mainContent.classList.toggle('sidebar-expanded');
-            });
-        });
-        
-        // Function to show modal for image preview (placeholder - implement as needed)
-        function showModal(img) {
-            // You can implement a modal to show the image in larger size
-            console.log('Show modal for image:', img.src);
-            // For now, just open the image in a new tab
-            window.open(img.src, '_blank');
-        }
-    </script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Get references to the sidebar and main content
+          const sidebar = document.getElementById('sidebar');
+          const toggleBtn = document.getElementById('toggleBtn');
+          const mainContent = document.getElementById('mainContent');
+          
+          // Add click event listener to the toggle button
+          toggleBtn.addEventListener('click', function() {
+              // Toggle the 'expanded' class on the sidebar
+              sidebar.classList.toggle('expanded');
+              
+              // Toggle the 'sidebar-expanded' class on the main content
+              mainContent.classList.toggle('sidebar-expanded');
+          });
+      });
+      
+      // Function to show modal for image preview (placeholder - implement as needed)
+      function showModal(img) {
+          // You can implement a modal to show the image in larger size
+          console.log('Show modal for image:', img.src);
+          // For now, just open the image in a new tab
+          window.open(img.src, '_blank');
+      }
+  </script>
 </body>
 </html>

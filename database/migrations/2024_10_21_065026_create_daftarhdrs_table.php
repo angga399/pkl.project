@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('dataGambar'); // Stores the photo data as base64
             $table->string('jenisAbsen')->default('default_value');
             $table->string('tipe');
-            $table->string('status')->default('Pending');
+            $table->string('status')->default('Menunggu Persetujuan');
             $table->timestamps();
         });
     }
