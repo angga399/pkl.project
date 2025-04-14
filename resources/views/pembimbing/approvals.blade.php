@@ -6,52 +6,92 @@
     <title>Daftar Pengambilan Foto - Persetujuan</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <style>
+        /* Custom Styles */
         :root {
-            --bg-primary: #1a202e;
-            --bg-secondary: #232836;
-            --purple-primary: #9966cc;
-            --purple-light: #b388ff;
-            --blue-primary: #4dc4d2;
-            --blue-light: #64dfdf;
-            --pink-primary: #ff66b2;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --accent-color: #4dc4d2;
-            --accent-hover: #64dfdf;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f4f8;
+            --accent-color: #1e3a8a;
+            --accent-hover: #3b82f6;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
         }
 
         body {
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            min-height: 100vh;
             font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
         }
 
-        /* Sidebar Styling */
+        /* Fixed Sidebar */
         #sidebar {
             background-color: var(--bg-secondary);
-            width: 60px;
-            min-height: 100vh;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 64px;
+            height: 100vh;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: fixed;
             left: 0;
             top: 0;
             z-index: 1000;
             overflow-x: hidden;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
 
         #sidebar.expanded {
-            width: 200px;
+            width: 220px;
+        }
+
+        /* Fixed Square Icon Containers */
+        .sidebar-icon-container {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-icon-container:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-icon:hover {
+            background-color: rgba(30, 58, 138, 0.2);
+        }
+
+        /* Active state for sidebar icons */
+        .sidebar-icon.active {
+            background-color: var(--accent-color);
+            box-shadow: 0 4px 8px rgba(30, 58, 138, 0.3);
+        }
+
+        .sidebar-icon.active i {
+            color: var(--bg-primary);
         }
 
         .sidebar-text {
             opacity: 0;
             transform: translateX(-10px);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             white-space: nowrap;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-left: 12px;
         }
 
         #sidebar.expanded .sidebar-text {
@@ -59,219 +99,398 @@
             transform: translateX(0);
         }
 
-        /* Main Content Styling */
+        /* Main Content - Fixed positioning */
         .main-content {
-            margin-left: 60px;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: calc(100% - 60px);
-            position: relative;
-            background-color: var(--bg-primary);
+            padding-left: 64px; /* Initial sidebar width */
+            transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 100vh;
         }
 
         .main-content.sidebar-expanded {
-            margin-left: 200px;
-            width: calc(100% - 200px);
+            padding-left: 220px; /* Expanded sidebar width */
         }
 
-        /* Add animations for sidebar items */
-        #sidebar .sidebar-nav li {
-            transition: transform 0.2s ease;
+        /* Content Container */
+        .content-wrapper {
+            padding: 24px;
         }
 
-        #sidebar .sidebar-nav li:hover {
-            transform: translateX(5px);
-        }
-
-        #sidebar .sidebar-nav i {
+        /* Enhanced Tab Buttons */
+        .btn-tab {
+            padding: 0.65rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
             transition: all 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        #sidebar .sidebar-nav li:hover i {
-            color: var(--accent-color);
+        .btn-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
         }
 
-        /* Button animation */
-        #toggleBtn {
-            transition: all 0.3s ease;
+        .btn-tab:hover {
+            transform: translateY(-2px);
+            color: var(--text-primary);
+            border-color: var(--accent-color);
         }
 
-        #toggleBtn:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .btn-tab.active {
+            background-color: transparent;
+            color: var(--text-primary);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
         }
 
-        #toggleBtn i {
-            transition: transform 0.3s ease;
+        .btn-tab.active:before {
+            opacity: 0.15;
         }
 
-        #sidebar.expanded #toggleBtn i {
-            transform: rotate(90deg);
-        }
-
-        /* Content Card Styling */
+        /* Modern Card Style */
         .content-card {
             background-color: var(--bg-secondary);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             padding: 2rem;
-            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        /* Table Styling */
+        /* Improved Table Styling */
         .table-custom {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(5px);
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
+            margin-top: 1rem;
         }
 
         .table-custom th {
-            background-color: rgba(77, 196, 210, 0.2);
+            background-color: rgba(30, 58, 138, 0.15);
             color: var(--text-primary);
-            padding: 1rem;
+            padding: 1.2rem 1rem;
             font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
         }
 
         .table-custom td {
-            padding: 1rem;
+            padding: 1.2rem 1rem;
             color: var(--text-primary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
 
         .table-custom tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
-        /* Form Controls */
-        .form-control {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            backdrop-filter: blur(5px);
-        }
-
-        .form-control:focus {
-            border-color: var(--accent-color);
-            outline: none;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: var(--text-primary);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(77, 196, 210, 0.3);
-        }
-
-        .btn-success {
-            background-color: #2ecc71;
-            color: var(--text-primary);
-        }
-
-        .btn-danger {
-            background-color: #e74c3c;
-            color: var(--text-primary);
-        }
-
-        /* Status Badges */
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-weight: 500;
-            font-size: 0.875rem;
-        }
-
-        .status-pending {
-            background-color: rgba(241, 196, 15, 0.2);
-            color: #f1c40f;
-        }
-
-        .status-approved {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
-        }
-
-        .status-rejected {
-            background-color: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-        }
-
-        /* Images */
         .photo-preview {
             width: 64px;
             height: 64px;
             object-fit: cover;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            border: 2px solid rgba(0, 0, 0, 0.1);
         }
 
         .photo-preview:hover {
             transform: scale(1.1);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
         }
 
-        /* Location Link */
         .location-link {
             color: var(--accent-color);
             text-decoration: none;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 500;
         }
 
         .location-link:hover {
             color: var(--accent-hover);
-            text-decoration: underline;
+            transform: translateY(-1px);
+        }
+
+        .location-link i {
+            margin-right: 4px;
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .status-badge i {
+            margin-right: 4px;
+            font-size: 0.75rem;
+        }
+
+        .status-pending {
+            background-color: rgba(234, 179, 8, 0.2);
+            color: #eab308;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .status-approved {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-rejected {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Enhanced Form Controls */
+        .form-control {
+            background-color: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
+        }
+
+        .form-control:hover {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover:after {
+            opacity: 1;
+        }
+
+        .btn i {
+            margin-right: 6px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-success {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Smooth Transition for Tables */
+        .table-container {
+            opacity: 1;
+            transition: all 0.4s ease;
+            transform: translateY(0);
+        }
+
+        .table-container.hidden {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        /* Heading with accent */
+        h1, h2 {
+            position: relative;
+            display: inline-block;
+        }
+
+        h1:after, h2:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 40%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+            border-radius: 2px;
+        }
+
+        /* Animations for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Date range indicator */
+        .date-range {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: rgba(30, 58, 138, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(30, 58, 138, 0.2);
+            font-size: 0.9rem;
+        }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            background-color: rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+            max-width: 80%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
         }
     </style>
 </head>
 <body>
     <div class="flex h-screen">
-        <!-- Sidebar -->
+        <!-- Enhanced Sidebar -->
         <div id="sidebar" class="flex-none flex flex-col items-center">
-            <button id="toggleBtn" class="p-4 w-full flex justify-center cursor-pointer">
-                <i class="fas fa-bars text-white text-xl"></i>
+            <button id="toggleBtn" class="p-4 w-full flex justify-center cursor-pointer hover:bg-gray-200 transition-colors my-2">
+                <i class="fas fa-bars text-blue-900 text-xl transition-transform"></i>
             </button>
             
-            <ul class="sidebar-nav space-y-8 mt-10 w-full">
+            <ul class="sidebar-nav space-y-8 mt-10 w-full px-2">
                 <li>
-                    <a href="{{ route('pembimbing.approvals') }}" class="flex items-center p-3 text-white">
-                        <i class="fas fa-eye text-xl"></i>
+                    <a href="{{ route('pembimbing.approvals') }}" class="flex items-center p-3 hover:bg-transparent transition-all">
+                        <div class="sidebar-icon active">
+                            <i class="fas fa-eye text-lg"></i>
+                        </div>
                         <span class="ml-3 sidebar-text">Absensi</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('pembimbing.journals') }}" class="flex items-center p-3 text-white">
-                        <i class="fas fa-book text-xl"></i>
+                    <a href="{{ route('pembimbing.journals') }}" class="flex items-center p-3 hover:bg-transparent transition-all">
+                        <div class="sidebar-icon">
+                            <i class="fas fa-book text-lg"></i>
+                        </div>
                         <span class="ml-3 sidebar-text">Jurnal</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('pembimbing.shalat') }}" class="flex items-center p-3 text-white">
-                        <i class="fas fa-mosque text-xl"></i>
+                    <a href="{{ route('pembimbing.shalat') }}" class="flex items-center p-3 hover:bg-transparent transition-all">
+                        <div class="sidebar-icon">
+                            <i class="fas fa-mosque text-lg"></i>
+                        </div>
                         <span class="ml-3 sidebar-text">Shalat</span>
                     </a>
                 </li>
             </ul>
+
+            <!-- Menu Home di Paling Bawah -->
+            <div class="mt-auto w-full">
+                <a href="{{ route('pembimbingpkl') }}" class="flex items-center p-3 hover:bg-transparent transition-all">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-home text-lg"></i>
+                    </div>
+                    <span class="ml-3 sidebar-text">Home</span>
+                </a>
+            </div>
         </div>
 
         <!-- Main Content -->
-        <div id="mainContent" class="main-content p-8 overflow-auto">
+        <div id="mainContent" class="main-content p-6 overflow-auto">
             <div class="content-card">
-                <h1 class="text-2xl font-bold mb-6">Daftar Pengambilan Foto - Persetujuan</h1>
+                <h1 class="text-2xl font-bold mb-8">Daftar Pengambilan Foto - Persetujuan</h1>
 
                 <!-- Filters -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -282,7 +501,7 @@
                             <input type="week" name="week" class="form-control" 
                                    value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
                             <button type="submit" class="btn btn-primary">
-                                Tampilkan
+                                <i class="fas fa-filter"></i> Tampilkan
                             </button>
                         </form>
                     </div>
@@ -300,37 +519,111 @@
                                 <option value="Perusahaan D" {{ request('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
                             </select>
                             <button type="submit" class="btn btn-primary">
-                                Cari
+                                <i class="fas fa-search"></i> Cari
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <p class="text-sm opacity-80 mb-6">
-                    Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
-                </p>
+                <div class="date-range mb-6">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    Periode: {{ $startOfWeek->format('d M Y') }} - {{ $endOfWeek->format('d M Y') }}
+                </div>
 
-                <!-- Tables -->
-                <div class="space-y-8">
-                    <!-- Arrival Table -->
-                    <div>
-                        <h2 class="text-xl font-semibold mb-4">Absen Datang</h2>
-                        <div class="overflow-x-auto">
-                            <table class="table-custom">
-                                <thead>
+                <!-- Enhanced Tab Buttons -->
+                <div class="flex space-x-4 mb-8">
+                    <button id="datangBtn" class="btn-tab">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Absen Datang
+                    </button>
+                    <button id="pulangBtn" class="btn-tab">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Absen Pulang
+                    </button>
+                </div>
+
+                <!-- Tabel Absen Datang -->
+                <div id="datangTable" class="table-container">
+                    <h2 class="text-xl font-semibold mb-6">Absen Datang</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Hari</th>
+                                    <th>Tanggal</th>
+                                    <th>Perusahaan</th>
+                                    <th>Lokasi</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($daftarhdrs as $item)
+                                @if ($item->tipe === 'datang')
                                     <tr>
-                                        <th>Foto</th>
-                                        <th>Hari</th>
-                                        <th>Tanggal</th>
-                                        <th>Perusahaan</th>
-                                        <th>Lokasi</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
+                                        <td>
+                                            <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
+                                        </td>
+                                        <td>{{ $item->hari }}</td>
+                                        <td>{{ $item->tanggal }}</td>
+                                        <td>{{ $item->pt }}</td>
+                                        <td>
+                                            <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
+                                               target="_blank" 
+                                               class="location-link">
+                                                <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
+                                                <i class="fas {{ $item->status === 'Disetujui' ? 'fa-check-circle' : ($item->status === 'Ditolak' ? 'fa-times-circle' : 'fa-clock') }}"></i>
+                                                {{ $item->status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if ($item->status === 'Menunggu Persetujuan')
+                                                <div class="flex gap-2">
+                                                    <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
+                                                            <i class="fas fa-check"></i> Setujui
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
+                                                            <i class="fas fa-times"></i> Tolak
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($daftarhdrs as $item)
-                                    @if ($item->tipe === 'datang')
+                                @endif
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabel Absen Pulang -->
+                <div id="pulangTable" class="table-container hidden">
+                    <h2 class="text-xl font-semibold mb-6">Absen Pulang</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Hari</th>
+                                    <th>Tanggal</th>
+                                    <th>Perusahaan</th>
+                                    <th>Lokasi</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($daftarhdrs as $item)
+                                    @if ($item->tipe === 'pulang')
                                         <tr>
                                             <td>
                                                 <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
@@ -342,11 +635,12 @@
                                                 <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
                                                    target="_blank" 
                                                    class="location-link">
-                                                    Lihat Lokasi
+                                                    <i class="fas fa-map-marker-alt"></i> Lihat Lokasi
                                                 </a>
                                             </td>
                                             <td>
                                                 <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
+                                                    <i class="fas {{ $item->status === 'Disetujui' ? 'fa-check-circle' : ($item->status === 'Ditolak' ? 'fa-times-circle' : 'fa-clock') }}"></i>
                                                     {{ $item->status }}
                                                 </span>
                                             </td>
@@ -356,13 +650,13 @@
                                                         <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
                                                             @csrf
                                                             <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
-                                                                Setujui
+                                                                <i class="fas fa-check"></i> Setujui
                                                             </button>
                                                         </form>
                                                         <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
                                                             @csrf
                                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                                Tolak
+                                                                <i class="fas fa-times"></i> Tolak
                                                             </button>
                                                         </form>
                                                     </div>
@@ -371,103 +665,110 @@
                                         </tr>
                                     @endif
                                 @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Departure Table -->
-                    <div>
-                      <h2 class="text-xl font-semibold mb-4">Absen Pulang</h2>
-                      <div class="overflow-x-auto">
-                          <table class="table-custom">
-                              <thead>
-                                  <tr>
-                                      <th>Foto</th>
-                                      <th>Hari</th
-                                        <th>Tanggal</th>
-                                      <th>Perusahaan</th>
-                                      <th>Lokasi</th>
-                                      <th>Status</th>
-                                      <th>Aksi</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  @foreach ($daftarhdrs as $item)
-                                      @if ($item->tipe === 'pulang')
-                                          <tr>
-                                              <td>
-                                                  <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
-                                              </td>
-                                              <td>{{ $item->hari }}</td>
-                                              <td>{{ $item->tanggal }}</td>
-                                              <td>{{ $item->pt }}</td>
-                                              <td>
-                                                  <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
-                                                     target="_blank" 
-                                                     class="location-link">
-                                                      Lihat Lokasi
-                                                  </a>
-                                              </td>
-                                              <td>
-                                                  <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
-                                                      {{ $item->status }}
-                                                  </span>
-                                              </td>
-                                              <td>
-                                                  @if ($item->status === 'Menunggu Persetujuan')
-                                                      <div class="flex gap-2">
-                                                          <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
-                                                              @csrf
-                                                              <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
-                                                                  Setujui
-                                                              </button>
-                                                          </form>
-                                                          <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                                              @csrf
-                                                              <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                                  Tolak
-                                                              </button>
-                                                          </form>
-                                                      </div>
-                                                  @endif
-                                              </td>
-                                          </tr>
-                                      @endif
-                                  @endforeach
-                              </tbody>
-                          </table>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-80 transition-all duration-300">
+        <div class="bg-gray-800 p-4 rounded-lg max-w-4xl w-full mx-4 relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-white hover:text-gray-300">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <img id="modalImage" class="max-w-full max-h-[80vh] mx-auto rounded-lg" src="" alt="Preview">
+        </div>
+    </div>
 
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          // Get references to the sidebar and main content
-          const sidebar = document.getElementById('sidebar');
-          const toggleBtn = document.getElementById('toggleBtn');
-          const mainContent = document.getElementById('mainContent');
-          
-          // Add click event listener to the toggle button
-          toggleBtn.addEventListener('click', function() {
-              // Toggle the 'expanded' class on the sidebar
-              sidebar.classList.toggle('expanded');
-              
-              // Toggle the 'sidebar-expanded' class on the main content
-              mainContent.classList.toggle('sidebar-expanded');
-          });
-      });
-      
-      // Function to show modal for image preview (placeholder - implement as needed)
-      function showModal(img) {
-          // You can implement a modal to show the image in larger size
-          console.log('Show modal for image:', img.src);
-          // For now, just open the image in a new tab
-          window.open(img.src, '_blank');
-      }
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggleBtn');
+            const mainContent = document.getElementById('mainContent');
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModal = document.getElementById('closeModal');
+
+            // Toggle sidebar
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('expanded');
+                mainContent.classList.toggle('sidebar-expanded');
+            });
+
+            // Toggle between arrival and departure tables
+            const datangBtn = document.getElementById('datangBtn');
+            const pulangBtn = document.getElementById('pulangBtn');
+            const datangTable = document.getElementById('datangTable');
+            const pulangTable = document.getElementById('pulangTable');
+
+            datangBtn.addEventListener('click', function() {
+                datangTable.classList.remove('hidden');
+                pulangTable.classList.add('hidden');
+                datangBtn.classList.add('active');
+                pulangBtn.classList.remove('active');
+            });
+
+            pulangBtn.addEventListener('click', function() {
+                pulangTable.classList.remove('hidden');
+                datangTable.classList.add('hidden');
+                pulangBtn.classList.add('active');
+                datangBtn.classList.remove('active');
+            });
+
+            // Enhanced modal functionality
+            function showModal(img) {
+                modalImage.src = img.src;
+                imageModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                // Add animation
+                imageModal.style.opacity = 0;
+                setTimeout(() => {
+                    imageModal.style.opacity = 1;
+                }, 10);
+            }
+
+            // Expose the function to global scope
+            window.showModal = showModal;
+
+            closeModal.addEventListener('click', function() {
+                imageModal.style.opacity = 0;
+                
+                setTimeout(() => {
+                    imageModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            });
+
+            // Close modal when clicking outside the image
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    closeModal.click();
+                }
+            });
+
+            // Sidebar active state
+            const sidebarItems = document.querySelectorAll('.sidebar-icon');
+            sidebarItems.forEach(item => {
+                item.addEventListener('mouseover', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(-2px)';
+                    }
+                });
+                
+                item.addEventListener('mouseout', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            // Set default to show arrival table
+            datangBtn.click();
+        });
+    </script>
 </body>
 </html>
