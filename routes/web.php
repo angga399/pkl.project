@@ -9,6 +9,7 @@ use App\Http\Controllers\DftrshalatController;
 use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\ShalatController;
 
 
@@ -28,7 +29,6 @@ Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.
 // Route untuk menampilkan daftar waktu shalat
 Route::get('dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
 Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
-
 
 // Route untuk menampilkan form create berdasarkan tipe waktu shalat
 Route::get('dftrshalats/create/{type?}', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
@@ -50,6 +50,10 @@ Route::get('/', function () {
     return view('awal', ['title' => 'home page']);
 })->name('awal');
 
+
+// Route::get('guru.index', function () {
+//     return view('guru.index', ['title' => 'home page']);
+// })->name('gurui.ndex');
 
 // Halaman utama
 Route::get('/pembimbingpkl', function () {
@@ -81,6 +85,7 @@ Route::put('/journals/{id}', [JournalController::class, 'update'])->name('journa
 Route::delete('/journals/{id}', [JournalController::class, 'destroy'])->name('journals.destroy'); // Pastikan ini ada
 Route::get('/journals', [JournalController::class, 'index'])->name('journals.index');
 Route::get('guru/journal', [JournalController::class, 'showGuru'])->name('guru.journal');
+Route::get('guru',[GuruController::class,'index'])->name('guru.index');
 
 
 
@@ -173,4 +178,4 @@ Route::get('/pembimbingpkl', function () {
     return view('.pembimbingpkl');
 })->name('pembimbingpkl')->middleware('auth');
 
-Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
+Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');    

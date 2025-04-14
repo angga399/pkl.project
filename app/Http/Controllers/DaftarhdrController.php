@@ -11,22 +11,24 @@ use Illuminate\Support\Facades\Log;
 class DaftarhdrController extends Controller
 {
     public function index(Request $request)
-{
-    $week = $request->get('week', Carbon::now()->format('Y-W'));
-    $startOfWeek = Carbon::parse($week)->startOfWeek();
-    $endOfWeek = Carbon::parse($week)->endOfWeek();
-
-    Log::info("Start of Week: " . $startOfWeek);
-    Log::info("End of Week: " . $endOfWeek);
-
-    $daftarhdrs = Daftarhdr::whereBetween('tanggal', [$startOfWeek, $endOfWeek])
-        ->orderBy('tanggal')
-        ->get();
-
-    Log::info("Daftarhdrs: ", $daftarhdrs->toArray());
-
-    return view('daftarhdr.index', compact('daftarhdrs', 'startOfWeek', 'endOfWeek', 'week'));
-}
+    {
+        $week = $request->get('week', Carbon::now()->format('Y-W'));
+        $startOfWeek = Carbon::parse($week)->startOfWeek();
+        $endOfWeek = Carbon::parse($week)->endOfWeek();
+    
+        Log::info("Start of Week: " . $startOfWeek);
+        Log::info("End of Week: " . $endOfWeek);
+    
+        // Ambil data dari database berdasarkan rentang tanggal
+        $daftarhdrs = Daftarhdr::whereBetween('tanggal', [$startOfWeek, $endOfWeek])
+            ->orderBy('tanggal')
+            ->get();
+    
+        Log::info("Daftarhdrs: ", $daftarhdrs->toArray());
+    
+        // Kirim data ke view
+        return view('daftarhdr.index', compact('daftarhdrs', 'startOfWeek', 'endOfWeek', 'week'));
+    }
 
     
 

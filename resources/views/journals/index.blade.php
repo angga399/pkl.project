@@ -16,17 +16,7 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(to bottom, #1a237e, #283593);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            transition: all 0.3s ease;
-        }
-
         .main-content {
-            margin-left: 250px;
             flex: 1;
             background: #f3f4f6;
         }
@@ -72,14 +62,22 @@
                 opacity: 1;
             }
         }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #1e1e2d;
+            color: #e0e0e0;
+            z-index: 1000;
+        }
+        
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-gray-200">
     <div class="flex h-screen">
-        <div class="sidebar shadow-xl" id="sidebar">
-            @include('sidebar')
-        </div>
-
+        @include('sidebar')
         <!-- Main Content -->
         <div class="main-content">
             <!-- Notifications -->
