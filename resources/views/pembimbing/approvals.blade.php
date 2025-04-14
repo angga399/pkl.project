@@ -324,207 +324,178 @@
                 </li>
             </ul>
         </div>
-
-        <!-- Main Content -->
-        <div id="mainContent" class="main-content p-8 overflow-auto">
-            <div class="content-card">
-                <h1 class="text-2xl font-bold mb-6">Daftar Pengambilan Foto - Persetujuan</h1>
-
-                <!-- Filters -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Week Filter -->
-                    <div class="form-group">
-                        <form method="GET" action="{{ route('pembimbing.approvals') }}" class="flex items-center gap-4">
-                            <label class="font-semibold">Pilih Minggu:</label>
-                            <input type="week" name="week" class="form-control" 
-                                   value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
-                            <button type="submit" class="btn btn-primary">
-                                Tampilkan
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Company Filter -->
-                    <div class="form-group" >
-                        <form method="GET" action="{{ route('pembimbing.approvals') }}" class="flex items-center gap-4">
-                            <input type="hidden" name="week" value="{{ request('week', $selectedWeek) }}">
-                            <label class="font-semibold">Pilih Perusahaan:</label>
-                            <select name="PT" class="form-control" style="color: black">
-                                <option style="color: white" value="" disabled {{ request('PT') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
-                                <option value="Perusahaan A" {{ request('PT') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
-                                <option value="Perusahaan B" {{ request('PT') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
-                                <option value="Perusahaan C" {{ request('PT') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
-                                <option value="Perusahaan D" {{ request('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary">
-                                Cari
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <p class="text-sm opacity-80 mb-6">
-                    Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
-                </p>
-
-                <!-- Tables -->
-                <div class="space-y-8">
-                    <!-- Arrival Table -->
-                    <div>
-                        <h2 class="text-xl font-semibold mb-4">Absen Datang</h2>
-                        <div class="overflow-x-auto">
-                            <table class="table-custom">
-                                <thead>
-                                    <tr>
-                                        <th>Foto</th>
-                                        <th>Hari</th>
-                                        <th>Tanggal</th>
-                                        <th>Perusahaan</th>
-                                        <th>Lokasi</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($daftarhdrs as $item)
-                                        @if ($item->tipe === 'datang')
-                                            <tr>
-                                                <td>
-                                                    <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
-                                                </td>
-                                                <td>{{ $item->hari }}</td>
-                                                <td>{{ $item->tanggal }}</td>
-                                                <td>{{ $item->pt }}</td>
-                                                <td>
-                                                    <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
-                                                       target="_blank" 
-                                                       class="location-link">
-                                                        Lihat Lokasi
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
-                                                        {{ $item->status }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    @if ($item->status === 'Menunggu Persetujuan')
-                                                        <div class="flex gap-2">
-                                                            <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
-                                                                    Setujui
-                                                                </button>
-                                                            </form>
-                                                            <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                                    Tolak
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Departure Table -->
-                    <div>
-                      <h2 class="text-xl font-semibold mb-4">Absen Pulang</h2>
-                      <div class="overflow-x-auto">
-                          <table class="table-custom">
-                              <thead>
-                                  <tr>
-                                      <th>Foto</th>
-                                      <th>Hari</th>
-                                      <th>Tanggal</th>
-                                      <th>Perusahaan</th>
-                                      <th>Lokasi</th>
-                                      <th>Status</th>
-                                      <th>Aksi</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  @foreach ($daftarhdrs as $item)
-                                      @if ($item->tipe === 'pulang')
-                                          <tr>
-                                              <td>
-                                                  <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
-                                              </td>
-                                              <td>{{ $item->hari }}</td>
-                                              <td>{{ $item->tanggal }}</td>
-                                              <td>{{ $item->pt }}</td>
-                                              <td>
-                                                  <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" 
-                                                     target="_blank" 
-                                                     class="location-link">
-                                                      Lihat Lokasi
-                                                  </a>
-                                              </td>
-                                              <td>
-                                                  <span class="status-badge {{ $item->status === 'Disetujui' ? 'status-approved' : ($item->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
-                                                      {{ $item->status }}
-                                                  </span>
-                                              </td>
-                                              <td>
-                                                  @if ($item->status === 'Menunggu Persetujuan')
-                                                      <div class="flex gap-2">
-                                                          <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST">
-                                                              @csrf
-                                                              <button type="submit" class="btn btn-success" onclick="return confirm('Setujui item ini?')">
-                                                                  Setujui
-                                                              </button>
-                                                          </form>
-                                                          <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                                              @csrf
-                                                              <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                                  Tolak
-                                                              </button>
-                                                          </form>
-                                                      </div>
-                                                  @endif
-                                              </td>
-                                          </tr>
-                                      @endif
-                                  @endforeach
-                              </tbody>
-                          </table>
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-5 overflow-auto">
+      <h1 class="text-2xl font-bold mb-5">Daftar Pengambilan Foto - Persetujuan</h1>
+      
+      <!-- Filter Form: Pilih Minggu -->
+      <div class="mb-4">
+        <form method="GET" action="{{ route('pembimbing.approvals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <label for="week" class="font-semibold text-white">Pilih Minggu:</label>
+          <input type="week" id="week" name="week" class="border rounded-lg p-2 text-black"
+                 value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
+          <button type="submit" class="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            Tampilkan
+          </button>
+        </form>
+        <p class="mt-2 text-gray-300">
+          Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+        </p>
+      </div>
+      
+      <!-- Form Pencarian Berdasarkan Perusahaan -->
+      <div class="mb-4">
+        <form method="GET" action="{{ route('pembimbing.approvals') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <!-- Hidden input untuk menyimpan minggu yang dipilih -->
+          <input type="hidden" name="week" value="{{ request('week', $selectedWeek) }}">
+          
+          <label for="PT" class="font-semibold text-white">Pilih Perusahaan:</label>
+          <select name="PT" id="PT" class="border rounded-lg p-2 text-black">
+            <option value="" disabled {{ request('PT') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
+            <option value="Perusahaan A" {{ request('PT') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
+            <option value="Perusahaan B" {{ request('PT') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
+            <option value="Perusahaan C" {{ request('PT') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
+            <option value="Perusahaan D" {{ request('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
+          </select>
+          <button type="submit" class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Cari
+          </button>
+        </form>
+        <p class="mt-2 text-gray-300">
+          Menampilkan data dari {{ $startOfWeek->format('d M Y') }} hingga {{ $endOfWeek->format('d M Y') }}
+        </p>
+      </div>
+      
+      
+      <!-- Tabel Absen Datang -->
+      <h2 class="text-xl font-semibold text-gray-200 mb-4">Absen Datang</h2>
+      <div class="overflow-x-auto mb-8">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Hari</th>
+              <th>Tanggal</th>
+              <th>Perusahaan</th>
+              <th>Lokasi</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($daftarhdrs as $item)
+              @if ($item->tipe === 'datang')
+                <tr>
+                  <td>
+                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md cursor-pointer" onclick="showModal(this)" />
+                  </td>
+                  <td>{{ $item->hari }}</td>
+                  <td>{{ $item->tanggal }}</td>
+                  <td>{{ $item->pt }}</td>
+                  <td>
+                    <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">
+                      Lihat Lokasi
+                    </a>
+                  </td>
+                  <td>
+                    @if ($item->status === 'Disetujui')
+                      <span class="text-green-500 font-bold">Disetujui</span>
+                    @elseif ($item->status === 'Ditolak')
+                      <span class="text-red-500 font-bold">Ditolak</span>
+                    @else
+                      <span class="text-yellow-500 font-bold">Menunggu Persetujuan</span>
+                    @endif
+                  </td>
+                  <td>
+                    @if ($item->status === 'Menunggu Persetujuan')
+                      <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600" onclick="return confirm('Setujui item ini?')">
+                          Setujui
+                        </button>
+                      </form>
+                      <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline-block ml-2">
+                        @csrf
+                        <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="return confirm('Tolak item ini?')">
+                          Tolak
+                        </button>
+                      </form>
+                    @endif
+                  </td>
+                </tr>
+              @endif
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Tabel Absen Pulang -->
+      <h2 class="text-xl font-semibold text-gray-200 mb-4">Absen Pulang</h2>
+      <div class="overflow-x-auto">
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Hari</th>
+              <th>Tanggal</th>
+              <th>Perusahaan</th>
+              <th>Lokasi</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($daftarhdrs as $item)
+              @if ($item->tipe === 'pulang')
+                <tr>
+                  <td>
+                    <img src="{{ $item->dataGambar }}" alt="Foto" class="w-16 h-16 object-cover rounded-md cursor-pointer" onclick="showModal(this)" />
+                  </td>
+                  <td>{{ $item->hari }}</td>
+                  <td>{{ $item->tanggal }}</td>
+                  <td>{{ $item->pt }}</td>
+                  <td>
+                    <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="text-blue-500 underline">
+                      Lihat Lokasi
+                    </a>
+                  </td>
+                  <td>
+                    @if ($item->status === 'Disetujui')
+                      <span class="text-green-500 font-bold">Disetujui</span>
+                    @elseif ($item->status === 'Ditolak')
+                      <span class="text-red-500 font-bold">Ditolak</span>
+                    @else
+                      <span class="text-yellow-500 font-bold">Menunggu Persetujuan</span>
+                    @endif
+                  </td>
+                  <td>
+                    @if ($item->status === 'Menunggu Persetujuan')
+                      <form action="{{ route('pembimbing.approve', $item->id) }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600" onclick="return confirm('Setujui item ini?')">
+                          Setujui
+                        </button>
+                      </form>
+                      <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST" class="inline-block ml-2">
+                        @csrf
+                        <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="return confirm('Tolak item ini?')">
+                          Tolak
+                        </button>
+                      </form>
+                    @endif
+                  </td>
+                </tr>
+              @endif
+            @endforeach
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
+  
+  <!-- Modal untuk Zoom Gambar -->
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get references to the sidebar and main content
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggleBtn');
-            const mainContent = document.getElementById('mainContent');
-            
-            // Add click event listener to the toggle button
-            toggleBtn.addEventListener('click', function() {
-                // Toggle the 'expanded' class on the sidebar
-                sidebar.classList.toggle('expanded');
-                
-                // Toggle the 'sidebar-expanded' class on the main content
-                mainContent.classList.toggle('sidebar-expanded');
-            });
-        });
-        
-        // Function to show modal for image preview (placeholder - implement as needed)
-        function showModal(img) {
-            // You can implement a modal to show the image in larger size
-            console.log('Show modal for image:', img.src);
-            // For now, just open the image in a new tab
-            window.open(img.src, '_blank');
-        }
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>*

@@ -12,114 +12,20 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
   <style>
-    :root {
-      --primary-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-      --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-      --text-primary: #1a5f7a;
-      --accent-color: #00c2cb;
-    }
-
+    /* Background halaman */
     body {
-      background: var(--primary-gradient);
-      color: white;
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-    }
+   background: linear-gradient(to right, #0a192f, #1c1c1c);
+   color: white;
+ }
 
-    /* Animated Background */
-    .bg-circles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
-    }
-
-    .bg-circles li {
-      position: absolute;
-      display: block;
-      list-style: none;
-      width: 20px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      animation: animate 25s linear infinite;
-      bottom: -150px;
-      border-radius: 50%;
-    }
-
-    .bg-circles li:nth-child(1) {
-      left: 25%;
-      width: 80px;
-      height: 80px;
-      animation-delay: 0s;
-    }
-
-    .bg-circles li:nth-child(2) {
-      left: 10%;
-      width: 20px;
-      height: 20px;
-      animation-delay: 2s;
-      animation-duration: 12s;
-    }
-
-    .bg-circles li:nth-child(3) {
-      left: 70%;
-      width: 20px;
-      height: 20px;
-      animation-delay: 4s;
-    }
-
-    @keyframes animate {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-1000px) rotate(720deg);
-        opacity: 0;
-      }
-    }
-
-    /* Sidebar Styling */
-    #sidebar {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
-      width: 60px;
-      min-height: 100vh;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: fixed;
-      left: 0;
-      top: 0;
-      z-index: 1000;
-      overflow-x: hidden;
-    }
-
-    #sidebar.expanded {
-      width: 200px;
-    }
-
-    .sidebar-text {
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    #sidebar.expanded .sidebar-text {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* Main Content Styling */
-    .main-content {
-      margin-left: 60px;
-      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      width: calc(100% - 60px);
-      position: relative;
-    }
+ /* Sidebar */
+ #sidebar {
+   width: 60px;
+   min-height: 100vh;
+   background-color: #111827;
+   transition: width 0.3s;
+   position: relative;
+ }
 
     #sidebar.expanded + .main-content {
       margin-left: 200px;
