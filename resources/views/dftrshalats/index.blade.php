@@ -245,13 +245,13 @@
     <div class="container mx-auto px-4 pb-20">
         <!-- Tombol Tambah Data -->
         <div class="mb-8">
-            <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="btn-add text-white px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
+            <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="btn-add text-gray-700 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Duha
             </a>
-            <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="btn-add text-white px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
+            <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="btn-add text-amber-600 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Dzuhur
             </a>
-            <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="btn-add text-white px-6 py-3 rounded-lg inline-block" style="display: none;">
+            <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="btn-add text-blue-600 px-6 py-3 rounded-lg inline-block" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Ashar
             </a>
         </div>
