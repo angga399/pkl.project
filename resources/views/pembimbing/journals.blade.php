@@ -13,12 +13,12 @@
 
   <style>
       :root {
-      --bg-primary: #ffffff; /* Warna latar belakang putih */
-      --bg-secondary: #f0f4f8; /* Warna card abu-abu muda */
-      --accent-color: #1e3a8a; /* Warna aksen biru tua */
-      --accent-hover: #3b82f6; /* Warna aksen biru muda */
-      --text-primary: #1e293b; /* Warna teks utama gelap */
-      --text-secondary: #64748b; /* Warna teks sekunder abu-abu */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f0f4f8;
+      --accent-color: #1e3a8a;
+      --accent-hover: #3b82f6;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
     }
 
     body {
@@ -103,7 +103,7 @@
 
      /* Main Content */
      .main-content {
-      padding-left: 64px; /* Sesuaikan dengan lebar sidebar */
+      padding-left: 64px;
       transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       width: 100%;
       box-sizing: border-box;
@@ -111,7 +111,7 @@
     }
 
     .main-content.sidebar-expanded {
-      padding-left: 220px; /* Sesuaikan dengan lebar sidebar yang diperluas */
+      padding-left: 220px;
     }
 
     /* Content Card */
@@ -283,6 +283,63 @@
       background: linear-gradient(90deg, var(--accent-color), transparent);
       border-radius: 2px;
     }
+
+    /* Search dropdown styles */
+    .search-container {
+      position: relative;
+      width: 100%;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
+    }
+    
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-result-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-primary);
+    }
+    
+    .search-result-item:hover {
+      background-color: rgba(30, 58, 138, 0.1);
+    }
+    
+    .search-result-item.active {
+      background-color: rgba(30, 58, 138, 0.2);
+    }
+    
+    .no-results {
+      padding: 0.75rem 1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -341,24 +398,29 @@
               <label class="font-semibold">Pilih Minggu:</label>
               <input type="week" name="week" class="form-control bg-white border border-gray-300 rounded-lg px-3 py-2 text-black" 
               value="{{ request('week', \Carbon\Carbon::now()->format('Y-\WW')) }}">
-       <button type="submit" class="btn btn-primary">
-        <i class="fas fa-filter"></i> Tampilkan
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-filter"></i> Tampilkan
               </button>
             </form>
           </div>
 
-          <!-- Company Filter -->
+          <!-- Company Filter - Updated with search engine style -->
           <div class="form-group">
             <form method="GET" action="{{ route('pembimbing.journals') }}" class="flex items-center gap-4">
               <input type="hidden" name="week" value="{{ request('week', $selectedWeek) }}">
-              <label class="font-semibold">Pilih Perusahaan:</label>
-              <select name="PT" class="form-control bg-white border border-gray-300 rounded-lg px-3 py-2 text-black">
-                <option value="" disabled {{ request('PT') == '' ? 'selected' : '' }}>Pilih Perusahaan</option>
-                <option value="Perusahaan A" {{ request('PT') == 'Perusahaan A' ? 'selected' : '' }}>Perusahaan A</option>
-                <option value="Perusahaan B" {{ request('PT') == 'Perusahaan B' ? 'selected' : '' }}>Perusahaan B</option>
-                <option value="Perusahaan C" {{ request('PT') == 'Perusahaan C' ? 'selected' : '' }}>Perusahaan C</option>
-                <option value="Perusahaan D" {{ request('PT') == 'Perusahaan D' ? 'selected' : '' }}>Perusahaan D</option>
-              </select>
+              <label class="font-semibold">Cari Perusahaan:</label>
+              <div class="search-container" style="flex-grow: 1;">
+                <input type="text" 
+                       name="PT" 
+                       id="companySearch" 
+                       class="search-input" 
+                       placeholder="Ketik nama perusahaan..."
+                       value="{{ request('PT') }}"
+                       autocomplete="off">
+                <div class="search-results" id="searchResults">
+                  <!-- Results will be populated by JavaScript -->
+                </div>
+              </div>
               <button type="submit" class="btn btn-primary">
                 <i class="fas fa-search"></i> Cari
               </button>
@@ -415,29 +477,135 @@
                           </button>
                         </form>
                       </div>
-                      @endif
-                    </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="8" class="text-center py-4">Tidak ada jurnal yang menunggu persetujuan.</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
+                    @endif
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="8" class="text-center py-4">Tidak ada jurnal yang menunggu persetujuan.</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
   
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('toggleBtn');
-        const mainContent = document.getElementById('mainContent');
-        toggleBtn.addEventListener('click', function() {
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggleBtn');
+      const mainContent = document.getElementById('mainContent');
+      
+      // Toggle sidebar
+      toggleBtn.addEventListener('click', function() {
         sidebar.classList.toggle('expanded');
         mainContent.classList.toggle('sidebar-expanded');
+      });
+
+      // Company search functionality
+      const companySearch = document.getElementById('companySearch');
+      const searchResults = document.getElementById('searchResults');
+      
+      // Sample company data - in a real app, you might fetch this from your backend
+      const companies = [
+        'Perusahaan A',
+        'Perusahaan B',
+        'Perusahaan C',
+        'Perusahaan D',
+        'PT Maju Jaya',
+        'PT Sejahtera Abadi',
+        'CV Kreatif Mandiri',
+        'PT Teknologi Inovasi',
+        'CV Sumber Rejeki',
+        'PT Global Solusi'
+      ];
+      
+      companySearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const filteredCompanies = companies.filter(company => 
+          company.toLowerCase().includes(searchTerm))
+          .sort();
+        
+        // Clear previous results
+        searchResults.innerHTML = '';
+        
+        if (searchTerm.length > 0) {
+          if (filteredCompanies.length > 0) {
+            filteredCompanies.forEach(company => {
+              const div = document.createElement('div');
+              div.className = 'search-result-item';
+              div.textContent = company;
+              div.addEventListener('click', function() {
+                companySearch.value = company;
+                searchResults.style.display = 'none';
+              });
+              searchResults.appendChild(div);
+            });
+          } else {
+            const div = document.createElement('div');
+            div.className = 'no-results';
+            div.textContent = 'Tidak ditemukan perusahaan yang cocok';
+            searchResults.appendChild(div);
+          }
+          searchResults.style.display = 'block';
+        } else {
+          searchResults.style.display = 'none';
+        }
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!companySearch.contains(e.target) && !searchResults.contains(e.target)) {
+          searchResults.style.display = 'none';
+        }
+      });
+      
+      // Highlight item on hover
+      searchResults.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('search-result-item')) {
+          const items = document.querySelectorAll('.search-result-item');
+          items.forEach(item => item.classList.remove('active'));
+          e.target.classList.add('active');
+        }
+      });
+      
+      // Navigate with keyboard
+      companySearch.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const items = document.querySelectorAll('.search-result-item');
+          if (items.length === 0) return;
+          
+          let activeIndex = -1;
+          items.forEach((item, index) => {
+            if (item.classList.contains('active')) {
+              activeIndex = index;
+            }
+          });
+          
+          if (e.key === 'ArrowDown') {
+            if (activeIndex < items.length - 1) {
+              items.forEach(item => item.classList.remove('active'));
+              items[activeIndex + 1].classList.add('active');
+            } else if (activeIndex === -1) {
+              items[0].classList.add('active');
+            }
+          } else if (e.key === 'ArrowUp') {
+            if (activeIndex > 0) {
+              items.forEach(item => item.classList.remove('active'));
+              items[activeIndex - 1].classList.add('active');
+            }
+          }
+        } else if (e.key === 'Enter') {
+          const activeItem = document.querySelector('.search-result-item.active');
+          if (activeItem) {
+            e.preventDefault();
+            companySearch.value = activeItem.textContent;
+            searchResults.style.display = 'none';
+          }
+        }
       });
     });
   </script>
