@@ -159,29 +159,29 @@
       <h4 class="menu-title">Menu</h4>
       <ul class="menu-list">
         <li>
-          <a href="#">
+          <a href="dftrshalats">
             <i class="fas fa-mosque"></i>
             <span>Shalat</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="daftarhdr">
             <i class="fas fa-calendar-check"></i>
             <span>Absen</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="journals">
             <i class="fas fa-book"></i>
             <span>Journal</span>
           </a>
         </li>
       </ul>
       
-      <button class="back-button">
+      <a class="back-button" href="welcome">
         <i class="fas fa-arrow-left"></i>
         <span>Back</span>
-      </button>
+      </a>
     </div>
     
     <!-- Toggle Button -->
