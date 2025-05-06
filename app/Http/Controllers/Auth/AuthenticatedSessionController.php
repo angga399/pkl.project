@@ -39,6 +39,9 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->route('pembimbingpkl'); // Ubah ke rute dashboard pembimbing
             }
 
+            if ($user->role == 'guru'){
+                return redirect()-> route('guru.index');
+            }
             // Default redirect jika role tidak dikenali
             return redirect('/');
         }

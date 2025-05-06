@@ -1,86 +1,191 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Pengambilan Foto</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>guru</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #4682B4;
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 300px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card-header {
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    
+    .absen-header {
+      background-color: #3498db;
+    }
+    
+    .jurnal-header {
+      background-color: #2ecc71;
+    }
+    
+    .shalat-header {
+      background-color: #9b59b6;
+    }
+    
+    .card-body {
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .card-footer {
+      padding: 15px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    
+    .absen-btn {
+      background-color: #3498db;
+    }
+    
+    .absen-btn:hover {
+      background-color: #2980b9;
+    }
+    
+    .jurnal-btn {
+      background-color: #2ecc71;
+    }
+    
+    .jurnal-btn:hover {
+      background-color: #27ae60;
+    }
+    
+    .shalat-btn {
+      background-color: #9b59b6;
+    }
+    
+    .shalat-btn:hover {
+      background-color: #8e44ad;
+    }
+    
+    @media (max-width: 768px) {
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 py-10">
-    <div class="container mx-auto px-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Data Daftar HDR</h2>
-        
-        <!-- Tabel Absen Datang -->
-        <h3 class="text-xl font-semibold text-gray-800 mb-3">Absen Datang</h3>
-        <table class="min-w-full bg-white border border-gray-200 mb-6">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border">No</th>
-                    <th class="px-4 py-2 border">Hari</th>
-                    <th class="px-4 py-2 border">Tanggal</th>
-                    <th class="px-4 py-2 border">link kordinat</th>
-                    <th class="px-4 py-2 border">Gambar</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($daftarhdrs as $key => $data)
-                    @if ($data->tipe === 'datang')
-                    <tr>
-                        <td class="px-4 py-2 border">{{ $key + 1 }}</td>
-                        <td class="px-4 py-2 border">{{ $data->hari }}</td>
-                        <td class="px-4 py-2 border">{{ $data->tanggal }}</td>
-                        <td class="px-4 py-2 border">
-                            <a href="https://www.google.com/maps?q={{ $data->latitude }},{{ $data->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
-                        </td>
-                        <td class="px-4 py-2 border">
-                            @if ($data->dataGambar)
-                                <img src= "{{$data->dataGambar}}" width="100" class="rounded-md">
-                            @else
-                                Tidak ada gambar
-                            @endif
-                        </td>
-                        <td class="px-4 py-2 border">{{ $data->notes ?? '-' }}</td>
-                    </tr>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
-
-        <!-- Tabel Absen Pulang -->
-        <h3 class="text-xl font-semibold text-gray-800 mb-3">Absen Pulang</h3>
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border">No</th>
-                    <th class="px-4 py-2 border">Hari</th>
-                    <th class="px-4 py-2 border">Tanggal</th>
-                    <th class="px-4 py-2 border">link kordinat</th>
-                    <th class="px-4 py-2 border">Gambar</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($daftarhdrs as $key => $data)
-                    @if ($data->tipe === 'pulang')
-                    <tr>
-                        <td class="px-4 py-2 border">{{ $key + 1 }}</td>
-                        <td class="px-4 py-2 border">{{ $data->hari }}</td>
-                        <td class="px-4 py-2 border">{{ $data->tanggal }}</td>
-                        <td class="px-4 py-2 border">
-                            <a href="https://www.google.com/maps?q={{ $data->latitude }},{{ $data->longitude }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a>
-                        </td>
-                        <td class="px-4 py-2 border">
-                            @if ($data->dataGambar)
-                                <img src= "{{$data->dataGambar}}" width="100" class="rounded-md">
-                            @else
-                                Tidak ada gambar
-                            @endif
-                        </td>
-                        <td class="px-4 py-2 border">{{ $data->notes ?? '-' }}</td>
-                    </tr>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
+<body>
+  <div class="container">
+    <header>
+      <h1>Selamat Datang</h1>
+      <p>Pilih menu yang tersedia di bawah ini</p>
+    </header>
+    
+    <div class="card-container">
+      <!-- Card Absen -->
+      <div class="card">
+        <div class="card-header absen-header">
+          <h2>Absensi</h2>
+        </div>
+        <div class="card-body">
+          <div class="icon">📝</div>
+          <h3>Absensi Harian</h3>
+          <p>Catat kehadiran Anda dengan mudah dan cepat</p>
+        </div>
+        <div class="card-footer">
+          <a href="{{route('guru.absen')}}" class="btn absen-btn">Buka Absensi</a>
+        </div>
+      </div>
+      
+      <!-- Card Jurnal -->
+      <div class="card">
+        <div class="card-header jurnal-header">
+          <h2>Jurnal</h2>
+        </div>
+        <div class="card-body">
+          <div class="icon">📔</div>
+          <h3>Jurnal Kegiatan</h3>
+          <p>Catat aktivitas dan pembelajaran harian Anda</p>
+        </div>
+        <div class="card-footer">
+          <a href="{{ route('guru.journal') }}" class="btn jurnal-btn">Buka Jurnal</a>
+        </div>
+      </div>
+      
+      <!-- Card Shalat -->
+      <div class="card">
+        <div class="card-header shalat-header">
+          <h2>Shalat</h2>
+        </div>
+        <div class="card-body">
+          <div class="icon">🕌</div>
+          <h3>Jadwal Shalat</h3>
+          <p>Pantau dan catat ibadah shalat Anda</p>
+        </div>
+        <div class="card-footer">
+          <a href="{{route('guru.shalats')}}" class="btn shalat-btn">Buka Jadwal</a>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
 </html>
