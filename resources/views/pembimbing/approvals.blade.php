@@ -496,6 +496,96 @@
             color: var(--text-secondary);
             font-style: italic;
         }
+
+        /* Rejection Modal Styles */
+        #rejectionModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #rejectionModal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #rejectionModal .modal-content {
+            background-color: #1e1e2d;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        #rejectionModal h3 {
+            color: white;
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        #rejectionReason {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #2d2d3a;
+            background-color: #252536;
+            color: white;
+            resize: vertical;
+        }
+
+        #rejectionReason:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+
+        #rejectionModal .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        #rejectionModal .modal-footer button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #rejectionModal .modal-footer button.cancel {
+            background-color: #2d2d3a;
+            color: white;
+            border: 1px solid #3d3d5c;
+        }
+
+        #rejectionModal .modal-footer button.cancel:hover {
+            background-color: #3d3d5c;
+        }
+
+        #rejectionModal .modal-footer button.submit {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+        }
+
+        #rejectionModal .modal-footer button.submit:hover {
+            background-color: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -650,12 +740,11 @@
                                                             <i class="fas fa-check"></i> Setujui
                                                         </button>
                                                     </form>
-                                                    <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                            <i class="fas fa-times"></i> Tolak
-                                                        </button>
-                                                    </form>
+                                                    <button type="button" 
+                                                            onclick="showRejectionModal('{{ route('pembimbing.reject', ['id' => '__ID__']) }}', '{{ $item->id }}')" 
+                                                            class="btn btn-danger">
+                                                        <i class="fas fa-times"></i> Tolak
+                                                    </button>
                                                 </div>
                                             @endif
                                         </td>
@@ -715,12 +804,11 @@
                                                                 <i class="fas fa-check"></i> Setujui
                                                             </button>
                                                         </form>
-                                                        <form action="{{ route('pembimbing.reject', $item->id) }}" method="POST">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tolak item ini?')">
-                                                                <i class="fas fa-times"></i> Tolak
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" 
+                                                            onclick="showRejectionModal('{{ route('pembimbing.reject', ['id' => '__ID__']) }}', '{{ $item->id }}')" 
+                                                            class="btn btn-danger">
+                                                        <i class="fas fa-times"></i> Tolak
+                                                    </button>
                                                     </div>
                                                 @endif
                                             </td>
@@ -744,6 +832,24 @@
             <img id="modalImage" class="max-w-full max-h-[80vh] mx-auto rounded-lg" src="" alt="Preview">
         </div>
     </div>
+
+    <!-- Rejection Reason Modal -->
+  <!-- Rejection Reason Modal -->
+<div id="rejectionModal" class="modal">
+    <div class="modal-content">
+        <h3>Alasan Penolakan</h3>
+        <form id="rejectionForm" method="POST" action="{{ route('pembimbing.reject', ['id' => '__ID__']) }}">
+            @csrf
+            <input type="hidden" name="id" id="rejectionId">
+            <textarea name="rejection_reason" id="rejectionReason" class="w-full p-2 border rounded" rows="4" 
+                      placeholder="Masukkan alasan penolakan..." required></textarea>
+            <div class="modal-footer">
+                <button type="button" class="cancel" onclick="hideRejectionModal()">Batal</button>
+                <button type="submit" class="submit">Kirim Penolakan</button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -774,167 +880,236 @@
             });
 
             pulangBtn.addEventListener('click', function() {
-                pulangTable.classList.remove('hidden');
-                datangTable.classList.add('hidden');
-                pulangBtn.classList.add('active');
-                datangBtn.classList.remove('active');
+            pulangTable.classList.remove('hidden');
+            datangTable.classList.add('hidden');
+            pulangBtn.classList.add('active');
+            datangBtn.classList.remove('active');
             });
 
-            // Enhanced modal functionality
-            function showModal(img) {
-                modalImage.src = img.src;
-                imageModal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-                
-                // Add animation
-                imageModal.style.opacity = 0;
-                setTimeout(() => {
-                    imageModal.style.opacity = 1;
-                }, 10);
-            }
-
-            // Expose the function to global scope
-            window.showModal = showModal;
-
-            closeModal.addEventListener('click', function() {
-                imageModal.style.opacity = 0;
-                
-                setTimeout(() => {
-                    imageModal.classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }, 300);
-            });
-
-            // Close modal when clicking outside the image
-            imageModal.addEventListener('click', function(e) {
-                if (e.target === imageModal) {
-                    closeModal.click();
-                }
-            });
-
-            // Sidebar active state
-            const sidebarItems = document.querySelectorAll('.sidebar-icon');
-            sidebarItems.forEach(item => {
-                item.addEventListener('mouseover', function() {
-                    if (!this.classList.contains('active')) {
-                        this.style.transform = 'translateY(-2px)';
-                    }
-                });
-                
-                item.addEventListener('mouseout', function() {
-                    if (!this.classList.contains('active')) {
-                        this.style.transform = 'translateY(0)';
-                    }
-                });
-            });
-
-            // Company search functionality
-            const companySearch = document.getElementById('companySearch');
-            const searchResults = document.getElementById('searchResults');
+        // Enhanced modal functionality
+        function showModal(img) {
+            modalImage.src = img.src;
+            imageModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
             
-            // Sample company data - in a real app, you might fetch this from your backend
-            const companies = [
-                'Perusahaan A',
-                'Perusahaan B',
-                'Perusahaan C',
-                'Perusahaan D',
-                'PT Maju Jaya',
-                'PT Sejahtera Abadi',
-                'CV Kreatif Mandiri',
-                'PT Teknologi Inovasi',
-                'CV Sumber Rejeki',
-                'PT Global Solusi'
-            ];
-            
-            companySearch.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const filteredCompanies = companies.filter(company => 
-                    company.toLowerCase().includes(searchTerm))
-                    .sort();
-                
-                // Clear previous results
-                searchResults.innerHTML = '';
-                
-                if (searchTerm.length > 0) {
-                    if (filteredCompanies.length > 0) {
-                        filteredCompanies.forEach(company => {
-                            const div = document.createElement('div');
-                            div.className = 'search-result-item';
-                            div.textContent = company;
-                            div.addEventListener('click', function() {
-                                companySearch.value = company;
-                                searchResults.style.display = 'none';
-                            });
-                            searchResults.appendChild(div);
-                        });
-                    } else {
-                        const div = document.createElement('div');
-                        div.className = 'no-results';
-                        div.textContent = 'Tidak ditemukan perusahaan yang cocok';
-                        searchResults.appendChild(div);
-                    }
-                    searchResults.style.display = 'block';
-                } else {
-                    searchResults.style.display = 'none';
-                }
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!companySearch.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.style.display = 'none';
-                }
-            });
-            
-            // Highlight item on hover
-            searchResults.addEventListener('mouseover', function(e) {
-                if (e.target.classList.contains('search-result-item')) {
-                    const items = document.querySelectorAll('.search-result-item');
-                    items.forEach(item => item.classList.remove('active'));
-                    e.target.classList.add('active');
-                }
-            });
-            
-            // Navigate with keyboard
-            companySearch.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    const items = document.querySelectorAll('.search-result-item');
-                    if (items.length === 0) return;
-                    
-                    let activeIndex = -1;
-                    items.forEach((item, index) => {
-                        if (item.classList.contains('active')) {
-                            activeIndex = index;
-                        }
-                    });
-                    
-                    if (e.key === 'ArrowDown') {
-                        if (activeIndex < items.length - 1) {
-                            items.forEach(item => item.classList.remove('active'));
-                            items[activeIndex + 1].classList.add('active');
-                        } else if (activeIndex === -1) {
-                            items[0].classList.add('active');
-                        }
-                    } else if (e.key === 'ArrowUp') {
-                        if (activeIndex > 0) {
-                            items.forEach(item => item.classList.remove('active'));
-                            items[activeIndex - 1].classList.add('active');
-                        }
-                    }
-                } else if (e.key === 'Enter') {
-                    const activeItem = document.querySelector('.search-result-item.active');
-                    if (activeItem) {
-                        e.preventDefault();
-                        companySearch.value = activeItem.textContent;
-                        searchResults.style.display = 'none';
-                    }
-                }
-            });
+            // Add animation
+            imageModal.style.opacity = 0;
+            setTimeout(() => {
+                imageModal.style.opacity = 1;
+            }, 10);
+        }
 
-            // Set default to show arrival table
-            datangBtn.click();
+        // Expose the function to global scope
+        window.showModal = showModal;
+
+        closeModal.addEventListener('click', function() {
+            imageModal.style.opacity = 0;
+            
+            setTimeout(() => {
+                imageModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
         });
-    </script>
-</body>
+
+        // Close modal when clicking outside the image
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal) {
+                closeModal.click();
+            }
+        });
+
+        // Sidebar active state
+        const sidebarItems = document.querySelectorAll('.sidebar-icon');
+        sidebarItems.forEach(item => {
+            item.addEventListener('mouseover', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.transform = 'translateY(-2px)';
+                }
+            });
+            
+            item.addEventListener('mouseout', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Company search functionality
+        const companySearch = document.getElementById('companySearch');
+        const searchResults = document.getElementById('searchResults');
+        
+        // Sample company data - in a real app, you might fetch this from your backend
+        const companies = [
+            'Perusahaan A',
+            'Perusahaan B',
+            'Perusahaan C',
+            'Perusahaan D',
+            'PT Maju Jaya',
+            'PT Sejahtera Abadi',
+            'CV Kreatif Mandiri',
+            'PT Teknologi Inovasi',
+            'CV Sumber Rejeki',
+            'PT Global Solusi'
+        ];
+        
+        companySearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredCompanies = companies.filter(company => 
+                company.toLowerCase().includes(searchTerm))
+                .sort();
+            
+            // Clear previous results
+            searchResults.innerHTML = '';
+            
+            if (searchTerm.length > 0) {
+                if (filteredCompanies.length > 0) {
+                    filteredCompanies.forEach(company => {
+                        const div = document.createElement('div');
+                        div.className = 'search-result-item';
+                        div.textContent = company;
+                        div.addEventListener('click', function() {
+                            companySearch.value = company;
+                            searchResults.style.display = 'none';
+                        });
+                        searchResults.appendChild(div);
+                    });
+                } else {
+                    const div = document.createElement('div');
+                    div.className = 'no-results';
+                    div.textContent = 'Tidak ditemukan perusahaan yang cocok';
+                    searchResults.appendChild(div);
+                }
+                searchResults.style.display = 'block';
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!companySearch.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+        
+        // Highlight item on hover
+        searchResults.addEventListener('mouseover', function(e) {
+            if (e.target.classList.contains('search-result-item')) {
+                const items = document.querySelectorAll('.search-result-item');
+                items.forEach(item => item.classList.remove('active'));
+                e.target.classList.add('active');
+            }
+        });
+        
+        // Navigate with keyboard
+        companySearch.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const items = document.querySelectorAll('.search-result-item');
+                if (items.length === 0) return;
+                
+                let activeIndex = -1;
+                items.forEach((item, index) => {
+                    if (item.classList.contains('active')) {
+                        activeIndex = index;
+                    }
+                });
+                
+                if (e.key === 'ArrowDown') {
+                    if (activeIndex < items.length - 1) {
+                        items.forEach(item => item.classList.remove('active'));
+                        items[activeIndex + 1].classList.add('active');
+                    } else if (activeIndex === -1) {
+                        items[0].classList.add('active');
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    if (activeIndex > 0) {
+                        items.forEach(item => item.classList.remove('active'));
+                        items[activeIndex - 1].classList.add('active');
+                    }
+                }
+            } else if (e.key === 'Enter') {
+                const activeItem = document.querySelector('.search-result-item.active');
+                if (activeItem) {
+                    e.preventDefault();
+                    companySearch.value = activeItem.textContent;
+                    searchResults.style.display = 'none';
+                }
+            }
+        });
+
+        // Set default to show arrival table
+        datangBtn.click();
+    });
+
+     // Fungsi untuk menampilkan modal penolakan
+     function showRejectionModal(formAction, id) {
+        const modal = document.getElementById('rejectionModal');
+        const form = document.getElementById('rejectionForm');
+        const idInput = document.getElementById('rejectionId');
+        
+        if (!modal || !form || !idInput) {
+            console.error('Elemen modal tidak ditemukan');
+            return;
+        }
+        
+        form.action = formAction.replace('__ID__', id);
+        idInput.value = id;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Fungsi untuk menyembunyikan modal penolakan
+    function hideRejectionModal() {
+        const modal = document.getElementById('rejectionModal');
+        if (modal) {
+            modal.classList.remove('active');
+            const reasonField = document.getElementById('rejectionReason');
+            if (reasonField) reasonField.value = '';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Pindahkan event listener ke dalam DOMContentLoaded
+    const rejectionForm = document.getElementById('rejectionForm');
+    if (rejectionForm) {
+        rejectionForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const reason = document.getElementById('rejectionReason')?.value.trim();
+            
+            if (!reason) {
+                alert('Harap masukkan alasan penolakan');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            const action = this.action;
+            
+            fetch(action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Gagal mengirim penolakan: ' + (data.message || 'Terjadi kesalahan'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengirim penolakan');
+            });
+        });
+    }
+</script>
+</body> 
 </html>

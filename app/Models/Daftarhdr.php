@@ -20,6 +20,8 @@ class Daftarhdr extends Model
         'latitude',
         'longitude',
         'dataGambar',
+        'status',
+        'alasan_penolakan', 
     ];
 
 }

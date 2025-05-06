@@ -179,3 +179,6 @@ Route::get('/pembimbingpkl', function () {
 })->name('pembimbingpkl')->middleware('auth');
 
 Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
+
+Route::post('/pembimbing/reject/{id}', [PembimbingController::class, 'reject'])
+    ->name('pembimbing.reject');

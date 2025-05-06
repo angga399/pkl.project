@@ -183,13 +183,38 @@ public function approve($id)
     return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil disetujui!');
 }
 
-public function reject($id)
+// PembimbingController.php
+public function reject(Request $request, $id)
 {
-    $item = Daftarhdr::findOrFail($id);
-    $item->status = 'Ditolak';
-    $item->save();
+    try {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:500'
+        ]);
 
-    return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil ditolak!');
+        $daftar = DaftarHdr::findOrFail($id);
+        $daftar->update([
+            'status' => 'Ditolak',
+            'alasan_penolakan' => $request->rejection_reason
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Penolakan berhasil disimpan'
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validasi gagal',
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+        ], 500);
+    }
 }
 
     
