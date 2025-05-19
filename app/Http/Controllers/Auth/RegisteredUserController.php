@@ -18,49 +18,86 @@ class RegisteredUserController extends Controller
     }
 
     /**
+     * Show the teacher registration form.
+     */
+    public function createGuru()
+    {
+        return view('auth.register-guru');
+    }
+
+    /**
+ * Show the pembimbing registration form.
+ */
+public function createPembimbing()
+{
+    return view('auth.register-pembimbing');
+}
+
+    /**
      * Handle an incoming registration request.
      */
     public function store(Request $request)
     {
-        // Debug: Tampilkan semua data yang dikirim dari form
-        //dd($request->all()); 
-
-        $validated = $request->validate([
-            'register_option' => 'required|in:siswa,pembimbingpkl',
-            'full_name' => 'required_if:register_option,siswa|nullable',
-            'birth_date' => 'required_if:register_option,siswa|nullable|date',
-            'major' => 'required_if:register_option,siswa|nullable',
-            'PT' => 'required_if:register_option,siswa|nullable',
-            'phone_number' => 'required_if:register_option,siswa|nullable',
-            'location_pkl' => 'required_if:register_option,siswa|nullable',
-            'supervisor_name' => 'required_if:register_option,pembimbingpkl|nullable',
-            'nip' => 'required_if:register_option,pembimbingpkl|nullable',
-            'birth_date_pembimbing' => 'required_if:register_option,pembimbingpkl|nullable|date',
-            'rank' => 'required_if:register_option,pembimbingpkl|nullable',
-            'company_address' => 'required_if:register_option,pembimbingpkl|nullable',
-            'phone_number_pembimbing' => 'required_if:register_option,pembimbingpkl|nullable',
+        // Jika register_option tidak ada (form guru), set default ke 'guru'
+        $role = $request->register_option ?? 'guru';
+        
+        $validationRules = [
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
-        ]);
+        ];
+
+        // Tambahkan validasi berdasarkan role
+        if ($role === 'siswa') {
+            $validationRules = array_merge($validationRules, [
+                'full_name' => 'required',
+                'birth_date' => 'required|date',
+                'major' => 'required',
+                'PT' => 'required',
+                'phone_number' => 'required',
+                'location_pkl' => 'required',
+            ]);
+        } elseif ($role === 'pembimbingpkl') {
+            $validationRules = array_merge($validationRules, [
+                'supervisor_name' => 'required',
+                'nip' => 'required',
+                'birth_date_pembimbing' => 'required|date',
+                'rank' => 'required',
+                'company_address' => 'required',
+                'phone_number_pembimbing' => 'required',
+            ]);
+        } else { // Untuk guru
+            $validationRules = array_merge($validationRules, [
+                'full_name' => 'required',
+            ]);
+        }
+
+        $validated = $request->validate($validationRules);
 
         // Simpan data ke database
         $user = new User;
-        $user->role = $validated['register_option'];
+        $user->role = $role;
         $user->full_name = $validated['full_name'] ?? $validated['supervisor_name'] ?? null;
-        $user->birth_date = $validated['birth_date'] ?? $validated['birth_date_pembimbing'] ?? null;
-
-        $user->major = $validated['major'] ?? null;
-        $user->PT = $validated['PT'] ?? null;
-        $user->phone_number = $validated['phone_number'] ?? $validated['phone_number_pembimbing']; // Menggunakan phone_number_pembimbing jika ada
-        $user->location_pkl = $validated['location_pkl'] ?? null;
-        $user->nip = $validated['nip'] ?? null;
-        $user->rank = $validated['rank'] ?? null;
-        $user->company_address = $validated['company_address'] ?? null;
         $user->email = $validated['email'];
         $user->password = Hash::make($validated['password']);
+
+        // Isi data khusus role
+        if ($role === 'siswa') {
+            $user->birth_date = $validated['birth_date'];
+            $user->major = $validated['major'];
+            $user->PT = $validated['PT'];
+            $user->phone_number = $validated['phone_number'];
+            $user->location_pkl = $validated['location_pkl'];
+        } elseif ($role === 'pembimbingpkl') {
+            $user->birth_date = $validated['birth_date_pembimbing'];
+            $user->nip = $validated['nip'];
+            $user->rank = $validated['rank'];
+            $user->company_address = $validated['company_address'];
+            $user->phone_number = $validated['phone_number_pembimbing'];
+        }
+        // Untuk guru tidak perlu field tambahan
+
         $user->save();
 
-        // **Arahkan semua pengguna ke halaman login setelah registrasi**
         return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
     }
 }

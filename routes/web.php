@@ -12,7 +12,21 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ShalatController;
+use App\Http\Controllers\ChatController;
+use App\Events\ChatMessage;
 
+
+// Untuk web routes (gunakan CSRF + session auth)
+Route::post('/send-message', [ChatController::class, 'sendMessage'])
+     ->middleware('auth'); 
+
+// Untuk API routes (gunakan sanctum)
+Route::post('/send-message', [ChatController::class, 'sendMessage'])
+     ->middleware('auth:sanctum');
+Route::get('/chat', function () {
+    return view('chat');
+});
+Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
 
 
@@ -25,6 +39,7 @@ Route::get('/daftarhdr/{daftarhdr}', [DaftarhdrController::class, 'show'])->name
 // Rute utama untuk daftarhdr
 Route::resource('daftarhdr', DaftarhdrController::class);
 Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.absen');
+
 
 
 // Route untuk menampilkan daftar waktu shalat
@@ -74,6 +89,16 @@ Route::get('/pembimbing/shalat', [PembimbingController::class, 'shalat'])->name(
 Route::post('/pembimbing/shalat/{id}/approve', [PembimbingController::class, 'disetujui'])->name('pembimbing.setuju');
 Route::post('/pembimbing/shalat/{id}/reject', [PembimbingController::class, 'ditolak'])->name('pembimbing.tolak');
 
+// Tambahkan ini di routes/web.php
+Route::middleware('guest')->group(function () {
+
+     
+    Route::get('/register/guru', [RegisteredUserController::class, 'createGuru'])
+        ->name('register.guru');
+    
+    Route::get('/register/pembimbing', [RegisteredUserController::class, 'createPembimbing'])
+        ->name('register.pembimbing');
+});
 
 // Rute untuk journals (daftar utama journals)
 Route::get('journals', [JournalController::class, 'index'])->name('journals.index');
@@ -156,6 +181,15 @@ Route::middleware('auth')->group(function () {
         // Menampilkan halaman Detail Akun
         Route::get('/profile/details', [ProfileController::class, 'show'])->name('profile.details');
 });
+
+
+// Untuk guru
+Route::middleware(['auth', 'role:guru'])->group(function () {
+    Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
+});
+Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
+
+
 
 // routes/web.php
 // routes/web.php

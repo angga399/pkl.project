@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 return new class extends Migration
 {
     /**
@@ -14,23 +13,27 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', ['siswa', 'pembimbingpkl']);
-            $table->string('full_name')->nullable(); // Nama Lengkap Siswa
-            $table->date('birth_date')->nullable(); // Tanggal Lahir Siswa
-            $table->string('major')->nullable(); // Jurusan Siswa
-            $table->string('PT')->nullable(); // PT Siswa
-            $table->string('phone_number')->nullable(); // No Telepon Siswa atau Pembimbing
-            $table->string('location_pkl')->nullable(); // Lokasi PKL Siswa
+            $table->enum('role', ['siswa', 'pembimbingpkl', 'guru']); // Added 'guru' role
+            $table->string('full_name')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('major')->nullable();
+            $table->string('PT')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('location_pkl')->nullable();
 
             // Kolom untuk Pembimbing PKL
-            $table->string('supervisor_name')->nullable(); // Nama Lengkap Pembimbing
-            $table->string('nip')->nullable(); // Nomor Induk Perusahaan (Pembimbing)
-            $table->date('birth_date_pembimbing')->nullable(); // Tanggal Lahir Pembimbing
-            $table->string('rank')->nullable(); // Pangkat Pembimbing
-            $table->string('company_address')->nullable(); // Alamat Perusahaan Pembimbing
+            $table->string('supervisor_name')->nullable();
+            $table->string('nip')->nullable();
+            $table->date('birth_date_pembimbing')->nullable();
+            $table->string('rank')->nullable();
+            $table->string('company_address')->nullable();
+            
+            // Kolom untuk Guru
+            $table->string('teacher_id')->nullable(); // NIP/NUPTK Guru
+            $table->string('subject')->nullable(); // Mata pelajaran yang diajar
             
             // Kolom umum
-            $table->string('email')->unique(); // Email pengguna
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
