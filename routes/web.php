@@ -12,20 +12,20 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\ShalatController;
 use App\Http\Controllers\ChatController;
-use App\Events\ChatMessage;
-
+use App\Models\User;
+use FontLib\Table\Type\name;
 
 // Untuk web routes (gunakan CSRF + session auth)
-Route::post('/send-message', [ChatController::class, 'sendMessage'])
-     ->middleware('auth'); 
+// Route::post('/send-message', [ChatController::class, 'sendMessage'])
+//      ->middleware('auth'); 
 
-// Untuk API routes (gunakan sanctum)
-Route::post('/send-message', [ChatController::class, 'sendMessage'])
-     ->middleware('auth:sanctum');
-Route::get('/chat', function () {
-    return view('chat');
-});
-Route::post('/send-message', [ChatController::class, 'sendMessage']);
+// // Untuk API routes (gunakan sanctum)
+// Route::post('/send-message', [ChatController::class, 'sendMessage'])
+//      ->middleware('auth:sanctum');
+// Route::get('/chat', function () {
+//     return view('chat');
+// });
+// Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
 
 
@@ -37,13 +37,13 @@ Route::get('/daftarhdr/{daftarhdr}', [DaftarhdrController::class, 'show'])->name
 
 // Rute utama untuk daftarhdr
 Route::resource('daftarhdr', DaftarhdrController::class);
-Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.absen');
+
 
 
 
 // Route untuk menampilkan daftar waktu shalat
 Route::get('dftrshalats', [DftrshalatController::class, 'index'])->name('dftrshalats.index');
-Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
+
 
 // Route untuk menampilkan form create berdasarkan tipe waktu shalat
 Route::get('dftrshalats/create/{type?}', [DftrshalatController::class, 'create'])->name('dftrshalats.create');
@@ -181,12 +181,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/details', [ProfileController::class, 'show'])->name('profile.details');
 });
 
-
-// Untuk guru
-Route::middleware(['auth', 'role:guru'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
+Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
 });
-Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
+Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.absen');
+
 
 
 
@@ -213,3 +213,9 @@ Route::get('/pembimbingpkl', function () {
 })->name('pembimbingpkl')->middleware('auth');
 
 Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
+
+Route::get('/dashboard', function ()  {
+    return view('dashboard',[
+        'user'
+    ]);  
+})->name('dashboard');

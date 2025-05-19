@@ -152,7 +152,7 @@
           <p>Catat kehadiran Anda dengan mudah dan cepat</p>
         </div>
         <div class="card-footer">
-          <a href="{{route('guru.absen ')}}" class="btn absen-btn">Buka Absensi</a>
+          <a href="{{url('guru.absen')}}" class="btn absen-btn">Buka Absensi</a>
         </div>
       </div>
       

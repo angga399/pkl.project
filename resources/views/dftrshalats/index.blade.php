@@ -8,23 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS dari kodingan pertama */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
-            color: #334155;
+            background-color: #111827;
+            color: #e0e0e0;
         }
 
         .prayer-card {
             border-radius: 1rem;
             overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            background-color: #1f2937;
+            border: 1px solid #374151;
         }
 
         .prayer-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
         }
 
         .prayer-header {
@@ -52,7 +53,7 @@
             right: 20px;
             top: 50%;
             transform: translateY(-50%);
-            opacity: 0.2;
+            opacity: 0.3;
             font-size: 3rem;
         }
 
@@ -61,7 +62,7 @@
             z-index: 1;
             font-weight: 600;
             letter-spacing: 0.05em;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
 
         .prayer-table {
@@ -75,6 +76,7 @@
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 0.05em;
+            color: #9ca3af;
         }
 
         .prayer-table tr:last-child td {
@@ -82,7 +84,11 @@
         }
 
         .prayer-table tr:hover td {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(55, 65, 81, 0.5);
+        }
+
+        .prayer-table tbody tr td {
+            border-color: #374151;
         }
 
         .status-badge {
@@ -100,7 +106,7 @@
             bottom: 1.5rem;
             right: 1.5rem;
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
             z-index: 50;
             overflow: hidden;
         }
@@ -135,7 +141,7 @@
             padding: 3rem 0;
             margin-bottom: 2rem;
             border-radius: 0 0 2rem 2rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(135deg, #1e3a8a, #4f46e5);
             color: white;
             text-align: center;
         }
@@ -156,7 +162,7 @@
             z-index: 1;
             font-weight: 700;
             letter-spacing: 0.05em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .prayer-time-wrapper {
@@ -171,47 +177,83 @@
 
         /* Prayer type specific styles */
         .duha-theme {
-            background: linear-gradient(135deg, #f59e0b, #f97316);
+            background: linear-gradient(135deg, #b45309, #d97706);
         }
 
         .duha-theme::before {
-            background-color: #f59e0b;
+            background-color: #b45309;
         }
 
         .dzuhur-theme {
-            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
         }
 
         .dzuhur-theme::before {
-            background-color: #3b82f6;
+            background-color: #1d4ed8;
         }
 
         .ashar-theme {
-            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
         }
 
         .ashar-theme::before {
-            background-color: #8b5cf6;
+            background-color: #6d28d9;
         }
 
         .status-active {
-            background-color: #dcfce7;
-            color: #166534;
+            background-color: #064e3b;
+            color: #6ee7b7;
         }
 
         .status-inactive {
-            background-color: #f3f4f6;
-            color: #6b7280;
+            background-color: #374151;
+            color: #9ca3af;
         }
+        
         .sidebar {
             width: 250px;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #1e1e2d;
+            background-color: #0f172a;
             color: #e0e0e0;
             z-index: 1000;
+            border-right: 1px solid #1e293b;
+        }
+        
+        .btn-add {
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-table {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .main-table th {
+            background-color: #111827;
+            color: #9ca3af;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        
+        .main-table tbody tr {
+            border-bottom: 1px solid #374151;
+        }
+        
+        .main-table tbody tr:hover {
+            background-color: rgba(55, 65, 81, 0.5);
         }
     </style>
 </head>
@@ -228,7 +270,7 @@
     <!-- Success Message -->
     @if (session('success'))
         <div class="container mx-auto px-4 mb-6">
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md" role="alert">
+            <div class="bg-green-900 border-l-4 border-green-500 text-green-100 p-4 rounded shadow-md" role="alert">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <i class="fas fa-check-circle"></i>
@@ -245,53 +287,53 @@
     <div class="container mx-auto px-4 pb-20">
         <!-- Tombol Tambah Data -->
         <div class="mb-8">
-            <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="btn-add text-gray-700 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
+            <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="btn-add text-yellow-400 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Duha
             </a>
-            <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="btn-add text-amber-600 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
+            <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="btn-add text-blue-400 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Dzuhur
             </a>
-            <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="btn-add text-blue-600 px-6 py-3 rounded-lg inline-block" style="display: none;">
+            <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="btn-add text-purple-400 px-6 py-3 rounded-lg inline-block" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Ashar
             </a>
         </div>
 
         <!-- All Prayer Times in One Table -->
-        <div class="mb-10 bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="p-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div class="mb-10 main-table shadow-xl">
+            <div class="p-6 bg-gradient-to-r from-indigo-900 to-purple-900 text-white">
                 <h2 class="text-xl font-bold mb-1">Semua Jadwal Shalat</h2>
                 <p class="text-sm opacity-80">Tampilan lengkap jadwal shalat dari semua kategori</p>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
-                        <tr class="bg-gray-50">
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hari</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">No</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Jenis</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tanggal</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Hari</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Waktu</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="divide-y divide-gray-700">
                         @php $counter = 1; @endphp
                         @foreach ($dftrshalats as $shalat)
-                            <tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $counter++ }}</td>
+                            <tr class="transition-colors duration-150 ease-in-out">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $counter++ }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($shalat->jenis == 'Duha') bg-yellow-100 text-yellow-800
-                                        @elseif($shalat->jenis == 'Dzuhur') bg-blue-100 text-blue-800
-                                        @elseif($shalat->jenis == 'Ashar') bg-purple-100 text-purple-800
+                                        @if($shalat->jenis == 'Duha') bg-yellow-900 text-yellow-300
+                                        @elseif($shalat->jenis == 'Dzuhur') bg-blue-900 text-blue-300
+                                        @elseif($shalat->jenis == 'Ashar') bg-purple-900 text-purple-300
                                         @endif">
                                         {{ $shalat->jenis }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $shalat->tanggal }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $shalat->hari }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $shalat->tanggal }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $shalat->hari }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900 bg-gray-100 px-3 py-1 rounded-full inline-block">
+                                    <div class="text-sm font-medium text-gray-200 bg-gray-800 px-3 py-1 rounded-full inline-block border border-gray-700">
                                         <i class="far fa-clock mr-1 opacity-70"></i> {{ $shalat->waktu }}
                                     </div>
                                 </td>
@@ -319,7 +361,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach ($shalatTypes as $type)
-                <div class="prayer-card bg-white">
+                <div class="prayer-card">
                     <div class="prayer-header {{ strtolower($type) }}-theme">
                         <i class="{{ $prayerIcons[$type] }} prayer-icon"></i>
                         <h2 class="prayer-title text-white text-xl">Shalat {{ $type }}</h2>
@@ -338,14 +380,14 @@
                                 <tbody>
                                     @foreach ($dftrshalats->where('jenis', $type) as $shalat)
                                         <tr>
-                                            <td class="py-3 text-sm pl-4 border-b border-gray-100">{{ $shalat->tanggal }}</td>
-                                            <td class="py-3 text-sm text-center border-b border-gray-100">{{ $shalat->hari }}</td>
-                                            <td class="py-3 border-b border-gray-100">
+                                            <td class="py-3 text-sm pl-4 border-b">{{ $shalat->tanggal }}</td>
+                                            <td class="py-3 text-sm text-center border-b">{{ $shalat->hari }}</td>
+                                            <td class="py-3 border-b">
                                                 <div class="prayer-time-wrapper text-sm {{ strtolower($type) }}-theme text-white">
                                                     {{ $shalat->waktu }}
                                                 </div>
                                             </td>
-                                            <td class="py-3 text-sm text-right pr-4 border-b border-gray-100">
+                                            <td class="py-3 text-sm text-right pr-4 border-b">
                                                 <span class="status-badge {{ $shalat->status == 'aktif' ? 'status-active' : 'status-inactive' }}">
                                                     {{ ucfirst($shalat->status) }}
                                                 </span>
@@ -364,9 +406,9 @@
     <!-- Floating Time Display -->
     <div class="float-time">
         <div class="gradient-border">
-            <div class="bg-white p-4" style="position: relative; z-index: 1;">
-                <div class="text-sm text-gray-500 mb-1">Waktu Sekarang</div>
-                <div id="current-time" class="text-xl font-bold">00:00:00</div>
+            <div class="bg-gray-900 p-4 border border-gray-700" style="position: relative; z-index: 1;">
+                <div class="text-sm text-gray-400 mb-1">Waktu Sekarang</div>
+                <div id="current-time" class="text-xl font-bold text-white">00:00:00</div>
             </div>
         </div>
     </div>

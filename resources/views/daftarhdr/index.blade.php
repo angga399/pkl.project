@@ -68,12 +68,6 @@
             background-color: #252536;
         }
 
-        .tables-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-        }
-
         .success-alert {
             background-color: rgba(16, 185, 129, 0.15);
             border-left: 4px solid #10b981;
@@ -222,6 +216,7 @@
         header button:hover {
             background-color: rgba(99, 102, 241, 0.2);
         }
+        
         .sidebar {
             width: 250px;
             height: 100vh;
@@ -232,30 +227,73 @@
             color: #e0e0e0;
             z-index: 1000;
         }
+
+        /* Tabs Styling */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #2d2d3a;
+            margin-bottom: 0;
+        }
+
+        .tab-button {
+            padding: 15px 24px;
+            background: transparent;
+            border: none;
+            color: #a7a7c5;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: #e0e0e0;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-button.active {
+            color: #6366f1;
+            background-color: #252536;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-button i {
+            margin-right: 10px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-icon-datang {
+            color: #10b981;
+        }
+
+        .tab-icon-pulang {
+            color: #ef4444;
+        }
     </style>
 </head>
 <body class="bg-gray-900">
     
     @include('sidebar')
- <!-- Main Content -->
+    <!-- Main Content -->
     <div class="content-wrapper" id="content">
-        <x-navigasi></x-navigasi>
-        <!-- Header -->
-        {{-- <header class="shadow-md p-4">
-            <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-white">Daftar Pengambilan Foto</h1>
-                <div class="flex items-center space-x-4">
-                    <button class="p-2 rounded-full hover:bg-indigo-800/30 text-gray-300 relative">
-                        <i class="fas fa-bell"></i>
-                        <span class="absolute top-0 right-0 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                    </button>
-                    <button class="p-2 rounded-full hover:bg-indigo-800/30 text-gray-300">
-                        <i class="fas fa-user"></i>
-                    </button>
-                </div>
-            </div>
-        </header> --}}
-
         <!-- Page Content -->
         <div class="p-6">
             <!-- Pesan Sukses -->
@@ -288,16 +326,20 @@
                 Menampilkan data dari <span class="font-semibold text-indigo-300">{{ $startOfWeek->format('d M Y') }}</span> hingga <span class="font-semibold text-indigo-300">{{ $endOfWeek->format('d M Y') }}</span>
             </p>
 
-            <!-- Tables Container - Horizontal -->
-            <div class="tables-row">
-                <!-- Tabel Absen Datang -->
-                <div class="table-card card">
-                    <div class="table-header">
-                        <h2 class="text-lg font-semibold text-white flex items-center">
-                            <i class="fas fa-sign-in-alt mr-2 text-emerald-400"></i>
-                            Absen Datang
-                        </h2>
-                    </div>
+            <!-- Tabs Container -->
+            <div class="card">
+                <!-- Tab Navigation -->
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab('absenDatang')">
+                        <i class="fas fa-sign-in-alt tab-icon-datang"></i>Absen Datang
+                    </button>
+                    <button class="tab-button" onclick="openTab('absenPulang')">
+                        <i class="fas fa-sign-out-alt tab-icon-pulang"></i>Absen Pulang
+                    </button>
+                </div>
+                
+                <!-- Tab Content - Absen Datang -->
+                <div id="absenDatang" class="tab-content active">
                     <div class="table-container">
                         <table class="min-w-full">
                             <thead>
@@ -316,7 +358,7 @@
                                     @if ($item->tipe === 'datang')
                                     <tr>
                                         <td>
-                                            <img src="{{ asset('storage/' . $item->dataGambar) }}" alt="Foto" class="profile-img cursor-pointer" onclick="showModal(this)">
+                                            <img src="{{ $item->dataGambar }}"   alt="Foto" class="profile-img cursor-pointer" onclick="showModal(this)">
                                         </td>
                                         <td>{{ $item->hari }}</td>
                                         <td class="font-medium">{{ $item->nama }}</td>
@@ -339,15 +381,9 @@
                         </table>
                     </div>
                 </div>
-
-                <!-- Tabel Absen Pulang -->
-                <div class="table-card card">
-                    <div class="table-header">
-                        <h2 class="text-lg font-semibold text-white flex items-center">
-                            <i class="fas fa-sign-out-alt mr-2 text-rose-400"></i>
-                            Absen Pulang
-                        </h2>
-                    </div>
+                
+                <!-- Tab Content - Absen Pulang -->
+                <div id="absenPulang" class="tab-content">
                     <div class="table-container">
                         <table class="min-w-full">
                             <thead>
@@ -366,7 +402,7 @@
                                     @if ($item->tipe === 'pulang')
                                     <tr>
                                         <td>
-                                            <img src="{{ asset('storage/' . $item->dataGambar) }}" alt="Foto" class="profile-img cursor-pointer" onclick="showModal(this)">
+                                            <img src="{{ $item->dataGambar }}" alt="Foto" class="profile-img cursor-pointer" onclick="showModal(this)">
                                         </td>
                                         <td>{{ $item->hari }}</td>
                                         <td class="font-medium">{{ $item->nama }}</td>
@@ -410,6 +446,24 @@
         function hideModal() {
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
+        }
+
+        function openTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show the selected tab content and mark the button as active
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
     </script>
 </body>
