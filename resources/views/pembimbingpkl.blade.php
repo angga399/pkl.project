@@ -508,6 +508,7 @@
         <li></li>
     </ul>
 
+    {{-- <x-bar></x-bar> --}}
     <div class="container">
         <!-- Welcome Section -->
         <div class="welcome-section fade-in-up delay-1">

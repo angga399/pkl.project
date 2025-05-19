@@ -10,6 +10,7 @@ use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ShalatController;
 
 
@@ -182,3 +183,4 @@ Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->nam
 
 Route::post('/pembimbing/reject/{id}', [PembimbingController::class, 'reject'])
     ->name('pembimbing.reject');
+

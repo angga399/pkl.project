@@ -7,6 +7,8 @@ use App\Models\Daftarhdr;
 use App\Models\Dftrshalat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Events\StatusUpdated;
+
 
 class PembimbingController extends Controller
 {
@@ -155,35 +157,35 @@ public function shalat(Request $request)
 
     // Proses setuju dan tolak untuk jurnal
     public function setuju($id)
-    {
-        $journal = Journal::findOrFail($id);
-        $journal->status = 'Disetujui';
-        $journal->save();
+{
+    $journal = Journal::findOrFail($id);
+    $journal->status = 'Disetujui';
+    $journal->save();
 
-        return redirect()->route('pembimbing.journals')->with('status', 'Jurnal disetujui!');
-    }
 
-    public function tolak($id)
-    {
-        $journal = Journal::findOrFail($id);
-        $journal->status = 'Ditolak';
-        $journal->save();
+    return redirect()->route('pembimbing.journals')->with('status', 'Jurnal disetujui!');
+}
 
-        return redirect()->route('pembimbing.journals')->with('status', 'Jurnal ditolak!');
-    }
+public function tolak($id)
+{
+    $journal = Journal::findOrFail($id);
+    $journal->status = 'Ditolak';
+    $journal->save();
 
-    // Proses persetujuan untuk approvals
-// Proses persetujuan untuk approvals
+    return redirect()->route('pembimbing.journals')->with('status', 'Jurnal ditolak!');
+}
+
 public function approve($id)
 {
     $item = Daftarhdr::findOrFail($id);
     $item->status = 'Disetujui';
     $item->save();
 
+
+
     return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil disetujui!');
 }
 
-// PembimbingController.php
 public function reject(Request $request, $id)
 {
     try {
@@ -197,17 +199,12 @@ public function reject(Request $request, $id)
             'alasan_penolakan' => $request->rejection_reason
         ]);
 
+
+
         return response()->json([
             'success' => true,
             'message' => 'Penolakan berhasil disimpan'
         ]);
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Validasi gagal',
-            'errors' => $e->errors()
-        ], 422);
 
     } catch (\Exception $e) {
         return response()->json([
@@ -217,29 +214,22 @@ public function reject(Request $request, $id)
     }
 }
 
-    
-    
-    
+public function disetujui($id)
+{
+    $shalat = Dftrshalat::findOrFail($id);
+    $shalat->status = 'Disetujui';
+    $shalat->save();
 
-    // Proses persetujuan untuk shalat
-    public function disetujui($id)
-    {
-        $shalat = Dftrshalat::findOrFail($id);
-        $shalat->status = 'Disetujui';
-        $shalat->save();
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
+}
 
-        return redirect()->route('pembimbing.shalat')->with('status', 'Shalat disetujui!');
-    }
+public function Ditolak($id)
+{
+    $shalat = Dftrshalat::findOrFail($id);
+    $shalat->status = 'Ditolak';
+    $shalat->save();
 
-    public function Ditolak($id)
-    {
-        $shalat = Dftrshalat::findOrFail($id);
-        $shalat->status = 'Ditolak';
-        $shalat->save();
 
-        // Menghapus data setelah ditolak
-        $shalat->delete();
-
-        return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
-    }
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
+}
 }
