@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f0f4f8;
-            --accent-color: #1e3a8a;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-color: #1e40af;
             --accent-hover: #3b82f6;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
             --hover-color: #3b82f6;
-            --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            --card-gradient: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+            --card-border: rgba(59, 130, 246, 0.2);
         }
 
         * {
@@ -31,7 +32,7 @@
             background-attachment: fixed;
             overflow-x: hidden;
             opacity: 0;
-            animation: fadeIn 0.8s ease-out forwards;
+            animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         /* Page Entrance Animation */
@@ -50,13 +51,16 @@
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.6s ease-out forwards;
+            animation: fadeInUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
                 transform: translateY(20px);
+            }
+            70% {
+                opacity: 1;
             }
             100% {
                 opacity: 1;
@@ -66,19 +70,19 @@
 
         /* Staggered Animation Delays */
         .delay-1 {
-            animation-delay: 0.2s;
+            animation-delay: 0.3s;
         }
         
         .delay-2 {
-            animation-delay: 0.4s;
-        }
-        
-        .delay-3 {
             animation-delay: 0.6s;
         }
         
+        .delay-3 {
+            animation-delay: 0.9s;
+        }
+        
         .delay-4 {
-            animation-delay: 0.8s;
+            animation-delay: 1.2s;
         }
 
         /* Animated Background Elements */
@@ -98,12 +102,12 @@
             list-style: none;
             width: 20px;
             height: 20px;
-            background: rgba(30, 58, 138, 0.6); /* Warna biru tua */
-            animation: animate 25s linear infinite;
+            background: rgba(59, 130, 246, 0.2); /* More subtle blue */
+            animation: animate 30s linear infinite;
             bottom: -150px;
             border-radius: 50%;
             opacity: 0;
-            animation: circleAppear 1s ease forwards, animate 25s linear infinite 1s;
+            animation: circleAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards, animate 30s cubic-bezier(0.25, 0.1, 0.25, 1) infinite 1.5s;
         }
 
         @keyframes circleAppear {
@@ -112,7 +116,7 @@
                 transform: scale(0.5);
             }
             100% {
-                opacity: 0.6;
+                opacity: 0.3;
                 transform: scale(1);
             }
         }
@@ -121,44 +125,49 @@
             left: 25%;
             width: 80px;
             height: 80px;
-            animation-delay: 0.2s;
+            animation-delay: 0.3s;
         }
 
         .bg-circles li:nth-child(2) {
             left: 10%;
             width: 20px;
             height: 20px;
-            animation-delay: 0.4s;
-            animation-duration: 12s;
+            animation-delay: 0.6s;
+            animation-duration: 36s;
         }
 
         .bg-circles li:nth-child(3) {
             left: 70%;
             width: 20px;
             height: 20px;
-            animation-delay: 0.6s;
+            animation-delay: 0.9s;
         }
 
         .bg-circles li:nth-child(4) {
             left: 40%;
             width: 60px;
             height: 60px;
-            animation-delay: 0.8s;
-            animation-duration: 18s;
+            animation-delay: 1.2s;
+            animation-duration: 42s;
         }
 
         .bg-circles li:nth-child(5) {
             left: 65%;
             width: 20px;
             height: 20px;
-            animation-delay: 1s;
+            animation-delay: 1.5s;
+            animation-duration: 30s;
         }
 
         @keyframes animate {
             0% {
                 transform: translateY(0) rotate(0deg);
-                opacity: 0.6;
-                border-radius: 0;
+                opacity: 0.3;
+                border-radius: 50%;
+            }
+            50% {
+                opacity: 0.2;
+                border-radius: 50%;
             }
             100% {
                 transform: translateY(-1000px) rotate(720deg);
@@ -179,10 +188,11 @@
             text-align: center;
             margin-bottom: 2rem;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(30, 41, 59, 0.8);
             border-radius: 15px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .welcome-section h3 {
@@ -203,11 +213,12 @@
         }
 
         .stat-item {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(30, 41, 59, 0.7);
             padding: 1rem;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .stat-item h4 {
@@ -232,7 +243,7 @@
             display: block;
             width: 100px;
             height: 4px;
-            background: rgba(30, 58, 138, 0.6); /* Warna biru tua */
+            background: var(--accent-color);
             margin: 1rem auto;
             border-radius: 2px;
         }
@@ -243,7 +254,7 @@
             margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .header h2 {
@@ -264,11 +275,11 @@
             border-radius: 20px;
             padding: 2rem;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .card::before {
@@ -278,9 +289,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent);
             transform: translateX(-100%);
-            transition: 0.6s;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .card:hover::before {
@@ -289,8 +300,9 @@
 
         .card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             border-color: var(--accent-color);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .card-header {
@@ -307,7 +319,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -326,7 +338,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--accent-color), var(--hover-color));
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             z-index: 1;
         }
 
@@ -384,19 +396,19 @@
         .card-link {
             display: inline-flex;
             align-items: center;
-            color: var(--accent-color);
+            color: var(--accent-hover);
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             padding: 0.5rem 1rem;
-            background: rgba(0, 194, 203, 0.1);
+            background: rgba(59, 130, 246, 0.1);
             border-radius: 8px;
         }
 
         .card-link:hover {
             color: var(--hover-color);
             transform: translateX(5px);
-            background: rgba(0, 194, 203, 0.2);
+            background: rgba(59, 130, 246, 0.2);
         }
 
         .card-link i {
@@ -409,10 +421,11 @@
             text-align: center;
             margin-top: 4rem;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(30, 41, 59, 0.8);
             border-radius: 15px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .footer p {
@@ -432,20 +445,38 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.75rem 1.25rem;
-            background: rgba(30, 58, 138, 0.6); /* Warna biru tua */
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             border: none;
             border-radius: 8px;
             color: white;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .action-button:hover::after {
+            transform: translateX(100%);
         }
 
         .action-button:hover {
-            background: rgba(30, 58, 138, 0.8); /* Warna biru tua lebih gelap */
+            background: linear-gradient(135deg, #1e40af, #60a5fa);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
         }
 
         @media (max-width: 768px) {
@@ -489,12 +520,14 @@
         /* Custom animations */
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(1deg); }
             50% { transform: translateY(-10px) rotate(2deg); }
+            75% { transform: translateY(-5px) rotate(1deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
         .card-icon {
-            animation: float 5s ease-in-out infinite;
+            animation: float 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
     </style>
 </head>
