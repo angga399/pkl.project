@@ -9,13 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --accent-color: #1e3a8a;
-            --accent-hover: #6366f1;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-color: #1e40af;
+            --accent-hover: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --card-gradient: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
         }
 
         body {
@@ -36,7 +37,7 @@
             top: 0;
             z-index: 1000;
             overflow-x: hidden;
-            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
@@ -64,13 +65,13 @@
         }
 
         .sidebar-item:hover {
-            background-color: rgba(79, 70, 229, 0.05);
-            color: var(--accent-color);
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-hover);
         }
 
         .sidebar-item.active {
-            background-color: rgba(79, 70, 229, 0.1);
-            color: var(--accent-color);
+            background-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent-hover);
             font-weight: 500;
         }
 
@@ -110,12 +111,13 @@
 
         /* Content Card */
         .content-card {
-            background-color: var(--bg-secondary);
+            background: var(--card-gradient);
             border-radius: 12px;
             padding: 2rem;
             box-shadow: var(--card-shadow);
             margin: 1.5rem;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         /* Header */
@@ -154,7 +156,7 @@
             font-weight: 500;
             display: inline-flex;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
         }
 
         .realtime-clock i {
@@ -170,11 +172,11 @@
         }
 
         .filter-card {
-            background-color: var(--bg-secondary);
+            background: var(--card-gradient);
             border-radius: 10px;
             padding: 1.25rem;
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .filter-label {
@@ -188,17 +190,18 @@
             width: 100%;
             padding: 0.65rem 1rem;
             border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background-color: rgba(15, 23, 42, 0.5);
             transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
         }
 
         .filter-input:focus {
             border-color: var(--accent-color);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background-color: rgba(15, 23, 42, 0.7);
         }
 
         /* Date Range */
@@ -206,16 +209,17 @@
             display: inline-flex;
             align-items: center;
             padding: 0.5rem 1rem;
-            background-color: rgba(79, 70, 229, 0.05);
+            background-color: rgba(59, 130, 246, 0.1);
             border-radius: 8px;
-            border: 1px solid rgba(79, 70, 229, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
+            color: var(--text-primary);
         }
 
         .date-range i {
             margin-right: 8px;
-            color: var(--accent-color);
+            color: var(--accent-hover);
         }
 
         /* Tab Navigation */
@@ -223,7 +227,7 @@
             display: flex;
             gap: 0.75rem;
             margin-bottom: 2rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
             padding-bottom: 0.5rem;
         }
 
@@ -246,13 +250,13 @@
         }
 
         .tab-btn:hover {
-            color: var(--accent-color);
-            background-color: rgba(79, 70, 229, 0.05);
+            color: var(--accent-hover);
+            background-color: rgba(59, 130, 246, 0.1);
         }
 
         .tab-btn.active {
-            color: var(--accent-color);
-            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--accent-hover);
+            background-color: rgba(59, 130, 246, 0.2);
         }
 
         .tab-btn.active:after {
@@ -262,7 +266,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background-color: var(--accent-color);
+            background-color: var(--accent-hover);
             border-radius: 2px;
         }
 
@@ -271,9 +275,10 @@
             overflow-x: auto;
             border-radius: 10px;
             box-shadow: var(--card-shadow);
-            background-color: white;
+            background: var(--card-gradient);
             margin-bottom: 2rem;
             transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .table-custom {
@@ -284,7 +289,7 @@
         }
 
         .table-custom th {
-            background-color: #f8fafc;
+            background-color: rgba(15, 23, 42, 0.7);
             color: var(--text-primary);
             padding: 1rem 1.25rem;
             font-weight: 600;
@@ -292,13 +297,13 @@
             font-size: 0.75rem;
             letter-spacing: 0.05em;
             text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .table-custom td {
             padding: 1rem 1.25rem;
             color: var(--text-primary);
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
             transition: all 0.2s ease;
         }
 
@@ -307,7 +312,7 @@
         }
 
         .table-custom tbody tr:hover {
-            background-color: #f8fafc;
+            background-color: rgba(59, 130, 246, 0.1);
         }
 
         /* Photo Preview */
@@ -318,18 +323,18 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(59, 130, 246, 0.3);
         }
 
         .photo-preview:hover {
             transform: scale(1.1);
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            border-color: var(--accent-hover);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         /* Location Link */
         .location-link {
-            color: var(--accent-color);
+            color: var(--accent-hover);
             text-decoration: none;
             transition: all 0.3s;
             display: inline-flex;
@@ -338,7 +343,7 @@
         }
 
         .location-link:hover {
-            color: var(--accent-hover);
+            color: var(--hover-color);
             transform: translateY(-1px);
         }
 
@@ -364,17 +369,17 @@
 
         .status-pending {
             background-color: rgba(234, 179, 8, 0.1);
-            color: #d97706;
+            color: #f59e0b;
         }
 
         .status-approved {
             background-color: rgba(34, 197, 94, 0.1);
-            color: #059669;
+            color: #10b981;
         }
 
         .status-rejected {
             background-color: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
+            color: #ef4444;
         }
 
         /* Action Buttons */
@@ -414,7 +419,7 @@
         .btn-primary:hover {
             background-color: var(--accent-hover);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .btn-success {
@@ -459,7 +464,7 @@
         }
 
         .modal-content {
-            background-color: var(--bg-secondary);
+            background: var(--card-gradient);
             border-radius: 12px;
             padding: 2rem;
             position: relative;
@@ -469,6 +474,7 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             transform: scale(0.95);
             transition: transform 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .modal.active .modal-content {
@@ -488,7 +494,7 @@
         }
 
         .modal-close:hover {
-            color: var(--accent-color);
+            color: var(--accent-hover);
         }
 
         /* Rejection Modal */
@@ -508,8 +514,8 @@
             min-height: 120px;
             padding: 0.75rem;
             border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background-color: rgba(15, 23, 42, 0.5);
             color: var(--text-primary);
             resize: vertical;
             font-family: 'Poppins', sans-serif;
@@ -518,7 +524,8 @@
         #rejectionReason:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background-color: rgba(15, 23, 42, 0.7);
         }
 
         .modal-footer {
@@ -566,7 +573,7 @@
         }
 
         #toggleBtn:hover {
-            color: var(--accent-color);
+            color: var(--accent-hover);
         }
 
         #toggleBtn i {
