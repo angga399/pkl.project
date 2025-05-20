@@ -370,8 +370,13 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <span class="status-badge {{ $item->status == 'Hadir' ? 'status-hadir' : 'status-terlambat' }}">
+                                            <span class="status-badge {{ $item->status == 'Ditolak' ? 'status-rejected' : 'status-hadir' }}">
                                                 {{ $item->status }}
+                                                @if($item->status == 'Ditolak' && $item->alasan_penolakan)
+                                                    <div class="text-xs text-gray-600 mt-1">
+                                                        <strong>Alasan:</strong> {{ $item->alasan_penolakan }}
+                                                    </div>
+                                                @endif
                                             </span>
                                         </td>
                                     </tr>
@@ -414,8 +419,13 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <span class="status-badge {{ $item->status == 'Hadir' ? 'status-hadir' : 'status-terlambat' }}">
+                                            <span class="status-badge {{ $item->status == 'Ditolak' ? 'status-rejected' : 'status-hadir' }}">
                                                 {{ $item->status }}
+                                                @if($item->status == 'Ditolak' && $item->alasan_penolakan)
+                                                    <div class="text-xs text-gray-600 mt-1">
+                                                        <strong>Alasan:</strong> {{ $item->alasan_penolakan }}
+                                                    </div>
+                                                @endif
                                             </span>
                                         </td>
                                     </tr>

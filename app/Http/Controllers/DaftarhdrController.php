@@ -53,6 +53,7 @@ class DaftarhdrController extends Controller
             'dataGambar' => 'required',
         ]);
 
+        
         Daftarhdr::create($request->all());
 
         return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil disimpan.');

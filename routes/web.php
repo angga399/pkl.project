@@ -10,6 +10,7 @@ use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ShalatController;
 use App\Http\Controllers\ChatController;
 use App\Models\User;
@@ -70,10 +71,7 @@ Route::get('/', function () {
 //     return view('guru.index', ['title' => 'home page']);
 // })->name('gurui.ndex');
 
-// Halaman utama
-Route::get('/pembimbingpkl', function () {
-    return view('pembimbingpkl', ['title' => 'home page']);
-})->name('pembimbingpkl');
+
 
 Route::get('/pembimbing/journals', [PembimbingController::class, 'journals'])->name('pembimbing.journals');
 Route::post('/pembimbing/journals/{id}/approve', [PembimbingController::class, 'setuju'])->name('pembimbing.setuju');
@@ -193,10 +191,6 @@ Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.
 // routes/web.php
 // routes/web.php
 
-Route::get('/pembimbingpkl', function () {
-    return view('pembimbingpkl'); // Ganti dengan nama view yang sesuai
-})->name('pembimbingpkl');
-
 
 Route::get('/', function () {
     return view('awal'); // Ganti dengan nama view yang sesuai
@@ -208,11 +202,15 @@ Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome')->middleware('auth');
 
-Route::get('/pembimbingpkl', function () {
-    return view('.pembimbingpkl');
-})->name('pembimbingpkl')->middleware('auth');
+Route::get('/pembimbing', function () {
+    return view('index');
+})->name('pembimbing')->middleware('auth');
 
 Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
+
+Route::post('/pembimbing/reject/{id}', [PembimbingController::class, 'reject'])
+    ->name('pembimbing.reject');
+
 
 Route::get('/dashboard', function ()  {
     return view('dashboard',[

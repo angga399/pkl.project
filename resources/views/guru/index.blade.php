@@ -9,137 +9,184 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     body {
-      background-color: #f5f5f5;
-      padding: 20px;
+      background-color: #f8f9fa;
+      padding: 0;
+      margin: 0;
+      color: #495057;
     }
     
     .container {
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 20px;
     }
     
     header {
       text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background-color: #4682B4;
-      color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+      padding: 30px 0;
+      background-color: #88c7dc;
+      color: #2c3e50;
+      width: 100%;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    header h1 {
+      margin-bottom: 10px;
+      font-weight: 600;
     }
     
     .card-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 30px;
     }
     
     .card {
       background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       overflow: hidden;
-      width: 300px;
+      width: 320px;
       transition: transform 0.3s, box-shadow 0.3s;
     }
     
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     }
     
     .card-header {
-      padding: 20px;
+      padding: 24px;
       text-align: center;
       color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-header::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 70%);
+      pointer-events: none;
     }
     
     .absen-header {
-      background-color: #3498db;
+      background-color: #79b8d1;
     }
     
     .jurnal-header {
-      background-color: #2ecc71;
+      background-color: #8acdaf;
     }
     
     .shalat-header {
-      background-color: #9b59b6;
+      background-color: #b6a4cc;
     }
     
     .card-body {
-      padding: 20px;
+      padding: 30px 24px;
       text-align: center;
     }
     
     .icon {
-      font-size: 60px;
-      margin-bottom: 15px;
+      font-size: 64px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+    
+    .card-body h3 {
+      margin-bottom: 12px;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .card-body p {
+      color: #6c757d;
+      line-height: 1.6;
     }
     
     .card-footer {
-      padding: 15px;
+      padding: 20px;
       text-align: center;
       background-color: #f9f9f9;
+      border-top: 1px solid #f0f0f0;
     }
     
     .btn {
       display: inline-block;
-      padding: 10px 20px;
-      background-color: #3498db;
+      padding: 12px 24px;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background-color 0.3s;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      letter-spacing: 0.5px;
     }
     
     .btn:hover {
-      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
     
     .absen-btn {
-      background-color: #3498db;
+      background-color: #79b8d1;
     }
     
     .absen-btn:hover {
-      background-color: #2980b9;
+      background-color: #6ba9c2;
     }
     
     .jurnal-btn {
-      background-color: #2ecc71;
+      background-color: #8acdaf;
     }
     
     .jurnal-btn:hover {
-      background-color: #27ae60;
+      background-color: #7bbea0;
     }
     
     .shalat-btn {
-      background-color: #9b59b6;
+      background-color: #b6a4cc;
     }
     
     .shalat-btn:hover {
-      background-color: #8e44ad;
+      background-color: #a795bd;
     }
     
     @media (max-width: 768px) {
       .card {
         width: 100%;
+        max-width: 380px;
+      }
+      
+      .container {
+        padding: 0 15px;
+      }
+      
+      header .container {
+        padding: 25px 15px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
+  <header>
+    <div class="container">
       <h1>Selamat Datang</h1>
       <p>Pilih menu yang tersedia di bawah ini</p>
-    </header>
-    
+    </div>
+  </header>
+  
+  <div class="container">
     <div class="card-container">
       <!-- Card Absen -->
       <div class="card">
@@ -185,7 +232,9 @@
           <a href="{{route('guru.shalats')}}" class="btn shalat-btn">Buka Jadwal</a>
         </div>
       </div>
-    </div>
   </div>
+  </div>
+   {{-- <x-footer></x-footer> --}}
+
 </body>
 </html>

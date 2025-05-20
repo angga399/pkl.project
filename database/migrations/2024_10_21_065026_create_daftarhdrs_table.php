@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('jenisAbsen')->default('default_value');
             $table->string('tipe');
             $table->string('status')->default('Menunggu Persetujuan');
+
+
             $table->timestamps();
         });
     }
