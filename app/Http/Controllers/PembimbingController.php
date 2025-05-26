@@ -35,41 +35,23 @@ class PembimbingController extends Controller
 }
 
 
-
 public function journals(Request $request)
 {
-    // Jika week dipilih, gunakan tanggal dari minggu yang dipilih
-    // Jika tidak, gunakan minggu ini sebagai default
-    if ($request->has('week')) {
-        $selectedWeek = $request->week;
-        $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
-        $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
-    } else {
-        $selectedWeek = Carbon::now()->format('Y-\WW');
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-    }
+    $selectedWeek = $request->input('week', Carbon::now()->format('Y-\WW'));
+    $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
+    $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
 
-    // Mulai query
-    $journals = Journal::query();
+    $query = Journal::whereBetween('tanggal', [$startOfWeek, $endOfWeek]);
 
-    // Terapkan filter tanggal berdasarkan minggu yang dipilih
-    $journals->whereBetween('tanggal', [
-        $startOfWeek->format('Y-m-d'),
-        $endOfWeek->format('Y-m-d')
-    ]);
-
-    // Filter berdasarkan perusahaan jika dipilih
     if ($request->has('PT') && $request->PT != '') {
-        $journals->where('PT', $request->PT);
+        $query->where('PT', 'like', '%'.$request->PT.'%');
     }
 
-    // Ambil data
-    $journals = $journals->get();
+    // Kelompokkan berdasarkan perusahaan
+    $journals = $query->get()->groupBy('PT');
 
-    // Kirim data ke view dengan parameter yang dipilih
     return view('pembimbing.journals', compact(
-        'journals',
+        'journals', // Kirim data yang sudah dikelompokkan
         'startOfWeek',
         'endOfWeek',
         'selectedWeek'
@@ -201,10 +183,10 @@ public function reject(Request $request, $id)
 
 
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Penolakan berhasil disimpan'
-        ]);
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Penolakan berhasil disimpan'
+        // ]);
 
     } catch (\Exception $e) {
         return response()->json([

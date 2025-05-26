@@ -560,60 +560,60 @@
             <!-- Journal Table -->
             <div class="table-container">
                 <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Tanggal</th>
-                            <th>Uraian</th>
-                            <th>Jurusan</th>
-                            <th>Perusahaan</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($journals as $journal)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $journal->nama }}</td>
-                                <td>{{ $journal->tanggal }}</td>
-                                <td class="uraian-text" title="{{ $journal->uraian_konsentrasi }}">
-                                    {{ $journal->uraian_konsentrasi }}
-                                </td>
-                                <td>{{ $journal->kelas }}</td>
-                                <td>{{ $journal->PT }}</td>
-                                <td>
-                                    <span class="status-badge {{ $journal->status === 'Disetujui' ? 'status-approved' : ($journal->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
-                                        <i class="fas {{ $journal->status === 'Disetujui' ? 'fa-check' : ($journal->status === 'Ditolak' ? 'fa-times' : 'fa-clock') }}"></i>
-                                        {{ $journal->status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if($journal->status === 'Menunggu')
-                                        <div class="action-btns">
-                                            <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Setujui jurnal ini?')">
-                                                    <i class="fas fa-check"></i> Setujui
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tolak jurnal ini?')">
-                                                    <i class="fas fa-times"></i> Tolak
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center py-4">Tidak ada jurnal yang menunggu persetujuan.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
+                    <!-- Ganti bagian tabel dengan ini: -->
+@foreach($journals as $companyName => $companyJournals)
+<div class="mb-8">
+    <h3 class="text-xl font-semibold mb-4 border-b border-blue-700 pb-2">
+        Perusahaan: {{ $companyName }} ({{ $companyJournals->count() }} jurnal)
+    </h3>
+    
+    <div class="table-container">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Tanggal</th>
+                    <th>Uraian</th>
+                    <th>Jurusan</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($companyJournals as $journal)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $journal->nama }}</td>
+                    <td>{{ $journal->tanggal }}</td>
+                    <td class="uraian-text">{{ $journal->uraian_konsentrasi }}</td>
+                    <td>{{ $journal->kelas }}</td>
+                    <td>
+                        <span class="status-badge {{ $journal->status === 'Disetujui' ? 'status-approved' : ($journal->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
+                            {{ $journal->status }}
+                        </span>
+                    </td>
+                    <td>
+                        @if($journal->status === 'Menunggu')
+                        <div class="action-btns">
+                            <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm">Setujui</button>
+                            </form>
+                            <form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
+                            </form>
+                        </div>
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endforeach
                 </table>
             </div>
         </div>
@@ -784,6 +784,9 @@
               });
           });
       });
+
+      // Di bagian script template
+// 
   </script>
 </body>
 </html>
