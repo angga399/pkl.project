@@ -14,7 +14,8 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        $companies = \App\Models\Company::all(); // Ambil semua data perusahaan
+    return view('auth.register', ['companies' => $companies]);
     }
 
     /**
@@ -22,7 +23,8 @@ class RegisteredUserController extends Controller
      */
     public function createGuru()
     {
-        return view('auth.register-guru');
+        $companies = \App\Models\Company::all();
+    return view('auth.register-guru', ['companies' => $companies]);
     }
 
     /**
@@ -30,74 +32,104 @@ class RegisteredUserController extends Controller
  */
 public function createPembimbing()
 {
-    return view('auth.register-pembimbing');
+
+    $companies = \App\Models\Company::all();
+    return view('auth.register-pembimbing', ['companies' => $companies]);
 }
+
+
 
     /**
      * Handle an incoming registration request.
      */
-    public function store(Request $request)
-    {
-        // Jika register_option tidak ada (form guru), set default ke 'guru'
-        $role = $request->register_option ?? 'guru';
+  public function store(Request $request)
+{
+    try {
+        // 1. Tentukan role
+        $role = $request->register_option ?? 'siswa'; // Default siswa
         
-        $validationRules = [
+        // 2. Validasi dasar
+        $rules = [
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:8',
+            'company_id' => 'required_if:role,siswa,pembimbingpkl|exists:companies,id'
         ];
 
-        // Tambahkan validasi berdasarkan role
+        // 3. Tambahkan validasi spesifik role
         if ($role === 'siswa') {
-            $validationRules = array_merge($validationRules, [
-                'full_name' => 'required',
+            $rules = array_merge($rules, [
+                'full_name' => 'required|string|max:255',
                 'birth_date' => 'required|date',
-                'major' => 'required',
-                'PT' => 'required',
-                'phone_number' => 'required',
-                'location_pkl' => 'required',
+                'nik' => 'required|string|max:20',
+                'major' => 'required|string',
+                'phone_number' => 'required|string|max:15',
+                'location_pkl' => 'required|string'
             ]);
-        } elseif ($role === 'pembimbingpkl') {
-            $validationRules = array_merge($validationRules, [
-                'supervisor_name' => 'required',
-                'nip' => 'required',
+        } 
+        elseif ($role === 'pembimbingpkl') {
+            $rules = array_merge($rules, [
+                'supervisor_name' => 'required|string|max:255',
+                'nip' => 'required|string|max:20',
                 'birth_date_pembimbing' => 'required|date',
-                'rank' => 'required',
-                'company_address' => 'required',
-                'phone_number_pembimbing' => 'required',
-            ]);
-        } else { // Untuk guru
-            $validationRules = array_merge($validationRules, [
-                'full_name' => 'required',
+                'rank' => 'required|string',
+                'company_address' => 'required|string',
+                'phone_number_pembimbing' => 'required|string|max:15'
             ]);
         }
 
-        $validated = $request->validate($validationRules);
+        // 4. Jalankan validasi
+        $validated = $request->validate($rules);
+        \Log::info('Validated Data:', $validated);
 
-        // Simpan data ke database
-        $user = new User;
-        $user->role = $role;
-        $user->full_name = $validated['full_name'] ?? $validated['supervisor_name'] ?? null;
-        $user->email = $validated['email'];
-        $user->password = Hash::make($validated['password']);
+        // 5. Siapkan data untuk disimpan
+        $userData = [
+            'role' => $role,
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'company_id' => $validated['company_id'] ?? null
+        ];
 
-        // Isi data khusus role
+        // 6. Tambahkan field spesifik role
         if ($role === 'siswa') {
-            $user->birth_date = $validated['birth_date'];
-            $user->major = $validated['major'];
-            $user->PT = $validated['PT'];
-            $user->phone_number = $validated['phone_number'];
-            $user->location_pkl = $validated['location_pkl'];
-        } elseif ($role === 'pembimbingpkl') {
-            $user->birth_date = $validated['birth_date_pembimbing'];
-            $user->nip = $validated['nip'];
-            $user->rank = $validated['rank'];
-            $user->company_address = $validated['company_address'];
-            $user->phone_number = $validated['phone_number_pembimbing'];
+            $userData = array_merge($userData, [
+                'full_name' => $validated['full_name'],
+                'birth_date' => $validated['birth_date'],
+                'nik' => $validated['nik'],
+                'major' => $validated['major'],
+                'phone_number' => $validated['phone_number'],
+                'location_pkl' => $validated['location_pkl']
+            ]);
+        } 
+        elseif ($role === 'pembimbingpkl') {
+            $userData = array_merge($userData, [
+                'full_name' => $validated['supervisor_name'],
+                'nip' => $validated['nip'],
+                'birth_date' => $validated['birth_date_pembimbing'],
+                'rank' => $validated['rank'],
+                'company_address' => $validated['company_address'],
+                'phone_number' => $validated['phone_number_pembimbing']
+            ]);
         }
-        // Untuk guru tidak perlu field tambahan
 
-        $user->save();
+        // 7. Simpan data
+        \DB::beginTransaction();
+        $user = User::create($userData);
+        \DB::commit();
 
-        return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
+        \Log::info('User created:', ['id' => $user->id]);
+
+        return redirect()->route('login')->with('success', 'Registrasi berhasil!');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        \DB::rollBack();
+        \Log::error('Validation Error: '.$e->getMessage());
+        return back()->withErrors($e->validator)->withInput();
+        
+    } catch (\Exception $e) {
+        \DB::rollBack();
+        \Log::error('Registration Error: '.$e->getMessage());
+        return back()->with('error', 'Gagal menyimpan data: '.$e->getMessage())->withInput();
     }
+}
+
 }

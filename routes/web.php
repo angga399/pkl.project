@@ -10,6 +10,8 @@ use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\CompanyController;
+
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ShalatController;
 use App\Http\Controllers\ChatController;
@@ -93,8 +95,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/register/guru', [RegisteredUserController::class, 'createGuru'])
         ->name('register.guru');
     
-    Route::get('/register/pembimbing', [RegisteredUserController::class, 'createPembimbing'])
-        ->name('register.pembimbing');
+    Route::get('/register/pembimbing', [RegisteredUserController::class, 'createPembimbing'])->name('register.pembimbing');
+Route::post('/register/pembimbing', [RegisteredUserController::class, 'store']);
 });
 
 // Rute untuk journals (daftar utama journals)
@@ -162,6 +164,13 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 
 
+// routes/web.php
+Route::post('/companies/{company}', [CompanyController::class, 'show'])
+     ->name('companies.show');
+     // routes/web.php
+Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
+Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
+Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
 
 Route::middleware('auth')->group(function () {
@@ -183,7 +192,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru', [GuruController::class, 'index'])->name('guru.index');
 Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('guru.shalats');
 });
-Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('guru.absen');
+Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('absen');
 
 
 
@@ -201,6 +210,11 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('regi
 Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome')->middleware('auth');
+
+
+Route::get('/pembimbingpkl', function () {
+    return view('pembimbingpkl');
+})->name('pembimbingpkl')->middleware('auth');
 
 Route::get('/pembimbing', function () {
     return view('index');

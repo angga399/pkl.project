@@ -131,7 +131,7 @@
       <section class="text-gray-600 body-font py-24 w-full relative z-10">
           <div class="container px-5 mx-auto text-center">
               <h1 class="sm:text-6xl text-5xl font-extrabold mb-6 gradient-text">
-                  HALAMAN SISWA SISWI
+                  Peserta Pkl
               </h1>
               <p class="text-xl leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-blue-100 mb-8">
                   Silahkan isi kegiatan kalian selama PKL
