@@ -190,174 +190,125 @@
               });
           });
 
-  // Notification system - improved version
-          const notificationButton = document.getElementById('notificationButton');
-          const notificationDropdown = document.getElementById('notificationDropdown');
-          
-          if (notificationButton && notificationDropdown) {
-              notificationButton.addEventListener('click', function(e) {
-                  e.stopPropagation();
-                  notificationDropdown.classList.toggle('hidden');
-                  
-                  if (!notificationDropdown.classList.contains('hidden')) {
-                      loadNotifications();
-                  }
-              });
-              
-              document.addEventListener('click', function(e) {
-                  if (!notificationButton.contains(e.target) && !notificationDropdown.contains(e.target)) {
-                      notificationDropdown.classList.add('hidden');
-                  }
-              });
-          }
+if (typeof Pusher !== 'undefined') {
+        const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            encrypted: true,
+            authEndpoint: '/broadcasting/auth',
+            auth: {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            }
+        });
 
-          async function loadNotifications() {
-              try {
-                  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-                  if (!csrfToken) {
-                      console.error('CSRF token not found');
-                      return;
-                  }
+        @auth
+        // Subscribe ke channel privat user
+        const channel = pusher.subscribe('private-user.{{ auth()->id() }}');
+        
+        // Tangani event approval
+        channel.bind('attendance.approval', function(data) {
+            // Update UI notifikasi
+            updateNotificationUI([{
+                data: {
+                    message: data.message,
+                    type: data.type,
+                    attendance: data.attendanceData
+                },
+                created_at: new Date().toISOString()
+            }]);
+            
+            // Tampilkan toast
+            showToast(data.message, data.type);
+            
+            // Animasi bel notifikasi
+            const bell = document.getElementById('notificationButton');
+            if (bell) {
+                bell.classList.add('bell-shake');
+                setTimeout(() => bell.classList.remove('bell-shake'), 500);
+                
+                // Update counter
+                const counter = document.getElementById('notificationCount');
+                if (counter) {
+                    const currentCount = parseInt(counter.textContent) || 0;
+                    counter.textContent = currentCount + 1;
+                    counter.classList.remove('hidden');
+                }
+            }
+        });
+        @endauth
+    }
 
-                  const response = await fetch('/api/notifications', {
-                      headers: {
-                          'Accept': 'application/json',
-                          'Content-Type': 'application/json',
-                          'X-CSRF-TOKEN': csrfToken,
-                          'X-Requested-With': 'XMLHttpRequest'
-                      },
-                      credentials: 'include'
-                  });
+    // Fungsi untuk memuat notifikasi
+    async function loadNotifications() {
+        try {
+            const response = await fetch('/api/notifications', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
+            
+            if (!response.ok) throw new Error('Failed to load notifications');
+            
+            const data = await response.json();
+            updateNotificationUI(data);
+        } catch (error) {
+            console.error('Error loading notifications:', error);
+            showErrorNotification('Gagal memuat notifikasi');
+        }
+    }
 
-                  if (response.status === 401) {
-                      window.location.href = '/login';
-                      return;
-                  }
+    // Fungsi untuk update UI notifikasi
+    function updateNotificationUI(notifications) {
+        const notificationList = document.getElementById('notificationList');
+        const notificationCount = document.getElementById('notificationCount');
+        
+        if (!notificationList) return;
 
-                  if (!response.ok) {
-                      throw new Error(`HTTP error! status: ${response.status}`);
-                  }
+        if (notifications && notifications.length > 0) {
+            notificationList.innerHTML = notifications.map(notif => {
+                const message = notif.data?.message || 'Notifikasi baru';
+                const type = notif.data?.type || 'info';
+                const date = new Date(notif.created_at).toLocaleString();
+                const icon = type === 'success' ? 'fa-check-circle text-green-400' : 
+                             type === 'error' ? 'fa-times-circle text-red-400' : 
+                             'fa-info-circle text-blue-400';
+                
+                return `
+                    <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 cursor-pointer" 
+                         onclick="handleNotificationClick(${notif.data?.attendance_id || 0})">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 pt-1">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-white">${message}</p>
+                                <p class="text-xs text-gray-400">${date}</p>
+                                ${notif.data?.reason ? `<p class="text-xs text-gray-300 mt-1">Alasan: ${notif.data.reason}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (notificationCount) {
+                notificationCount.textContent = notifications.length;
+                notificationCount.classList.remove('hidden');
+            }
+        } else {
+            notificationList.innerHTML = '<div class="px-4 py-3 text-center text-gray-400">Tidak ada notifikasi baru</div>';
+            if (notificationCount) {
+                notificationCount.classList.add('hidden');
+            }
+        }
+    }
 
-                  const data = await response.json();
-                  updateNotificationUI(data);
-              } catch (error) {
-                  console.error('Error loading notifications:', error);
-                  showErrorNotification('Failed to load notifications');
-              }
-          }
-
-          function updateNotificationUI(notifications) {
-              const notificationList = document.getElementById('notificationList');
-              const notificationCount = document.getElementById('notificationCount');
-              
-              if (!notificationList || !notificationCount) return;
-
-              if (notifications && notifications.length > 0) {
-                  notificationCount.textContent = notifications.length;
-                  notificationCount.classList.remove('hidden');
-                  
-                  notificationList.innerHTML = notifications.map(notif => `
-                      <div class="px-4 py-3 border-b border-gray-700 hover:bg-gray-700 cursor-pointer">
-                          <div class="flex items-start">
-                              <div class="flex-shrink-0 pt-1">
-                                  <i class="fas ${getNotificationIcon(notif)}"></i>
-                              </div>
-                              <div class="ml-3">
-                                  <p class="text-sm font-medium text-white">${notif.data?.message || 'New notification'}</p>
-                                  <p class="text-xs text-gray-400">${formatDate(notif.created_at)}</p>
-                              </div>
-                          </div>
-                      </div>
-                  `).join('');
-              } else {
-                  notificationCount.classList.add('hidden');
-                  notificationList.innerHTML = '<div class="px-4 py-3 text-center text-gray-400">No new notifications</div>';
-              }
-          }
-
-          function getNotificationIcon(notification) {
-              const type = notification.data?.type || 'info';
-              switch(type) {
-                  case 'success': return 'fa-check-circle text-green-400';
-                  case 'error': return 'fa-times-circle text-red-400';
-                  default: return 'fa-info-circle text-blue-400';
-              }
-          }
-
-          function formatDate(dateString) {
-              try {
-                  return new Date(dateString).toLocaleString();
-              } catch (e) {
-                  return 'Just now';
-              }
-          }
-
-          function showErrorNotification(message) {
-              const notificationList = document.getElementById('notificationList');
-              if (notificationList) {
-                  notificationList.innerHTML = `
-                      <div class="px-4 py-3 text-center text-yellow-400">
-                          ${message}
-                      </div>
-                  `;
-              }
-          }
-
-          // Pusher initialization remains the same
-          if (typeof Pusher !== 'undefined') {
-              const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-                  cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-                  encrypted: true
-              });
-
-              @auth
-              const channel = pusher.subscribe('user.{{ auth()->id() }}');
-              
-              channel.bind('status.updated', function(data) {
-                  loadNotifications();
-                  showToast(data.message, data.type);
-              });
-              @endauth
-          }
-
-          function showToast(message, type = 'info') {
-              const toast = document.getElementById('notificationToast');
-              const toastMessage = document.getElementById('toastMessage');
-              const toastIcon = document.getElementById('toastIcon');
-              
-              if (!toast || !toastMessage || !toastIcon) return;
-
-              let iconClass, borderColor;
-              switch(type) {
-                  case 'success':
-                      iconClass = 'fa-check-circle text-green-400';
-                      borderColor = 'border-green-500';
-                      break;
-                  case 'error':
-                      iconClass = 'fa-times-circle text-red-400';
-                      borderColor = 'border-red-500';
-                      break;
-                  default:
-                      iconClass = 'fa-info-circle text-blue-400';
-                      borderColor = 'border-blue-500';
-              }
-              
-              toast.className = `fixed bottom-4 right-4 z-50 bg-gray-800 border-l-4 ${borderColor} text-white px-6 py-4 shadow-lg rounded-lg max-w-xs`;
-              toastIcon.innerHTML = `<i class="fas ${iconClass}"></i>`;
-              toastMessage.textContent = message;
-              toast.classList.remove('hidden');
-              
-              setTimeout(() => {
-                  toast.classList.add('hidden');
-              }, 5000);
-          }
-
-          function hideToast() {
-              const toast = document.getElementById('notificationToast');
-              if (toast) {
-                  toast.classList.add('hidden');
-              }
-          }
-      });
+    // Fungsi untuk menangani klik notifikasi
+    window.handleNotificationClick = function(attendanceId) {
+        if (attendanceId) {
+            window.location.href = `/daftarhdr/${attendanceId}`;
+        }
+    };
   </script>
 </body>

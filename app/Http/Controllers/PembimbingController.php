@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Journal;
 use App\Models\Daftarhdr;
+use Illuminate\Support\Facades\DB;
 use App\Models\Dftrshalat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -175,6 +176,26 @@ public function tolak($id)
     return redirect()->route('pembimbing.journals')->with('status', 'Jurnal ditolak!');
 }
 
+public function approveAllJournals(Request $request)
+{
+    $ids = $request->input('ids', []);
+    $count = 0;
+
+    foreach ($ids as $id) {
+        $journal = Journal::find($id);
+        if ($journal && $journal->status === 'Menunggu') {
+            $journal->status = 'Disetujui';
+            $journal->save();
+            $count++;
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'approved_count' => $count
+    ]);
+}
+
 public function approve($id)
 {
     $item = Daftarhdr::findOrFail($id);
@@ -214,6 +235,33 @@ public function reject(Request $request, $id)
     }
 }
 
+public function approveAll(Request $request)
+{
+    $validated = $request->validate([
+        'ids' => 'required|array|min:1',
+        'ids.*' => 'required|integer|exists:daftarhdrs,id',
+        'tab' => 'required|in:datang,pulang'
+    ]);
+
+    $count = Daftarhdr::whereIn('id', $validated['ids'])
+        ->where('status', 'Menunggu Persetujuan')
+        ->where('tipe', $validated['tab'])
+        ->update([
+            'status' => 'Disetujui',
+            // Hapus approved_at dan approved_by jika kolom tidak ada
+            // 'approved_at' => now(),
+            // 'approved_by' => auth()->id()
+        ]);
+
+    return response()->json([
+        'success' => $count > 0,
+        'approved_count' => $count,
+        'message' => $count > 0 
+            ? "Berhasil menyetujui $count absensi" 
+            : 'Tidak ada absensi yang perlu disetujui'
+    ]);
+}
+
 public function disetujui($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
@@ -230,6 +278,27 @@ public function Ditolak($id)
     $shalat->save();
 
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak!');
 }
+
+public function approveAllShalat(Request $request)
+{
+    $ids = $request->input('ids', []);
+    $count = 0;
+
+    foreach ($ids as $id) {
+        $shalat = Dftrshalat::find($id);
+        if ($shalat && $shalat->status === 'Menunggu') {
+            $shalat->status = 'Disetujui';
+            $shalat->save();
+            $count++;
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'approved_count' => $count
+    ]);
+}
+
 }

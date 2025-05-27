@@ -30,14 +30,19 @@ class AuthenticatedSessionController extends Controller
 
             $user = Auth::user();
 
-            // Cek jenis pengguna berdasarkan kolom 'role'
             if ($user->role == 'siswa') {
                 return redirect()->route('welcome'); // Ubah ke rute dashboard siswa
             }
-
             if ($user->role == 'pembimbingpkl') {
-                return redirect()->route('pembimbingpkl'); // Ubah ke rute dashboard pembimbing
+                return redirect()->route('pembimbingpkl'); // Ubah ke rute dashboard siswa
             }
+
+
+
+//             if ($user->role == 'pembimbingpkl') {
+//     Auth::guard('pembimbing')->login($user);
+//     return redirect()->route('pembimbingpkl');
+// }
 
             if ($user->role == 'guru'){
                 return redirect()-> route('guru.index');

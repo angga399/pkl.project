@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Pengambilan Foto - Persetujuan</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -534,7 +535,7 @@
             gap: 0.75rem;
             margin-top: 1rem;
         }
-
+        
         /* Animation */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -583,6 +584,117 @@
         #sidebar.expanded #toggleBtn i {
             transform: rotate(180deg);
         }
+
+        /* Approve All Button */
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        #approveAllBtn {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #10b981;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+            animation: pulseApproveBtn 2s infinite;
+        }
+        
+        #approveAllBtn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        @keyframes pulseApproveBtn {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast-success {
+            background-color: #10b981;
+        }
+        
+        .toast-error {
+            background-color: #ef4444;
+        }
+
+        /* Tambahkan di CSS */
+.status-update {
+    transition: all 0.3s ease;
+    transform: scale(1.05);
+    opacity: 0;
+}
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Tambahkan di bagian CSS */
+.approval-checkbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-color);
+}
+
+.approval-checkbox:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#selectAllCheckbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-hover);
+}
+
+.status-updated {
+    animation: fadeInScale 0.3s ease forwards;
+}/* Hapus styling untuk checkbox disabled karena kita akan menghilangkannya */
+.approval-checkbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-color);
+}
+
+#selectAllCheckbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-hover);
+}
+
+/* Style untuk placeholder */
+td span.text-gray-400 {
+    padding-left: 8px;
+}
     </style>
 </head>
 <body>
@@ -672,19 +784,23 @@
                         </form>
                     </div>
                 </div>
-
+            
                 <div class="date-range">
                     <i class="far fa-calendar-alt"></i>
                     Periode: {{ $startOfWeek->format('d M Y') }} - {{ $endOfWeek->format('d M Y') }}
                 </div>
 
-                <!-- Tab Navigation -->
-                <div class="tab-nav">
-                    <button id="datangBtn" class="tab-btn active">
-                        <i class="fas fa-sign-in-alt"></i> Absen Datang
-                    </button>
-                    <button id="pulangBtn" class="tab-btn">
-                        <i class="fas fa-sign-out-alt"></i> Absen Pulang
+                <div class="flex justify-between items-center mb-4">
+                    <div class="tab-nav">
+                        <button id="datangBtn" class="tab-btn active">
+                            <i class="fas fa-sign-in-alt"></i> Absen Datang
+                        </button>
+                        <button id="pulangBtn" class="tab-btn">
+                            <i class="fas fa-sign-out-alt"></i> Absen Pulang
+                        </button>
+                    </div>
+                    <button id="approveAllBtn" class="btn btn-success btn-lg">
+                        <i class="fas fa-check-double"></i> Setujui Semua
                     </button>
                 </div>
 
@@ -693,6 +809,13 @@
                     <table class="table-custom">
                         <thead>
                             <tr>
+                                 <th>
+    @if($daftarhdrs->where('status', 'Menunggu Persetujuan')->count() > 0)
+        <input type="checkbox" id="selectAllCheckbox">
+    @else
+        <span class="text-gray-400">-</span>
+    @endif
+</th>
                                 <th>Foto</th>
                                 <th>Hari</th>
                                 <th>Tanggal</th>
@@ -706,6 +829,13 @@
                             @foreach ($daftarhdrs as $item)
                                 @if ($item->tipe === 'datang')
                                     <tr>
+                                        <td>
+                @if($item->status === 'Menunggu Persetujuan')
+                    <input type="checkbox" class="approval-checkbox" data-id="{{ $item->id }}">
+                @else
+                    <span class="text-gray-400">-</span>
+                @endif
+            </td>
                                         <td>
                                             <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
                                         </td>
@@ -754,6 +884,13 @@
                     <table class="table-custom">
                         <thead>
                             <tr>
+                                 <th>
+            @if($daftarhdrs->where('tipe', 'pulang')->where('status', 'Menunggu Persetujuan')->count() > 0)
+                <input type="checkbox" id="selectAllCheckboxPulang">
+            @else
+                <span class="text-gray-400">-</span>
+            @endif
+        </th>
                                 <th>Foto</th>
                                 <th>Hari</th>
                                 <th>Tanggal</th>
@@ -767,6 +904,13 @@
                             @foreach ($daftarhdrs as $item)
                                 @if ($item->tipe === 'pulang')
                                     <tr>
+                                          <td>
+                    @if($item->status === 'Menunggu Persetujuan')
+                        <input type="checkbox" class="approval-checkbox" data-id="{{ $item->id }}">
+                    @else
+                        <span class="text-gray-400">-</span>
+                    @endif
+                </td>
                                         <td>
                                             <img src="{{ $item->dataGambar }}" alt="Foto" class="photo-preview" onclick="showModal(this)" />
                                         </td>
@@ -823,6 +967,23 @@
         </div>
     </div>
 
+    <!-- Approve All Modal -->
+    <div id="approveAllModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="modal-close" onclick="hideApproveAllModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="text-xl font-semibold mb-4">Konfirmasi Setujui Semua</h3>
+            <p class="mb-6">Anda akan menyetujui semua absensi yang masih menunggu persetujuan pada tab yang aktif saat ini. Lanjutkan?</p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="hideApproveAllModal()">Batal</button>
+                <button type="button" class="btn btn-success" id="confirmApproveAll">
+                    <i class="fas fa-check-double"></i> Ya, Setujui Semua
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Rejection Modal -->
     <div id="rejectionModal" class="modal">
         <div class="modal-content">
@@ -842,6 +1003,12 @@
             </form>
         </div>
     </div>
+    
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="toast">
+        <i class="fas fa-info-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -849,7 +1016,7 @@
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.getElementById('toggleBtn');
             const mainContent = document.getElementById('mainContent');
-
+            
             toggleBtn.addEventListener('click', function() {
                 sidebar.classList.toggle('expanded');
                 mainContent.classList.toggle('sidebar-expanded');
@@ -927,6 +1094,188 @@
                 document.getElementById('rejectionReason').value = '';
                 document.body.style.overflow = 'auto';
             }
+            
+            // Approve All Functionality
+            const approveAllBtn = document.getElementById('approveAllBtn');
+            const approveAllModal = document.getElementById('approveAllModal');
+            const confirmApproveAllBtn = document.getElementById('confirmApproveAll');
+            const toast = document.getElementById('toastNotification');
+            const toastMessage = document.getElementById('toastMessage');
+
+            function showToast(message, type) {
+    const toast = document.getElementById('toastNotification');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toast.className = 'toast show';
+    toast.classList.add(`toast-${type}`);
+    toastMessage.textContent = message;
+    
+    setTimeout(() => {
+        toast.className = 'toast';
+        toast.classList.remove(`toast-${type}`);
+    }, 3000);
+}
+            
+            approveAllBtn.addEventListener('click', function() {
+                // Check if there are any pending approvals
+                const activeTable = datangBtn.classList.contains('active') ? datangTable : pulangTable;
+                const pendingForms = activeTable.querySelectorAll('form[action*="/approve"]');
+                
+                if (pendingForms.length === 0) {
+                    showToast('Tidak ada absensi yang perlu disetujui', 'error');
+                    return;
+                }
+                
+                approveAllModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            window.hideApproveAllModal = function() {
+                approveAllModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            document.getElementById('selectAllCheckbox').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.approval-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+    });
+});
+
+// Fungsi untuk update select all checkbox
+// Fungsi untuk mengelola select all checkbox
+function setupSelectAllCheckbox() {
+    const activeTable = datangBtn.classList.contains('active') ? datangTable : pulangTable;
+    const selectAllCheckbox = activeTable.querySelector('thead input[type="checkbox"]');
+    const itemCheckboxes = activeTable.querySelectorAll('tbody .approval-checkbox');
+    
+    if (selectAllCheckbox && itemCheckboxes.length > 0) {
+        // Select all checkbox event
+        selectAllCheckbox.addEventListener('change', function() {
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+        
+        // Individual checkbox events
+        itemCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const allChecked = [...itemCheckboxes].every(cb => cb.checked);
+                selectAllCheckbox.checked = allChecked;
+            });
+        });
+    }
+}
+
+// Panggil fungsi saat pertama kali load dan saat ganti tab
+setupSelectAllCheckbox();
+
+// Tambahkan event listener untuk tab navigation
+datangBtn.addEventListener('click', () => {
+    setTimeout(setupSelectAllCheckbox, 0);
+});
+pulangBtn.addEventListener('click', () => {
+    setTimeout(setupSelectAllCheckbox, 0);
+});
+
+// Update fungsi approveAll untuk menangani kedua tabel
+confirmApproveAllBtn.addEventListener('click', function() {
+    const activeTable = datangBtn.classList.contains('active') ? datangTable : pulangTable;
+    const checkedBoxes = activeTable.querySelectorAll('.approval-checkbox:checked');
+    
+    if (checkedBoxes.length === 0) {
+        showToast('Pilih minimal 1 absensi untuk disetujui', 'error');
+        hideApproveAllModal();
+        return;
+    }
+
+    const ids = Array.from(checkedBoxes).map(checkbox => checkbox.dataset.id);
+    const data = {
+        ids: ids,
+        tab: datangBtn.classList.contains('active') ? 'datang' : 'pulang',
+        _token: document.querySelector('meta[name="csrf-token"]').content
+    };
+
+    fetch('{{ route("pembimbing.approveAll") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': data._token
+        },
+        body: JSON.stringify(data)
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error || 'Request failed');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showToast(`Berhasil menyetujui ${data.approved_count} absensi`, 'success');
+            
+            checkedBoxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                if (row) {
+                    // Update status
+                    const statusCell = row.querySelector('td:nth-child(8)'); // Sesuaikan dengan posisi kolom status
+                    if (statusCell) {
+                        statusCell.innerHTML = `
+                            <span class="status-badge status-approved">
+                                <i class="fas fa-check-circle"></i> Disetujui
+                            </span>
+                        `;
+                    }
+                    
+                    // Update checkbox dan tombol aksi
+                    const firstCell = row.querySelector('td:first-child');
+                    const actionCell = row.querySelector('td:last-child');
+                    if (firstCell) firstCell.innerHTML = '<span class="text-gray-400">-</span>';
+                    if (actionCell) actionCell.innerHTML = '';
+                }
+            });
+            
+            // Setup ulang select all checkbox
+            setupSelectAllCheckbox();
+        } else {
+            throw new Error(data.message || 'Gagal memproses');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast(error.message || 'Terjadi kesalahan', 'error');
+    })
+    .finally(() => {
+        hideApproveAllModal();
+    });
+});
+
+function updateSelectAllVisibility() {
+    const activeTable = datangBtn.classList.contains('active') ? datangTable : pulangTable;
+    const availableCheckboxes = activeTable.querySelectorAll('.approval-checkbox');
+    
+    const selectAllContainer = document.getElementById('selectAllCheckbox').parentElement;
+    
+    if (availableCheckboxes.length === 0) {
+        selectAllContainer.innerHTML = '<span class="text-gray-400">-</span>';
+    } else {
+        selectAllContainer.innerHTML = '<input type="checkbox" id="selectAllCheckbox">';
+        // Tambahkan event listener baru
+        document.getElementById('selectAllCheckbox').addEventListener('change', function() {
+            const checkboxes = activeTable.querySelectorAll('.approval-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    }
+}
+
+// Panggil fungsi saat pertama kali load dan setelah approve
+document.addEventListener('DOMContentLoaded', updateSelectAllVisibility);
+
+
 
             // Company search functionality
             const companySearch = document.getElementById('companySearch');
@@ -1031,7 +1380,7 @@
                     }
                 }
             });
-
+  
             // Set default to show arrival table
             switchTab(datangBtn, datangTable);
         });

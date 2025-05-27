@@ -55,8 +55,6 @@ Route::post('dftrshalats', [DftrshalatController::class, 'store'])->name('dftrsh
 // Rute untuk mengedit data waktu shalat
 Route::get('dftrshalats/{id}/edit', [DftrshalatController::class, 'edit'])->name('dftrshalats.edit');
 
-// Rute untuk menghapus data waktu shalat
-Route::delete('dftrshalats/{id}', [DftrshalatController::class, 'destroy'])->name('dftrshalats.destroy');
 
 // Rute untuk melihat arsip waktu shalat
 Route::get('/dftrshalats/arsip', [DftrshalatController::class, 'arsip'])->name('dftrshalats.arsip');
@@ -202,9 +200,9 @@ Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome')->middleware('auth');
 
-Route::get('/pembimbing', function () {
-    return view('index');
-})->name('pembimbing')->middleware('auth');
+Route::get('/pembimbingpkl', function () {
+    return view('pembimbingpkl');
+})->name('pembimbingpkl')->middleware('auth');
 
 Route::get('/journals/export-pdf', [JournalController::class, 'exportPdf'])->name('journals.exportPdf');
 
@@ -217,3 +215,16 @@ Route::get('/dashboard', function ()  {
         'user'
     ]);  
 })->name('dashboard');
+
+Route::get('/pembimbing', [PembimbingController::class, 'index'])->name('pembimbing')->middleware('auth');
+
+// routes/web.php
+Route::post('/pembimbing/approve-all', [PembimbingController::class, 'approveAll'])
+    ->middleware('auth') 
+    ->name('pembimbing.approveAll');
+
+    Route::post('/pembimbing/approve-all-journals', [PembimbingController::class, 'approveAllJournals'])
+    ->name('pembimbing.approveAllJournals');
+
+    Route::post('/pembimbing/approve-all-shalat', [PembimbingController::class, 'approveAllShalat'])
+    ->name('pembimbing.approveAllShalat');
