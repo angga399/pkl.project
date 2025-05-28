@@ -498,6 +498,73 @@
       #sidebar.expanded #toggleBtn i {
           transform: rotate(180deg);
       }
+
+      .approval-checkbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-color);
+}
+
+#selectAllDuhaCheckbox,
+#selectAllDzuhurCheckbox,
+#selectAllAsharCheckbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-hover);
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.75);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--card-gradient);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    max-width: 80%;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: var(--accent-hover);
+}
   </style>
 </head>
 <body>
@@ -606,49 +673,56 @@
                 </button>
             </div>
 
+            {{-- <div class="flex justify-between items-center mb-4">
+    <div class="date-range">
+        <i class="far fa-calendar-alt"></i>
+        Periode: {{ $startOfWeek->format('d M Y') }} - {{ $endOfWeek->format('d M Y') }}
+    </div>
+    
+    @if($dftrshalats->where('status', 'Menunggu')->count() > 0)
+        <button id="approveAllBtn" class="btn btn-success">
+            <i class="fas fa-check-double"></i> Setujui Semua yang Dipilih
+        </button>
+    @endif
+</div> --}}
+
             <!-- Tabel Waktu Shalat Duha -->
             <div id="duhaTable" class="table-container">
                 <div class="table-responsive">
                     <table class="table-custom">
                         <thead>
                             <tr>
+                                {{-- <th>
+            @if($dftrshalats->where('jenis', 'Duha')->where('status', 'Menunggu')->count() > 0)
+                <input type="checkbox" id="selectAllDuhaCheckbox">
+            @else
+                <span class="text-gray-400">-</span>
+            @endif
+        </th> --}}
                                 <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Hari</th>
                                 <th>Waktu</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                {{-- <th>Status</th>
+                                <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($dftrshalats->where('jenis', 'Duha')->where('status', 'Menunggu') as $index => $shalat)
                                 <tr>
+                                     {{-- <td>
+                <input type="checkbox" class="approval-checkbox" data-id="{{ $shalat->id }}">
+            </td> --}}
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $shalat->tanggal }}</td>
                                     <td>{{ $shalat->hari }}</td>
                                     <td>{{ $shalat->waktu }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <span class="status-badge {{ $shalat->status === 'Disetujui' ? 'status-approved' : ($shalat->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
                                             <i class="fas {{ $shalat->status === 'Disetujui' ? 'fa-check' : ($shalat->status === 'Ditolak' ? 'fa-times' : 'fa-clock') }}"></i>
                                             {{ $shalat->status }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <div class="action-btns">
-                                            <form action="{{ route('pembimbing.disetujui', $shalat->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Setujui waktu shalat ini?')">
-                                                    <i class="fas fa-check"></i> Setujui
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('pembimbing.ditolak', $shalat->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tolak waktu shalat ini?')">
-                                                    <i class="fas fa-times"></i> Tolak
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -662,28 +736,38 @@
                     <table class="table-custom">
                         <thead>
                             <tr>
+                                    {{-- <th>
+            @if($dftrshalats->where('jenis', 'Dzuhur')->where('status', 'Menunggu')->count() > 0)
+                <input type="checkbox" id="selectAllDzuhurCheckbox">
+            @else
+                <span class="text-gray-400">-</span>
+            @endif
+        </th> --}}
                                 <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Hari</th>
                                 <th>Waktu</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                {{-- <th>Status</th>
+                                <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($dftrshalats->where('jenis', 'Dzuhur')->where('status', 'Menunggu') as $index => $shalat)
                                 <tr>
+                                    {{-- <td>
+                <input type="checkbox" class="approval-checkbox" data-id="{{ $shalat->id }}">
+            </td> --}}
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $shalat->tanggal }}</td>
                                     <td>{{ $shalat->hari }}</td>
                                     <td>{{ $shalat->waktu }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <span class="status-badge {{ $shalat->status === 'Disetujui' ? 'status-approved' : ($shalat->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
                                             <i class="fas {{ $shalat->status === 'Disetujui' ? 'fa-check' : ($shalat->status === 'Ditolak' ? 'fa-times' : 'fa-clock') }}"></i>
                                             {{ $shalat->status }}
                                         </span>
-                                    </td>
-                                    <td>
+                                    </td> --}}
+                                    {{-- <td>
                                         <div class="action-btns">
                                             <form action="{{ route('pembimbing.disetujui', $shalat->id) }}" method="POST">
                                                 @csrf
@@ -698,7 +782,7 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -712,28 +796,38 @@
                     <table class="table-custom">
                         <thead>
                             <tr>
+                                      {{-- <th>
+            @if($dftrshalats->where('jenis', 'Ashar')->where('status', 'Menunggu')->count() > 0)
+                <input type="checkbox" id="selectAllAsharCheckbox">
+            @else
+                <span class="text-gray-400">-</span>
+            @endif
+        </th> --}}
                                 <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Hari</th>
                                 <th>Waktu</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                {{-- <th>Status</th>
+                                <th>Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($dftrshalats->where('jenis', 'Ashar')->where('status', 'Menunggu') as $index => $shalat)
                                 <tr>
+                                     {{-- <td>
+                <input type="checkbox" class="approval-checkbox" data-id="{{ $shalat->id }}">
+            </td> --}}
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $shalat->tanggal }}</td>
                                     <td>{{ $shalat->hari }}</td>
                                     <td>{{ $shalat->waktu }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <span class="status-badge {{ $shalat->status === 'Disetujui' ? 'status-approved' : ($shalat->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
                                             <i class="fas {{ $shalat->status === 'Disetujui' ? 'fa-check' : ($shalat->status === 'Ditolak' ? 'fa-times' : 'fa-clock') }}"></i>
                                             {{ $shalat->status }}
-                                        </span>
+                                        </span> --}}
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <div class="action-btns">
                                             <form action="{{ route('pembimbing.disetujui', $shalat->id) }}" method="POST">
                                                 @csrf
@@ -748,7 +842,7 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -758,6 +852,23 @@
         </div>
     </div>
   </div>
+
+
+  {{-- <div id="approveAllModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <button class="modal-close" onclick="hideApproveAllModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <h3 class="text-xl font-semibold mb-4">Konfirmasi Setujui Semua</h3>
+        <p class="mb-6">Anda akan menyetujui semua waktu shalat yang dipilih. Lanjutkan?</p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="hideApproveAllModal()">Batal</button>
+            <button type="button" class="btn btn-success" id="confirmApproveAll">
+                <i class="fas fa-check-double"></i> Ya, Setujui Semua
+            </button>
+        </div>
+    </div>
+</div> --}}
 
   <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -812,6 +923,133 @@
           dzuhurBtn.addEventListener('click', () => switchTab(dzuhurBtn, dzuhurTable));
           asharBtn.addEventListener('click', () => switchTab(asharBtn, asharTable));
 
+
+//           function setupSelectAllCheckboxes() {
+//     // Duha
+//     const selectAllDuha = document.getElementById('selectAllDuhaCheckbox');
+//     if (selectAllDuha) {
+//         selectAllDuha.addEventListener('change', function() {
+//             const checkboxes = duhaTable.querySelectorAll('.approval-checkbox');
+//             checkboxes.forEach(checkbox => {
+//                 checkbox.checked = this.checked;
+//             });
+//         });
+//     }
+    
+//     // Dzuhur
+//     const selectAllDzuhur = document.getElementById('selectAllDzuhurCheckbox');
+//     if (selectAllDzuhur) {
+//         selectAllDzuhur.addEventListener('change', function() {
+//             const checkboxes = dzuhurTable.querySelectorAll('.approval-checkbox');
+//             checkboxes.forEach(checkbox => {
+//                 checkbox.checked = this.checked;
+//             });
+//         });
+//     }
+    
+//     // Ashar
+//     const selectAllAshar = document.getElementById('selectAllAsharCheckbox');
+//     if (selectAllAshar) {
+//         selectAllAshar.addEventListener('change', function() {
+//             const checkboxes = asharTable.querySelectorAll('.approval-checkbox');
+//             checkboxes.forEach(checkbox => {
+//                 checkbox.checked = this.checked;
+//             });
+//         });
+//     }
+// }
+
+// // Panggil fungsi setup saat pertama kali load
+// setupSelectAllCheckboxes();
+
+// // Approve All Button
+// const approveAllBtn = document.getElementById('approveAllBtn');
+// const approveAllModal = document.getElementById('approveAllModal');
+// const confirmApproveAll = document.getElementById('confirmApproveAll');
+
+// approveAllBtn?.addEventListener('click', function() {
+//     const activeTable = document.querySelector('.table-container:not(.hidden)');
+//     const checkedBoxes = activeTable.querySelectorAll('.approval-checkbox:checked');
+    
+//     if (checkedBoxes.length === 0) {
+//         alert('Pilih minimal 1 waktu shalat untuk disetujui');
+//         return;
+//     }
+    
+//     approveAllModal.classList.add('active');
+// });
+
+// window.hideApproveAllModal = function() {
+//     approveAllModal.classList.remove('active');
+// };
+
+// confirmApproveAll?.addEventListener('click', function() {
+//     const activeTable = document.querySelector('.table-container:not(.hidden)');
+//     const checkedBoxes = activeTable.querySelectorAll('.approval-checkbox:checked');
+//     const ids = Array.from(checkedBoxes).map(checkbox => checkbox.dataset.id);
+    
+//     fetch('{{ route("pembimbing.approveAllShalat") }}', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Accept': 'application/json',
+//             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+//         },
+//         body: JSON.stringify({ ids: ids })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             // Update UI
+//             checkedBoxes.forEach(checkbox => {
+//                 const row = checkbox.closest('tr');
+//                 if (row) {
+//                     // Update status
+//                     const statusCell = row.querySelector('td:nth-child(6)');
+//                     if (statusCell) {
+//                         statusCell.innerHTML = `
+//                             <span class="status-badge status-approved">
+//                                 <i class="fas fa-check"></i> Disetujui
+//                             </span>
+//                         `;
+//                     }
+                    
+//                     // Hapus checkbox dan tombol aksi
+//                     const firstCell = row.querySelector('td:first-child');
+//                     const actionCell = row.querySelector('td:last-child');
+//                     if (firstCell) firstCell.innerHTML = '<span class="text-gray-400">-</span>';
+//                     if (actionCell) actionCell.innerHTML = '';
+//                 }
+//             });
+            
+//             // Reset select all checkbox
+//             const selectAllCheckbox = activeTable.querySelector('thead input[type="checkbox"]');
+//             if (selectAllCheckbox) selectAllCheckbox.checked = false;
+            
+//             alert(`Berhasil menyetujui ${data.approved_count} waktu shalat`);
+//         } else {
+//             alert('Gagal menyetujui waktu shalat: ' + (data.message || 'Terjadi kesalahan'));
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('Terjadi kesalahan saat menyetujui waktu shalat');
+//     })
+//     .finally(() => {
+//         hideApproveAllModal();
+//     });
+// });
+
+// // Event delegation untuk checkbox individual
+// document.addEventListener('change', function(e) {
+//     if (e.target.classList.contains('approval-checkbox')) {
+//         const table = e.target.closest('.table-container');
+//         const allCheckboxes = table.querySelectorAll('.approval-checkbox');
+//         const allChecked = table.querySelectorAll('.approval-checkbox:checked').length === allCheckboxes.length;
+//         const selectAllCheckbox = table.querySelector('thead input[type="checkbox"]');
+//         if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+//     }
+// });
           // Company Search
           const companySearch = document.getElementById('companySearch');
           const searchResults = document.getElementById('searchResults');

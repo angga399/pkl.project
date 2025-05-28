@@ -306,7 +306,7 @@
       let jenisShalat = 'Duha'; // Default jika di luar waktu utama
       let prayerClass = 'prayer-duha';
 
-      if (hours >= 4 && hours < 5) {
+      if (hours >= 4 && hours < 11) {
         jenisShalat = 'Subuh';
         prayerClass = 'prayer-subuh';
       }

@@ -462,6 +462,76 @@
           max-width: 400px;
           border: 1px solid rgba(59, 130, 246, 0.3);
       }
+
+      .approval-checkbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-color);
+}
+
+#selectAllCheckbox {
+    transform: scale(1.3);
+    cursor: pointer;
+    accent-color: var(--accent-hover);
+}
+
+/* Style untuk placeholder */
+td span.text-gray-400 {
+    padding-left: 8px;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.75);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--card-gradient);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    max-width: 80%;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: var(--accent-hover);
+}
   </style>
 </head>
 <body>
@@ -553,13 +623,19 @@
             </div>
 
             <div class="date-range">
+               
                 <i class="far fa-calendar-alt"></i>
                 Periode: {{ $startOfWeek->format('d M Y') }} - {{ $endOfWeek->format('d M Y') }}
             </div>
-
+             <div class="flex justify-end mb-4">
+    <button id="approveAllBtn" class="btn btn-success">
+        <i class="fas fa-check-double"></i> Setujui Semua yang Dipilih
+    </button>
+</div>
             <!-- Journal Table -->
             <div class="table-container">
                 <table class="table-custom">
+<<<<<<< HEAD
                     <!-- Ganti bagian tabel dengan ini: -->
 @foreach($journals as $companyName => $companyJournals)
 <div class="mb-8">
@@ -614,11 +690,97 @@
     </div>
 </div>
 @endforeach
+=======
+                    <thead>
+                        <tr>
+                            <th>
+            @if($journals->where('status', 'Menunggu')->count() > 0)
+                <input type="checkbox" id="selectAllCheckbox">
+            @else
+                <span class="text-gray-400">-</span>
+            @endif
+        </th>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Tanggal</th>
+                            <th>Uraian</th>
+                            <th>Jurusan</th>
+                            <th>Perusahaan</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($journals as $journal)
+                            <tr>
+                                 <td>
+            @if($journal->status === 'Menunggu')
+                <input type="checkbox" class="approval-checkbox" data-id="{{ $journal->id }}">
+            @else
+                <span class="text-gray-400">-</span>
+            @endif
+        </td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $journal->nama }}</td>
+                                <td>{{ $journal->tanggal }}</td>
+                                <td class="uraian-text" title="{{ $journal->uraian_konsentrasi }}">
+                                    {{ $journal->uraian_konsentrasi }}
+                                </td>
+                                <td>{{ $journal->kelas }}</td>
+                                <td>{{ $journal->PT }}</td>
+                                <td>
+                                    <span class="status-badge {{ $journal->status === 'Disetujui' ? 'status-approved' : ($journal->status === 'Ditolak' ? 'status-rejected' : 'status-pending') }}">
+                                        <i class="fas {{ $journal->status === 'Disetujui' ? 'fa-check' : ($journal->status === 'Ditolak' ? 'fa-times' : 'fa-clock') }}"></i>
+                                        {{ $journal->status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($journal->status === 'Menunggu')
+                                        <div class="action-btns">
+                                            <form action="{{ route('pembimbing.setuju', $journal->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Setujui jurnal ini?')">
+                                                    <i class="fas fa-check"></i> Setujui
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('pembimbing.tolak', $journal->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tolak jurnal ini?')">
+                                                    <i class="fas fa-times"></i> Tolak
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center py-4">Tidak ada jurnal yang menunggu persetujuan.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+>>>>>>> a73aa92a3a9b20e21660ce3a1b182b62264c60c1
                 </table>
             </div>
         </div>
     </div>
   </div>
+
+  <div id="approveAllModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <button class="modal-close" onclick="hideApproveAllModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <h3 class="text-xl font-semibold mb-4">Konfirmasi Setujui Semua</h3>
+        <p class="mb-6">Anda akan menyetujui semua jurnal yang dipilih. Lanjutkan?</p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="hideApproveAllModal()">Batal</button>
+            <button type="button" class="btn btn-success" id="confirmApproveAll">
+                <i class="fas fa-check-double"></i> Ya, Setujui Semua
+            </button>
+        </div>
+    </div>
+</div>
 
   <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -651,6 +813,95 @@
           updateClock();
           setInterval(updateClock, 1000);
 
+
+          document.getElementById('selectAllCheckbox')?.addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.approval-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+    });
+});
+
+// Approve All Button
+const approveAllBtn = document.getElementById('approveAllBtn');
+const approveAllModal = document.getElementById('approveAllModal');
+const confirmApproveAll = document.getElementById('confirmApproveAll');
+
+approveAllBtn?.addEventListener('click', function() {
+    const checkedBoxes = document.querySelectorAll('.approval-checkbox:checked');
+    if (checkedBoxes.length === 0) {
+        alert('Pilih minimal 1 jurnal untuk disetujui');
+        return;
+    }
+    approveAllModal.classList.add('active');
+});
+
+window.hideApproveAllModal = function() {
+    approveAllModal.classList.remove('active');
+};
+
+confirmApproveAll?.addEventListener('click', function() {
+    const checkedBoxes = document.querySelectorAll('.approval-checkbox:checked');
+    const ids = Array.from(checkedBoxes).map(checkbox => checkbox.dataset.id);
+    
+    fetch('{{ route("pembimbing.approveAllJournals") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ ids: ids })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update UI
+            checkedBoxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                if (row) {
+                    // Update status
+                    const statusCell = row.querySelector('td:nth-child(8)');
+                    if (statusCell) {
+                        statusCell.innerHTML = `
+                            <span class="status-badge status-approved">
+                                <i class="fas fa-check"></i> Disetujui
+                            </span>
+                        `;
+                    }
+                    
+                    // Update checkbox dan tombol aksi
+                    const firstCell = row.querySelector('td:first-child');
+                    const actionCell = row.querySelector('td:last-child');
+                    if (firstCell) firstCell.innerHTML = '<span class="text-gray-400">-</span>';
+                    if (actionCell) actionCell.innerHTML = '';
+                }
+            });
+            
+            // Reset select all
+            document.getElementById('selectAllCheckbox').checked = false;
+            
+            alert(`Berhasil menyetujui ${data.approved_count} jurnal`);
+        } else {
+            alert('Gagal menyetujui jurnal: ' + (data.message || 'Terjadi kesalahan'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menyetujui jurnal');
+    })
+    .finally(() => {
+        hideApproveAllModal();
+    });
+});
+
+// Event delegation untuk checkbox individual
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('approval-checkbox')) {
+        const allChecked = document.querySelectorAll('.approval-checkbox:checked').length === 
+                          document.querySelectorAll('.approval-checkbox').length;
+        document.getElementById('selectAllCheckbox').checked = allChecked;
+    }
+});
           // Company Search
           const companySearch = document.getElementById('companySearch');
           const searchResults = document.getElementById('searchResults');

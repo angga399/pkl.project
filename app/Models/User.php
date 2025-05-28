@@ -9,22 +9,24 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     
-      // app/Models/User.php
-protected $fillable = [
-    'role',
-    'full_name',
-    'email',
-    'password',
-    'company_id',
-    'birth_date',
-    'major',
-    'PT', 
-    'phone_number',
-    'location_pkl',
-    'nip',
-    'rank',
-    'company_address'
-];
+    
+        protected $fillable = [
+            'full_name',
+            'birth_date',
+            'major',
+            'PT',
+            'phone_number',
+            'location_pkl',
+            'company_name',
+            'leader_name',
+            'supervisor_name',
+            'phone',
+            'company_address',
+            'company_email',
+            'company_phone',
+            'email',
+            'password',
+        ];
     
     
 

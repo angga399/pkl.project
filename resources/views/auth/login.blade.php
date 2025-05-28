@@ -190,7 +190,7 @@
               <div class="inline-block p-3 rounded-full bg-gradient-to-r from-blue-800 to-blue-600 mb-3">
                 <i class="fas fa-user-circle text-4xl text-white"></i>
               </div>
-              <h2 class="text-2xl font-bold text-white text-glow">Login Peserta</h2>
+              <h2 class="text-2xl font-bold text-white text-glow">Login </h2>
             </div>
 
             <form method="POST" action="{{ route('login') }}" class="space-y-4 max-w-md mx-auto">

@@ -626,29 +626,15 @@
 
         <!-- Footer Section -->
         <div class="footer fade-in-up delay-4">
-            <p>Akses Cepat</p>
+            <p>Pengembangan</p>
             <div class="quick-actions">
                 <button class="action-button">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 14H14V21H21V14Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10 14H3V21H10V14Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 3H14V10H21V3Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10 3H3V10H10V3Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                       <a href="https://iconscout.com/icons/chat" class="text-underline font-size-sm" target="_blank">Chat</a> by <a href="https://iconscout.com/contributors/unicons" class="text-underline font-size-sm" target="_blank">Unicons Font</a>
+                        <path d="M21 15C21 17.2091 19.2091 19 17 19H5C2.79086 19 1 17.2091 1 15V7C1 4.79086 2.79086 3 5 3H17C19.2091 3 21 4.79086 21 7V15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 20L17.88 15.88" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Laporan Harian
-                </button>
-                <button class="action-button">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="4" width="18" height="18" rx="2" stroke="white" stroke-width="2"/>
-                        <path d="M16 2V6" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M8 2V6" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M3 10H21" stroke="white" stroke-width="2"/>
-                        <path d="M8 14H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M14 14H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M8 18H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M14 18H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    Jadwal
+                    Chat
                 </button>
                 <button class="action-button">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -661,7 +647,5 @@
             </div>
         </div>
     </div>
-     <x-footer></x-footer>
-
 </body>
 </html>
