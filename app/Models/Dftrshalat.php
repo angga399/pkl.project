@@ -9,4 +9,13 @@ class Dftrshalat extends Model
     use HasFactory;
 
     protected $fillable = ['jenis','nama', 'perusahaan','tanggal', 'hari', 'waktu', 'status'];
+
+
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
+
 }

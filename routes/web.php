@@ -30,6 +30,9 @@ use FontLib\Table\Type\name;
 // });
 // Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
+Route::get('/test-user', function() {
+    return \App\Models\Journal::with('user')->latest()->first()->user->nama ?? 'tidak ada nama';
+});
 
 
 Route::get('/daftarhdr/create', [DaftarhdrController::class, 'create'])->name('daftarhdr.create');

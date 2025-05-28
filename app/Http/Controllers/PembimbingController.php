@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Journal;
 use App\Models\Daftarhdr;
-use Illuminate\Support\Facades\DB;
 use App\Models\Dftrshalat;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Events\StatusUpdated;
 
@@ -19,9 +19,13 @@ class PembimbingController extends Controller
     $startOfWeek = Carbon::createFromFormat('Y-\WW', $week)->startOfWeek();
     $endOfWeek = Carbon::createFromFormat('Y-\WW', $week)->endOfWeek();
 
-    $journals = Journal::where('status', 'Menunggu')
-        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-        ->get();
+  $journals = Journal::with('user')
+    ->where('status', 'Menunggu')
+    ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+    ->get()
+    ->groupBy('PT');
+
+
 
     $daftarhdrs = Daftarhdr::where('status', '!=', 'Disetujui')
         ->where('status', '!=', 'Ditolak')
@@ -38,26 +42,33 @@ class PembimbingController extends Controller
 
 public function journals(Request $request)
 {
-    $selectedWeek = $request->input('week', Carbon::now()->format('Y-\WW'));
-    $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
-    $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
+    $companyId = auth()->user()->company_id; // atau sesuai logicmu
 
-    $query = Journal::whereBetween('tanggal', [$startOfWeek, $endOfWeek]);
+    $week = $request->input('week', Carbon::now()->format('Y-\WW'));
+    $startOfWeek = Carbon::parse($week . '-1')->startOfWeek();
+    $endOfWeek = Carbon::parse($week . '-7')->endOfWeek();
+
+    $query = Journal::with('user')
+        ->whereBetween('tanggal', [$startOfWeek, $endOfWeek])
+        ->where('status', 'Menunggu')
+        ->whereHas('user', function ($q) use ($companyId) {
+            $q->where('company_id', $companyId);
+        });
 
     if ($request->has('PT') && $request->PT != '') {
-        $query->where('PT', 'like', '%'.$request->PT.'%');
+        $query->where('PT', 'like', '%' . $request->PT . '%');
     }
 
-    // Kelompokkan berdasarkan perusahaan
-    $journals = $query->get()->groupBy('PT');
+    $journals = $query->get()->groupBy('PT'); // atau 'company_id' kalau itu relasinya
 
-    return view('pembimbing.journals', compact(
-        'journals', // Kirim data yang sudah dikelompokkan
-        'startOfWeek',
-        'endOfWeek',
-        'selectedWeek'
-    ));
+    return view('pembimbing.journals', [
+        'journals' => $journals,
+        'startOfWeek' => $startOfWeek,
+        'endOfWeek' => $endOfWeek,
+        'selectedWeek' => $week,
+    ]);
 }
+
 
 public function approvals(Request $request)
 {
@@ -74,7 +85,10 @@ public function approvals(Request $request)
     }
 
     // Mulai query
-    $daftarhdrs = Daftarhdr::query();
+  $daftarhdrs = Daftarhdr::whereHas('user', function ($q) {
+    $q->where('company_id', Auth::user()->company_id);
+});
+
 
     // Terapkan filter tanggal berdasarkan minggu yang dipilih
     $daftarhdrs->whereBetween('tanggal', [
@@ -158,26 +172,6 @@ public function tolak($id)
     return redirect()->route('pembimbing.journals')->with('status', 'Jurnal ditolak!');
 }
 
-public function approveAllJournals(Request $request)
-{
-    $ids = $request->input('ids', []);
-    $count = 0;
-
-    foreach ($ids as $id) {
-        $journal = Journal::find($id);
-        if ($journal && $journal->status === 'Menunggu') {
-            $journal->status = 'Disetujui';
-            $journal->save();
-            $count++;
-        }
-    }
-
-    return response()->json([
-        'success' => true,
-        'approved_count' => $count
-    ]);
-}
-
 public function approve($id)
 {
     $item = Daftarhdr::findOrFail($id);
@@ -217,33 +211,6 @@ public function reject(Request $request, $id)
     }
 }
 
-public function approveAll(Request $request)
-{
-    $validated = $request->validate([
-        'ids' => 'required|array|min:1',
-        'ids.*' => 'required|integer|exists:daftarhdrs,id',
-        'tab' => 'required|in:datang,pulang'
-    ]);
-
-    $count = Daftarhdr::whereIn('id', $validated['ids'])
-        ->where('status', 'Menunggu Persetujuan')
-        ->where('tipe', $validated['tab'])
-        ->update([
-            'status' => 'Disetujui',
-            // Hapus approved_at dan approved_by jika kolom tidak ada
-            // 'approved_at' => now(),
-            // 'approved_by' => auth()->id()
-        ]);
-
-    return response()->json([
-        'success' => $count > 0,
-        'approved_count' => $count,
-        'message' => $count > 0 
-            ? "Berhasil menyetujui $count absensi" 
-            : 'Tidak ada absensi yang perlu disetujui'
-    ]);
-}
-
 public function disetujui($id)
 {
     $shalat = Dftrshalat::findOrFail($id);
@@ -260,27 +227,6 @@ public function Ditolak($id)
     $shalat->save();
 
 
-    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak!');
+    return redirect()->route('pembimbing.shalat')->with('status', 'Shalat ditolak dan data dihapus!');
 }
-
-public function approveAllShalat(Request $request)
-{
-    $ids = $request->input('ids', []);
-    $count = 0;
-
-    foreach ($ids as $id) {
-        $shalat = Dftrshalat::find($id);
-        if ($shalat && $shalat->status === 'Menunggu') {
-            $shalat->status = 'Disetujui';
-            $shalat->save();
-            $count++;
-        }
-    }
-
-    return response()->json([
-        'success' => true,
-        'approved_count' => $count
-    ]);
-}
-
 }

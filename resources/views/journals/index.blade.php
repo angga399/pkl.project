@@ -1,43 +1,3 @@
-
-
-<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Journal Kegiatan</title> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"> <link
-
-    pasted
-    
-    rubah tampilannya jangan sistemnya.rubah keseluruhan design nya menjadi lebih gelap namun masih elegan
-    
-    Saya akan merancang ulang tampilan halaman Journal Kegiatan dengan tema gelap yang elegan tanpa mengubah sistem atau fungsionalitas yang ada. Berikut desain baru dengan tema dark mode yang tetap profesional:
-    
-    
-    Journal Kegiatan - Dark Theme
-    Artefak interaktif 
-    Saya telah mengubah keseluruhan tampilan halaman Journal Kegiatan dengan tema gelap yang elegan. Berikut adalah perubahan yang dilakukan:
-    
-    Perubahan Desain Utama:
-    Warna Latar:
-    Latar belakang utama menjadi abu-abu gelap (
-    #111827)
-    Area konten menggunakan abu-abu yang sedikit lebih terang (
-    #1f2937)
-    Warna teks diubah menjadi putih keabu-abuan untuk meningkatkan keterbacaan
-    Container & Panel:
-    Semua container dan panel menggunakan latar belakang abu-abu gelap
-    Ditambahkan border tipis dengan warna abu-abu yang lebih terang untuk memberikan kedalaman visual
-    Border radius diperbesar untuk tampilan yang lebih modern
-    Tabel & Data:
-    Header tabel menggunakan gradient ungu-biru yang elegan
-    Baris tabel memiliki border pembatas dengan warna yang lebih lembut
-    Status (Approved, Pending, Rejected) menggunakan warna gelap yang tetap kontras
-    Tombol & Input:
-    Tombol menggunakan gradient ungu-indigo yang terlihat premium
-    Input field memiliki latar belakang gelap dengan border yang kontras
-    Efek hover pada tombol ditingkatkan dengan bayangan berwarna ungu
-    Aksen & Detail:
-    Section header diberi underline berwarna ungu
-    Card dan container diberi border tipis untu
-    
-    
-    
     <!DOCTYPE html>
     <html lang="id">
     <head>
@@ -229,7 +189,7 @@
                                 @forelse ($journals as $journal)
                                     <tr>
                                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $journal->nama }}</td>
+                                        <td class="px-6 py-4">{{ $journal->nama  }}</td>
                                         <td class="px-6 py-4">{{ $journal->tanggal }}</td>
                                         <td class="px-6 py-4">{{ $journal->uraian_konsentrasi }}</td>
                                         <td class="px-6 py-4">{{ $journal->kelas }}</td>
@@ -257,74 +217,68 @@
                 </div>
     
                 <!-- History Section -->
-                <div class="p-6">
-                    <div class="bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-700">
-                        <h2 class="text-2xl font-bold text-white mb-6 section-header">Histori Jurnal</h2>
-                        <div class="table-container mt-6">
-                            <table class="w-full">
-                                <thead>
-                                    <tr class="text-white">
-                                        <th class="px-6 py-4 text-left">No</th>
-                                        <th class="px-6 py-4 text-left">Nama</th>
-                                        <th class="px-6 py-4 text-left">Tanggal</th>
-                                        <th class="px-6 py-4 text-left">Uraian</th>
-                                        <th class="px-6 py-4 text-left">Jurusan</th>
-                                        <th class="px-6 py-4 text-left">Perusahaan</th>
-                                        <th class="px-6 py-4 text-left">Tanggal Lengkap</th>
-                                        <th class="px-6 py-4 text-left">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-gray-300">
-                                    @forelse ($histories as $history)
-                                        @php $changes = json_decode($history->changes); @endphp
-                                        <tr>
-                                            <td class="px-6 py-4">{{ $history->journal_id }}</td>
-                                            <td class="px-6 py-4">{{ Auth::user()->full_name }}</td>
-                                            <td class="px-6 py-4">{{ $changes->tanggal }}</td>
-                                            <td class="px-6 py-4">{{ $changes->uraian_konsentrasi }}</td>
-                                            <td class="px-6 py-4">{{ Auth::user()->major }}</td>
-                                            <td class="px-6 py-4">{{ $changes->PT }}</td>
-                                            <td class="px-6 py-4">{{ $history->created_at }}</td>
-                                            <td class="px-6 py-4">
-                                                <span class="px-3 py-1 rounded-full text-sm 
-                                                    {{ $journal->status === 'Approved' ? 'bg-green-900 text-green-100' : 
-                                                       ($journal->status === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
-                                                        'bg-red-900 text-red-100') }}">
-                                                    {{ $journal->status }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="8" class="px-6 py-8 text-center text-gray-400">
-                                                <i class="fas fa-history text-4xl mb-4"></i>
-                                                <p>Tidak ada histori jurnal.</p>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mt-6">
-                            <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
-                               target="_blank" 
-                               class="custom-button text-white px-6 py-3 rounded-lg inline-flex items-center">
-                                <i class="fas fa-file-pdf mr-2"></i>
-                                Ekspor ke PDF
-                            </a>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Footer -->
-                <footer class="footer py-6 mt-8">
-                    <div class="text-center text-gray-400">
-                        &copy; {{ date('Y') }} Journal Kegiatan. All rights reserved.
-                    </div>
-                </footer>
-            </div>
+                <!-- History Section -->
+<div class="p-6">
+    <div class="bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-700">
+        <h2 class="text-2xl font-bold text-white mb-6 section-header">Histori Jurnal</h2>
+        <div class="table-container mt-6">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-white">
+                        <th class="px-6 py-4 text-left">No</th>
+                        <th class="px-6 py-4 text-left">Nama</th>
+                        <th class="px-6 py-4 text-left">Tanggal</th>
+                        <th class="px-6 py-4 text-left">Uraian</th>
+                        <th class="px-6 py-4 text-left">Jurusan</th>
+                        <th class="px-6 py-4 text-left">Perusahaan</th>
+                        <th class="px-6 py-4 text-left">Tanggal Lengkap</th>
+                        <th class="px-6 py-4 text-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-300">
+                    @forelse ($histories as $index => $history)
+                        @php 
+                            $changes = json_decode($history->changes);
+                        @endphp
+                        <tr>
+                            <td class="px-6 py-4">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4">{{ Auth::user()->full_name }}</td>
+                            <td class="px-6 py-4">{{ $changes->tanggal ?? '-' }}</td>
+                            <td class="px-6 py-4">{{ $changes->uraian_konsentrasi ?? '-' }}</td>
+                            <td class="px-6 py-4">{{ Auth::user()->major }}</td>
+                            <td class="px-6 py-4">{{ $changes->PT ?? '-' }}</td>
+                            <td class="px-6 py-4">{{ $history->created_at }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full text-sm 
+                                    {{ ($changes->status ?? '') === 'Approved' ? 'bg-green-900 text-green-100' : 
+                                       (($changes->status ?? '') === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
+                                        'bg-red-900 text-red-100') }}">
+                                    {{ $changes->status ?? 'Unknown' }}
+                                </span>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="px-6 py-8 text-center text-gray-400">
+                                <i class="fas fa-history text-4xl mb-4"></i>
+                                <p>Tidak ada histori jurnal.</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    
+        <div class="mt-6">
+            <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
+               target="_blank" 
+               class="custom-button text-white px-6 py-3 rounded-lg inline-flex items-center">
+                <i class="fas fa-file-pdf mr-2"></i>
+                Ekspor ke PDF
+            </a>
+        </div>
+    </div>
+</div>
+
         <script>
             function toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');

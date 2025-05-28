@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use App\Models\Journal;
 use App\Models\JournalHistory;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth; // Pa
 use Illuminate\Http\Request;
 
 
@@ -36,33 +37,34 @@ class JournalController extends Controller
         return view('journals.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'kelas' => 'required',
-            'PT' => 'required',
-            'uraian_konsentrasi' => 'required|string|max:500',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'tanggal' => 'required|date',
+        'kelas' => 'required',
+        'PT' => 'required',
+        'uraian_konsentrasi' => 'required|string|max:500',
+    ]);
 
-        $journal = Journal::create([
-            'nama' => $request->nama,
-            'tanggal' => $request->tanggal,
-            'kelas' => $request->kelas,
-            'PT' => $request->PT,
-            'uraian_konsentrasi' => $request->uraian_konsentrasi,
-            'status' => 'Menunggu',
-        ]);
+    $journal = Journal::create([
+        'nama' => $request->nama,
+        'tanggal' => $request->tanggal,
+        'kelas' => $request->kelas,
+        'PT' => $request->PT,
+        'uraian_konsentrasi' => $request->uraian_konsentrasi,
+        'status' => 'Menunggu',
+        'user_id' => Auth::id(), // ✅ Menambahkan user_id dari user yang login
+    ]);
 
-        JournalHistory::create([
-            'journal_id' => $journal->id,
-            'action' => 'created',
-            'changes' => json_encode($journal),
-        ]);
+  JournalHistory::create([
+    'journal_id' => $journal->id,
+    'action' => 'created',
+    'changes' => json_encode($journal->getAttributes()),
+]);
 
-        return redirect()->route('journals.index')->with('status', 'Jurnal berhasil dikirim dan menunggu persetujuan!');
-        return redirect()->route('guru.journals')->with('success', 'Jurnal berhasil disimpan');
+    return redirect()->route('journals.index')->with('status', 'Jurnal berhasil dikirim dan menunggu persetujuan!');
+ return redirect()->route('guru.journals')->with('success', 'Jurnal berhasil disimpan');
     }
 
     public function show(Journal $journal)
@@ -114,22 +116,22 @@ class JournalController extends Controller
 
         $journal->update($request->all());
 
-        JournalHistory::create([
-            'journal_id' => $journal->id,
-            'action' => 'updated',
-            'changes' => json_encode(['old' => $oldData, 'new' => $journal]),
-        ]);
+       JournalHistory::create([
+    'journal_id' => $journal->id,
+    'action' => 'updated',
+    'changes' => json_encode(['old' => $oldData, 'new' => $journal->getAttributes()]),
+]);
 
         return redirect()->route('journals.index')->with('success', 'Jurnal berhasil diperbarui!');
     }
 
     public function destroy(Journal $journal)
     {
-        JournalHistory::create([
-            'journal_id' => $journal->id,
-            'action' => 'deleted',
-            'changes' => json_encode($journal),
-        ]);
+       JournalHistory::create([
+    'journal_id' => $journal->id,
+    'action' => 'deleted',
+    'changes' => json_encode($journal->getAttributes()),
+]);
 
         $journal->delete();
         return redirect()->route('journals.index')->with('success', 'Jurnal berhasil dihapus!');

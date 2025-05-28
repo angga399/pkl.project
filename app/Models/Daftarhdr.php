@@ -32,4 +32,9 @@ public function siswa()
         'alasan_penolakan', 
     ];
 
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }
