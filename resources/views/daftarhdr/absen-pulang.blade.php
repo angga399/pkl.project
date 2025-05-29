@@ -131,7 +131,7 @@
                             <svg class="w-4 h-4 mr-2 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.354 12.104a.5.5 0 01-.708-.708l3-3a.5.5 0 01.708 0l3 3a.5.5 0 01-.708.708L10 9.707l-4.646 4.397z" clip-rule="evenodd"></path>
                             </svg>
-                            <span>{{ Auth::user()->PT }}</span>
+                            <span>{{ auth()->user()->company->name ?? '' }}</span>
                         </div>
                         <div class="flex items-center" id="tampilTanggalContainer">
                             <svg class="w-4 h-4 mr-2 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">

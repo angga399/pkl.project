@@ -35,6 +35,12 @@ Route::get('/test-user', function() {
 });
 
 
+// di route/web.php
+Route::middleware('auth')->group(function () {
+    // route lain yang butuh login
+Route::post('/daftarhdr/store', [DaftarhdrController::class, 'store'])->middleware('auth');
+
+
 Route::get('/daftarhdr/create', [DaftarhdrController::class, 'create'])->name('daftarhdr.create');
 
 Route::get('/histori/{daftarhdr}', [DaftarhdrController::class, 'histori'])->name('daftarhdr.histori');
@@ -42,8 +48,8 @@ Route::get('/histori-all', [DaftarhdrController::class, 'getAllHistories'])->nam
 Route::get('/daftarhdr/{daftarhdr}', [DaftarhdrController::class, 'show'])->name('daftarhdr.show');
 
 // Rute utama untuk daftarhdr
-Route::resource('daftarhdr', DaftarhdrController::class);
-
+   Route::resource('daftarhdr', DaftarhdrController::class);
+});
 
 
 

@@ -59,9 +59,7 @@
         Periode: {{ $startOfWeek->format('d M Y') }} - {{ $endOfWeek->format('d M Y') }}
       </div>
       
-      <div>
-        <button id="approveAllBtn">Setujui Semua yang Dipilih</button>
-      </div>
+    
 
       <!-- Journal Table -->
       <div>
@@ -128,18 +126,7 @@
   </div>
 
   <!-- Modal -->
-  <div id="approveAllModal">
-    <div>
-      <button onclick="hideApproveAllModal()">X</button>
-      <h3>Konfirmasi Setujui Semua</h3>
-      <p>Anda akan menyetujui semua jurnal yang dipilih. Lanjutkan?</p>
-      <div>
-        <button onclick="hideApproveAllModal()">Batal</button>
-        <button id="confirmApproveAll">Ya, Setujui Semua</button>
-      </div>
-    </div>
-  </div>
-
+  
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Real-time Clock

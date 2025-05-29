@@ -21,4 +21,10 @@ class Company extends Model
     {
         return $this->hasMany(User::class)->where('role', 'siswa');
     }
+
+    public function daftarhdrs()
+{
+    return $this->hasMany(Daftarhdr::class, 'company_id');
+}
+
 }

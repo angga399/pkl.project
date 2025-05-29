@@ -20,4 +20,6 @@ public function journal()
 {
     return $this->belongsTo(Journal::class);
 }
+
+
 }
