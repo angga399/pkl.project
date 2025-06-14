@@ -92,7 +92,13 @@ class DftrshalatController extends Controller
     // Menampilkan data shalat untuk guru
     public function showGuru()
     {
-        $dftrshalats = Dftrshalat::orderBy('tanggal')->get();
+
+         $companyId = auth()->user()->company_id;
+        $dftrshalats = Dftrshalat::whereHas('user', function($query) use ($companyId) {
+            $query->where('company_id', $companyId);
+        })
+        ->orderBy('tanggal')
+        ->get();
         
         // Debugging: Lihat data yang diambil
         Log::info('Data shalat untuk guru:', $dftrshalats->toArray());
