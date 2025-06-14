@@ -1,11 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Carbon\Carbon;
 use App\Models\Journal;
+use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\JournalHistory;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+
+
+
 
 
 class JournalController extends Controller
@@ -99,6 +107,98 @@ class JournalController extends Controller
     
         return $pdf->download('jurnal_kegiatan_' . $week . '.pdf');
     }
+
+
+    public function exportExcel(Request $request)
+{
+    try {
+        // Validasi autentikasi
+        if (!auth()->check()) {
+            throw new \Exception('User tidak terautentikasi');
+        }
+
+        // Ambil input minggu dengan default minggu ini
+        $weekInput = $request->input('week', Carbon::now()->format('Y-\WW'));
+
+        // Validasi format minggu (YYYY-Www)
+        if (!preg_match('/^(\d{4})-W(\d{2})$/', $weekInput, $matches)) {
+            throw new \Exception('Format minggu tidak valid. Gunakan format YYYY-Www (contoh: 2023-W52)');
+        }
+
+        $year = (int)$matches[1];
+        $weekNum = (int)$matches[2];
+
+        // Validasi range minggu
+        if ($weekNum < 1 || $weekNum > 53) {
+            throw new \Exception('Nomor minggu harus antara 1-53');
+        }
+
+        // Hitung rentang tanggal
+        $startOfWeek = Carbon::now()
+            ->setISODate($year, $weekNum)
+            ->startOfWeek()
+            ->startOfDay();
+
+        $endOfWeek = $startOfWeek->copy()
+            ->endOfWeek()
+            ->endOfDay();
+
+        // Ambil data jurnal
+        $journals = Journal::with('user')
+            ->whereBetween('tanggal', [
+                $startOfWeek->format('Y-m-d H:i:s'),
+                $endOfWeek->format('Y-m-d H:i:s')
+            ])
+            ->orderBy('tanggal')
+            ->get();
+
+        // Verifikasi data
+        if ($journals->isEmpty()) {
+            $hasAnyData = Journal::whereBetween('tanggal', [
+                $startOfWeek->format('Y-m-d'),
+                $endOfWeek->format('Y-m-d')
+            ])->exists();
+
+            $message = $hasAnyData 
+                ? 'Data ada tetapi gagal dimuat' 
+                : 'Tidak ada data jurnal untuk minggu yang dipilih';
+
+            throw new \Exception($message);
+        }
+
+        // Siapkan data untuk Excel
+        $exportData = $journals->map(function ($journal) {
+            return [
+                'Tanggal' => optional($journal->tanggal)->format('d/m/Y') ?? '-',
+                'Nama' => $journal->user->name ?? 'N/A',
+                'Uraian Kegiatan' => $journal->uraian_konsentrasi,
+                'Jurusan' => $journal->kelas ?? '-',
+                'Perusahaan' => $journal->PT ?? '-',
+                'Status' => $journal->status ?? 'Pending',
+                'Dibuat Pada' => optional($journal->created_at)->format('d/m/Y H:i') ?? '-'
+            ];
+        });
+
+        // Generate Excel
+        return (new FastExcel($exportData))->download(sprintf(
+            'jurnal_%s_%s.xlsx',
+            auth()->user()->username,
+            $weekInput
+        ));
+
+    } catch (\Exception $e) {
+        Log::error('Excel Export Failed: ' . $e->getMessage(), [
+            'user_id' => auth()->id(),
+            'week_input' => $request->input('week'),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return redirect()
+            ->route('journals.index')
+            ->with('error', 'Gagal ekspor: ' . $e->getMessage());
+    }
+}
+    
 
     public function update(Request $request, Journal $journal)
     {

@@ -9,13 +9,10 @@ class Daftarhdr extends Model
 {
     use HasFactory;
 
-public function siswa()
-{
-    return $this->belongsTo(Siswa::class, 'siswa_id')->withDefault([
-        'id' => 0,
-        'nama' => 'Siswa Tidak Dikenal'
-    ]);
-}
+   public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected $table = 'daftarhdrs';
 

@@ -1,43 +1,3 @@
-
-
-<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Journal Kegiatan</title> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"> <link
-
-    pasted
-    
-    rubah tampilannya jangan sistemnya.rubah keseluruhan design nya menjadi lebih gelap namun masih elegan
-    
-    Saya akan merancang ulang tampilan halaman Journal Kegiatan dengan tema gelap yang elegan tanpa mengubah sistem atau fungsionalitas yang ada. Berikut desain baru dengan tema dark mode yang tetap profesional:
-    
-    
-    Journal Kegiatan - Dark Theme
-    Artefak interaktif 
-    Saya telah mengubah keseluruhan tampilan halaman Journal Kegiatan dengan tema gelap yang elegan. Berikut adalah perubahan yang dilakukan:
-    
-    Perubahan Desain Utama:
-    Warna Latar:
-    Latar belakang utama menjadi abu-abu gelap (
-    #111827)
-    Area konten menggunakan abu-abu yang sedikit lebih terang (
-    #1f2937)
-    Warna teks diubah menjadi putih keabu-abuan untuk meningkatkan keterbacaan
-    Container & Panel:
-    Semua container dan panel menggunakan latar belakang abu-abu gelap
-    Ditambahkan border tipis dengan warna abu-abu yang lebih terang untuk memberikan kedalaman visual
-    Border radius diperbesar untuk tampilan yang lebih modern
-    Tabel & Data:
-    Header tabel menggunakan gradient ungu-biru yang elegan
-    Baris tabel memiliki border pembatas dengan warna yang lebih lembut
-    Status (Approved, Pending, Rejected) menggunakan warna gelap yang tetap kontras
-    Tombol & Input:
-    Tombol menggunakan gradient ungu-indigo yang terlihat premium
-    Input field memiliki latar belakang gelap dengan border yang kontras
-    Efek hover pada tombol ditingkatkan dengan bayangan berwarna ungu
-    Aksen & Detail:
-    Section header diberi underline berwarna ungu
-    Card dan container diberi border tipis untu
-    
-    
-    
     <!DOCTYPE html>
     <html lang="id">
     <head>
@@ -305,15 +265,25 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mt-6">
-                            <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
-                               target="_blank" 
-                               class="custom-button text-white px-6 py-3 rounded-lg inline-flex items-center">
-                                <i class="fas fa-file-pdf mr-2"></i>
-                                Ekspor ke PDF
-                            </a>
-                        </div>
-                    </div>
+                       <div class="mt-6 flex gap-4">
+    <!-- Tombol PDF -->
+    <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
+       class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg inline-flex items-center">
+        <i class="fas fa-file-pdf mr-2"></i> Ekspor PDF
+    </a>
+
+    <!-- Tombol Excel (Hanya aktif jika ada data) -->
+    @if($journals->isNotEmpty())
+        <a href="{{ route('journals.exportExcel', ['week' => $week]) }}" 
+           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg inline-flex items-center">
+            <i class="fas fa-file-excel mr-2"></i> Ekspor Excel
+        </a>
+    @else
+        <button class="bg-gray-500 text-white px-4 py-2 rounded-lg inline-flex items-center cursor-not-allowed" disabled>
+            <i class="fas fa-file-excel mr-2"></i> Ekspor Excel
+        </button>
+    @endif
+</div>
                 </div>
     
                 <!-- Footer -->
@@ -334,4 +304,3 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
     </html>
-    

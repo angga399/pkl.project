@@ -9,7 +9,9 @@ use App\Models\Dftrshalat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Events\StatusUpdated;
-
+use App\Events\AttendanceApproved;
+use App\Events\AttendanceRejected;
+    
 
 class PembimbingController extends Controller
 {
@@ -198,41 +200,50 @@ public function approveAllJournals(Request $request)
 
 public function approve($id)
 {
-    $item = Daftarhdr::findOrFail($id);
-    $item->status = 'Disetujui';
-    $item->save();
+    $attendance = Daftarhdr::findOrFail($id);
+    $attendance->update(['status' => 'Disetujui']);
+    
+    // Kirim notifikasi
+    event(new AttendanceApproved(
+        $attendance->user_id,
+        [
+            'id' => $attendance->id,
+            'tanggal' => $attendance->tanggal,
+            'tipe' => $attendance->tipe,
+            'pt' => $attendance->pt,
+            'status' => 'Disetujui'
+        ]
+    ));
 
-
-
-    return redirect()->route('pembimbing.approvals')->with('status', 'Data berhasil disetujui!');
+    return redirect()->route('pembimbing.approvals')->with('status', 'Absen disetujui!');
 }
 
 public function reject(Request $request, $id)
 {
-    try {
-        $request->validate([
-            'rejection_reason' => 'required|string|max:500'
-        ]);
+    $request->validate([
+        'rejection_reason' => 'required|string|max:255'
+    ]);
 
-        $daftar = DaftarHdr::findOrFail($id);
-        $daftar->update([
-            'status' => 'Ditolak',
-            'alasan_penolakan' => $request->rejection_reason
-        ]);
+    $attendance = Daftarhdr::findOrFail($id);
+    $attendance->update([
+        'status' => 'Ditolak',
+        'rejection_reason' => $request->rejection_reason
+    ]);
+    
+    // Kirim notifikasi
+    event(new AttendanceRejected(
+        $attendance->user_id,
+        [
+            'id' => $attendance->id,
+            'tanggal' => $attendance->tanggal,
+            'tipe' => $attendance->tipe,
+            'pt' => $attendance->pt,
+            'status' => 'Ditolak'
+        ],
+        $request->rejection_reason
+    ));
 
-
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Penolakan berhasil disimpan'
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-        ], 500);
-    }
+    return redirect()->route('pembimbing.approvals')->with('status', 'Absen ditolak!');
 }
 
 public function approveAll(Request $request)

@@ -9,6 +9,13 @@ class Journal extends Model
 {
     use HasFactory;
 
+    public function user()
+{
+    return $this->belongsTo(User::class)->withDefault([
+        'full_name' => 'User Tidak Ditemukan',
+        'major' => '-'
+    ]);
+}
     protected $fillable = [
         'judul_jurnal',
         'tanggal',

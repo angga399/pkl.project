@@ -12,6 +12,10 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
       min-height: 100vh;
       font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
     }
 
     .glass-card {
@@ -72,20 +76,11 @@
     
     .login-container {
       display: flex;
-      height: 100vh;
-      align-items: center;
-      padding: 1rem;
+      flex-direction: column;
+      width: 100%;
       max-width: 1280px;
-      margin: 0 auto;
     }
     
-    @media (max-width: 1023px) {
-      .login-container {
-        flex-direction: column;
-        height: auto;
-      }
-    }
-
     .text-glow {
       text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
     }
@@ -121,134 +116,101 @@
         background-position: 0% 50%;
       }
     }
+
+    /* Tambahan untuk memusatkan konten */
+    .main-content {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .form-container {
+      width: 100%;
+      max-width: 600px; /* Sesuaikan jika perlu */
+    }
   </style>
 </head>
 <body class="text-gray-100">
   <div class="login-container">
-    <div class="container mx-auto">
-      <!-- Header -->
-      <div class="text-center mb-6">
-        <h1 class="text-4xl font-bold text-white mb-2 text-glow">Selamat Datang</h1>
-        <p class="text-lg text-blue-200">Sistem Informasi Praktek Kerja Lapangan</p>
-      </div>
-      
-      <div class="flex flex-col lg:flex-row gap-5">
-        <!-- Left Column - Information -->
-        <div class="w-full lg:w-5/12">
-          <div class="space-y-6">
-            <!-- Introduction Card -->
-            <div class="glass-card rounded-xl p-6 h-full card-hover">
-              <div class="flex items-center mb-3">
-                <i class="fas fa-book-open text-2xl info-icon mr-3"></i>
-                <h3 class="text-xl font-semibold text-blue-300">Pendahuluan</h3>
-              </div>
-              <button class="flex items-center text-blue-400 hover:text-blue-300 transition-colors duration-200" id="toggleIntro">
-                <span>Baca Selengkapnya</span>
-                <i class="fas fa-chevron-down ml-2 transform transition-transform duration-200"></i>
-              </button>
-              <div class="collapse mt-4" id="introContent">
-                <p class="text-gray-300 leading-relaxed text-base">
-                  Selamat datang di sistem informasi Praktek Kerja Lapangan. Di sini, Anda akan menemukan informasi penting mengenai PKL dan panduan lengkap untuk mengoptimalkan pengalaman pembelajaran Anda.
-                </p>
-              </div>
-            </div>
-
-            <!-- Regulations Card -->
-            <div class="glass-card rounded-xl p-6 h-full card-hover">
-              <div class="flex items-center mb-3">
-                <i class="fas fa-clipboard-list text-2xl info-icon mr-3"></i>
-                <h3 class="text-xl font-semibold text-blue-300">Peraturan PKL</h3>
-              </div>
-              <button class="flex items-center text-blue-400 hover:text-blue-300 transition-colors duration-200" id="toggleRegulation">
-                <span>Baca Selengkapnya</span>
-                <i class="fas fa-chevron-down ml-2 transform transition-transform duration-200"></i>
-              </button>
-              <div class="collapse mt-4" id="regulationContent">
-                <ul class="space-y-3">
-                  <li class="flex items-center text-gray-300 text-base">
-                    <i class="fas fa-check-circle text-blue-400 mr-2 text-base"></i>
-                    <span>Hadir tepat waktu sesuai jadwal yang ditentukan</span>
-                  </li>
-                  <li class="flex items-center text-gray-300 text-base">
-                    <i class="fas fa-check-circle text-blue-400 mr-2 text-base"></i>
-                    <span>Mengikuti arahan pembimbing dengan seksama</span>
-                  </li>
-                  <li class="flex items-center text-gray-300 text-base">
-                    <i class="fas fa-check-circle text-blue-400 mr-2 text-base"></i>
-                    <span>Memahami dan mengimplementasikan materi yang disampaikan</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column - Login Form -->
-        <div class="w-full lg:w-7/12">
-          <div class="glass-card rounded-xl p-7 h-full card-hover animate-gradient" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.9) 100%);">
-            <div class="text-center mb-6">
-              <div class="inline-block p-3 rounded-full bg-gradient-to-r from-blue-800 to-blue-600 mb-3">
-                <i class="fas fa-user-circle text-4xl text-white"></i>
-              </div>
-              <h2 class="text-2xl font-bold text-white text-glow">Login </h2>
-            </div>
-
-            <form method="POST" action="{{ route('login') }}" class="space-y-4 max-w-md mx-auto">
-              @csrf
-              <div>
-                <label for="email" class="block text-base font-medium text-blue-200 mb-1">Email</label>
-                <div class="relative">
-                  <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 text-base"></i>
-                  <input type="email" 
-                         class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none text-base" 
-                         id="email"
-                         name="email" 
-                         placeholder="Masukkan email Anda"
-                         value="{{ old('email') }}"
-                         required>
-                </div>
-              </div>
-              
-              <div>
-                <label for="password" class="block text-base font-medium text-blue-200 mb-1">Password</label>
-                <div class="relative">
-                  <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 text-base"></i>
-                  <input type="password" 
-                         class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none text-base" 
-                         id="password"
-                         name="password" 
-                         placeholder="Masukkan password Anda"
-                         required>
-                </div>
-              </div>
-              
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <input type="checkbox" 
-                         class="checkbox-blue rounded" 
-                         id="remember" 
-                         name="remember">
-                  <label class="ml-2 text-sm text-gray-300" for="remember">Remember me</label>
-                </div>
-                
-                @if (Route::has('password.request'))
-                  <a href="{{ route('password.request') }}" 
-                     class="text-sm text-blue-300 hover:text-blue-200 transition-colors duration-200">
-                    Lupa password?
-                  </a>
-                @endif
-              </div>
-              
-              <button type="submit" 
-                      class="custom-button w-full py-3 px-5 rounded-lg text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base">
-                <i class="fas fa-sign-in-alt mr-2"></i> Masuk
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-4xl font-bold text-white mb-2 text-glow">Selamat Datang</h1>
+      <p class="text-lg text-blue-200">Sistem Informasi Praktek Kerja Lapangan</p>
     </div>
+    
+    <div class="main-content">
+      <div class="form-container">
+        <!-- Right Column - Login Form -->
+        <div class="glass-card rounded-xl p-7 card-hover animate-gradient" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 58, 138, 0.9) 100%);">
+          <div class="text-center mb-6">
+            <div class="inline-block p-3 rounded-full bg-gradient-to-r from-blue-800 to-blue-600 mb-3">
+              <i class="fas fa-user-circle text-4xl text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white text-glow">Login </h2>
+          </div>
+
+          <form method="POST" action="{{ route('login') }}" class="space-y-4">
+            @csrf
+            <div>
+              <label for="email" class="block text-base font-medium text-blue-200 mb-1">Email</label>
+              <div class="relative">
+                <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 text-base"></i>
+                <input type="email" 
+                       class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none text-base" 
+                       id="email"
+                       name="email" 
+                       placeholder="Masukkan email Anda"
+                       value="{{ old('email') }}"
+                       required>
+              </div>
+            </div>
+            
+            <div>
+              <label for="password" class="block text-base font-medium text-blue-200 mb-1">Password</label>
+              <div class="relative">
+                <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 text-base"></i>
+                <input type="password" 
+                       class="custom-input block w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none text-base" 
+                       id="password"
+                       name="password" 
+                       placeholder="Masukkan password Anda"
+                       required>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input type="checkbox" 
+                       class="checkbox-blue rounded" 
+                       id="remember" 
+                       name="remember">
+                <label class="ml-2 text-sm text-gray-300" for="remember">Remember me</label>
+              </div>
+              
+              @if (Route::has('password.request'))
+                <a href="{{ route('password.request') }}" 
+                   class="text-sm text-blue-300 hover:text-blue-200 transition-colors duration-200">
+                  Lupa password?
+                </a>
+              @endif
+            </div>
+            
+            <button type="submit" 
+                    class="custom-button w-full py-3 px-5 rounded-lg text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base">
+              <i class="fas fa-sign-in-alt mr-2"></i> Masuk
+            </button>
+          </form>
+        </div>
+      </div>
+    </div> <div class="text-center text-xs text-blue-300 pt-3">
+          belum punya akun? 
+          <a href="{{ route('register') }}" class="font-medium text-white hover:text-blue-200 transition-colors">
+            Masuk disini
+          </a>
+        </div>
   </div>
+
+ 
 
   <script>
     $(document).ready(function() {

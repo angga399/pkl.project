@@ -3,28 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Models\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
+        // Ambil notifikasi user yang login dengan pagination
+        $notifications = auth()->user()->notifications()->paginate(10);
+        
+        // Return view dengan data notifikasi
+        return view('notifications.index', compact('notifications'));
+    }
 
-          return response()->json([
-            ['id' => 1, 'type' => 'success', 'message' => 'Notifikasi contoh', 'created_at' => now()],
-            ['id' => 2, 'type' => 'info', 'message' => 'Contoh notifikasi kedua', 'created_at' => now()]
-        ]);
-        // Pastikan user terautentikasi
-        if (!$request->user()) {
-            return response()->json([], 401);
-        }
+    public function markAsRead($notificationId)
+    {
+        $notification = Auth::user()->notifications()->findOrFail($notificationId);
+        $notification->markAsRead();
+        
+        return back()->with('success', 'Notifikasi telah ditandai sebagai dibaca');
+    }
 
-        $notifications = $request->user()->notifications()
-            ->orderBy('created_at', 'desc')
-            ->take(10)
-            ->get();
-
-        return response()->json($notifications);
+    public function markAllAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        
+        return back()->with('success', 'Semua notifikasi telah ditandai sebagai dibaca');
     }
 }
