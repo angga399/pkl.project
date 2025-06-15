@@ -116,13 +116,20 @@ class DaftarhdrController extends Controller
         return redirect()->route('daftarhdr.index')->with('success', 'Data berhasil dihapus.');
     }
 
-    public function showGuru()
-    {
-        $daftarhdrs = Daftarhdr::orderBy('tanggal')->get();
+  public function showGuru()
+{
+    // Dapatkan perusahaan yang terkait dengan guru yang login
+    $companyId = auth()->user()->company_id; // Asumsi ada relasi company
+    
+    // Dapatkan daftar absen hanya untuk perusahaan tersebut
+    $daftarhdrs = Daftarhdr::whereHas('user', function($query) use ($companyId) {
+            $query->where('company_id', $companyId);
+        })
+        ->orderBy('tanggal')
+        ->get();
 
-        return view('guru.absen', compact('daftarhdrs'));
-    }
-
+    return view('guru.absen', compact('daftarhdrs'));
+}
     public function history(Daftarhdr $daftarhdr)
     {
         $histories = HistoriAbsen::where('journal_id', $daftarhdr->id)->get();

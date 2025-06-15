@@ -275,7 +275,12 @@ $histories = JournalHistory::whereHas('journal', function ($query) use ($startOf
     }
     public function showGuru()
 {
-    $journals = Journal::orderBy('tanggal')->get(); // Ubah $journal menjadi $journals
+      $companyId = auth()->user()->company_id;
+    $journals = Journal::whereHas('user', function($query) use ($companyId) {
+            $query->where('company_id', $companyId);
+        })
+        ->orderBy('tanggal')
+        ->get(); // Ubah $journal menjadi $journals
   return view('guru.journal', compact('journals'));
 
 

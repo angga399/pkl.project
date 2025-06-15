@@ -41,4 +41,9 @@ public function company()
     return $this->belongsTo(Company::class, 'company_id');
 }
 
+
+// 
+
+// Cara pakai:
+// Daftarhdr::filterByCompany(auth()->user()->company_id)->get();
 }

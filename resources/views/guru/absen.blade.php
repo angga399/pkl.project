@@ -179,6 +179,7 @@
                                     @if ($data->tipe === 'datang')
                                             <tr>
                                                 <td class="px-4 py-3">{{ $key + 1 }}</td>
+                                                 <td class="px-4 py-3">{{ $data->user->company->name ?? 'N/A' }} <!-- Tampilkan nama perusahaan --></td>
                                                 <td class="px-4 py-3">{{ $data->hari }}</td>
                                                 <td class="px-4 py-3">{{ $data->tanggal }}</td>
                                                 <td class="px-4 py-3">
