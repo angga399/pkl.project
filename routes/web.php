@@ -29,6 +29,15 @@ use FontLib\Table\Type\name;
 // });
 // Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
+Route::get('/test-user', function() {
+    return \App\Models\Journal::with('user')->latest()->first()->user->nama ?? 'tidak ada nama';
+});
+
+
+// di route/web.php
+Route::middleware('auth')->group(function () {
+    // route lain yang butuh login
+Route::post('/daftarhdr/store', [DaftarhdrController::class, 'store'])->middleware('auth');
 
 
 Route::get('/daftarhdr/create', [DaftarhdrController::class, 'create'])->name('daftarhdr.create');
@@ -38,8 +47,8 @@ Route::get('/histori-all', [DaftarhdrController::class, 'getAllHistories'])->nam
 Route::get('/daftarhdr/{daftarhdr}', [DaftarhdrController::class, 'show'])->name('daftarhdr.show');
 
 // Rute utama untuk daftarhdr
-Route::resource('daftarhdr', DaftarhdrController::class);
-
+   Route::resource('daftarhdr', DaftarhdrController::class);
+});
 
 
 

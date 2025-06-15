@@ -7,6 +7,7 @@ use App\Models\Journal;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\JournalHistory;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth; // Pa
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -28,12 +29,17 @@ class JournalController extends Controller
     $endOfWeek = Carbon::parse($week . '-7')->endOfWeek(); // Hari Minggu
 
     // Ambil semua jurnal dalam rentang minggu
-    $journals = Journal::whereBetween('tanggal', [$startOfWeek, $endOfWeek])->get();
+   $userId = Auth::id();
 
-    // Ambil semua histori yang terkait dengan jurnal dalam rentang minggu yang sama
-    $histories = JournalHistory::whereHas('journal', function ($query) use ($startOfWeek, $endOfWeek) {
-        $query->whereBetween('tanggal', [$startOfWeek, $endOfWeek]);
-    })->get();
+$journals = Journal::where('user_id', $userId)
+                   ->whereBetween('tanggal', [$startOfWeek, $endOfWeek])
+                   ->get();
+
+$histories = JournalHistory::whereHas('journal', function ($query) use ($startOfWeek, $endOfWeek, $userId) {
+    $query->where('user_id', $userId)
+          ->whereBetween('tanggal', [$startOfWeek, $endOfWeek]);
+})->get();
+
 
     // Kirim data ke view
     return view('journals.index', compact('journals', 'histories', 'startOfWeek', 'endOfWeek', 'week'));
@@ -44,42 +50,51 @@ class JournalController extends Controller
         return view('journals.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'kelas' => 'required',
-            'PT' => 'required',
-            'uraian_konsentrasi' => 'required|string|max:500',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'tanggal' => 'required|date',
+        'kelas' => 'required',
+        'PT' => 'required',
+        'uraian_konsentrasi' => 'required|string|max:500',
+    ]);
 
-        $journal = Journal::create([
-            'nama' => $request->nama,
-            'tanggal' => $request->tanggal,
-            'kelas' => $request->kelas,
-            'PT' => $request->PT,
-            'uraian_konsentrasi' => $request->uraian_konsentrasi,
-            'status' => 'Menunggu',
-        ]);
+    $journal = Journal::create([
+        'nama' => $request->nama,
+        'tanggal' => $request->tanggal,
+        'kelas' => $request->kelas,
+        'PT' => $request->PT,
+        'uraian_konsentrasi' => $request->uraian_konsentrasi,
+        'status' => 'Menunggu',
+        'user_id' => Auth::id(), // ✅ Menambahkan user_id dari user yang login
+    ]);
 
-        JournalHistory::create([
-            'journal_id' => $journal->id,
-            'action' => 'created',
-            'changes' => json_encode($journal),
-        ]);
+  JournalHistory::create([
+    'journal_id' => $journal->id,
+    'action' => 'created',
+    'changes' => json_encode($journal->getAttributes()),
+]);
 
-        return redirect()->route('journals.index')->with('status', 'Jurnal berhasil dikirim dan menunggu persetujuan!');
-        return redirect()->route('guru.journals')->with('success', 'Jurnal berhasil disimpan');
+    return redirect()->route('journals.index')->with('status', 'Jurnal berhasil dikirim dan menunggu persetujuan!');
+ return redirect()->route('guru.journals')->with('success', 'Jurnal berhasil disimpan');
     }
 
     public function show(Journal $journal)
     {
+        if ($journal->user_id !== Auth::id()) {
+        abort(403); // Forbidden
+    }
+
         return view('journals.show', compact('journal'));
     }
 
     public function edit(Journal $journal)
     {
+        if ($journal->user_id !== Auth::id()) {
+        abort(403); // Forbidden
+    }
+
         return view('journals.edit', compact('journal'));
     }
 
@@ -93,7 +108,10 @@ class JournalController extends Controller
         $endOfWeek = Carbon::parse($week . '-7')->endOfWeek(); // Hari Minggu
     
         // Ambil semua jurnal dalam rentang minggu
-        $journals = Journal::whereBetween('tanggal', [$startOfWeek, $endOfWeek])->get();
+     $journals = Journal::where('user_id', Auth::id())
+                   ->whereBetween('tanggal', [$startOfWeek, $endOfWeek])
+                   ->get();
+
     
         // Jika tidak ada data, kembalikan pesan error
         if ($journals->isEmpty()) {
@@ -202,6 +220,10 @@ class JournalController extends Controller
 
     public function update(Request $request, Journal $journal)
     {
+          if ($journal->user_id !== Auth::id()) {
+        abort(403); // Forbidden
+    }
+
         $request->validate([
             'tanggal' => 'required|date',
             'nama' => 'required',
@@ -214,22 +236,26 @@ class JournalController extends Controller
 
         $journal->update($request->all());
 
-        JournalHistory::create([
-            'journal_id' => $journal->id,
-            'action' => 'updated',
-            'changes' => json_encode(['old' => $oldData, 'new' => $journal]),
-        ]);
+       JournalHistory::create([
+    'journal_id' => $journal->id,
+    'action' => 'updated',
+    'changes' => json_encode(['old' => $oldData, 'new' => $journal->getAttributes()]),
+]);
 
         return redirect()->route('journals.index')->with('success', 'Jurnal berhasil diperbarui!');
     }
 
     public function destroy(Journal $journal)
     {
-        JournalHistory::create([
-            'journal_id' => $journal->id,
-            'action' => 'deleted',
-            'changes' => json_encode($journal),
-        ]);
+          if ($journal->user_id !== Auth::id()) {
+        abort(403); // Forbidden
+    }
+
+       JournalHistory::create([
+    'journal_id' => $journal->id,
+    'action' => 'deleted',
+    'changes' => json_encode($journal->getAttributes()),
+]);
 
         $journal->delete();
         return redirect()->route('journals.index')->with('success', 'Jurnal berhasil dihapus!');

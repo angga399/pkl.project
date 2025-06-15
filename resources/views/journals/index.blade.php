@@ -189,7 +189,7 @@
                                 @forelse ($journals as $journal)
                                     <tr>
                                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $journal->nama }}</td>
+                                        <td class="px-6 py-4">{{ $journal->nama  }}</td>
                                         <td class="px-6 py-4">{{ $journal->tanggal }}</td>
                                         <td class="px-6 py-4">{{ $journal->uraian_konsentrasi }}</td>
                                         <td class="px-6 py-4">{{ $journal->kelas }}</td>
@@ -294,7 +294,17 @@
                 </footer>
             </div>
         </div>
-    
+        <div class="mt-6">
+            <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
+               target="_blank" 
+               class="custom-button text-white px-6 py-3 rounded-lg inline-flex items-center">
+                <i class="fas fa-file-pdf mr-2"></i>
+                Ekspor ke PDF
+            </a>
+        </div>
+    </div>
+</div>
+
         <script>
             function toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');

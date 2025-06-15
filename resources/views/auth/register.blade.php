@@ -64,9 +64,9 @@
         <p class="mt-1 text-blue-200 text-sm">Isi formulir dengan lengkap untuk mendaftar</p>
       </div>
       
-      <form method="POST" action="{{ route('register') }}" autocomplete="on" class="space-y-4">
-        @csrf
-        <input type="hidden" name="register_option" value="siswa">
+    <form method="POST" action="{{ route('register') }}" autocomplete="on" class="space-y-4">
+  @csrf
+  <input type="hidden" name="register_option" value="siswa">
 
         <!-- Nama Lengkap -->
         <div>
@@ -147,30 +147,30 @@
           </div>
 
           <!-- Perusahaan -->
-          <div>
-            <label for="company_id" class="block text-sm font-medium text-blue-200 mb-1">Perusahaan</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-building text-blue-400 text-sm"></i>
-              </div>
-              <select id="company_id" 
-                      name="company_id" 
-                      autocomplete="organization" 
-                      class="custom-input pl-10 block w-full py-2 px-3 rounded-lg text-sm focus:outline-none" 
-                      required>
-                <option value="">Pilih Perusahaan</option>
-                @foreach($companies as $company)
-                  <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
-                    {{ $company->name }}
-                  </option>
-                @endforeach
-              </select>
-              @error('company_id')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
-              @enderror
-            </div>
-          </div>
-        </div>
+          <!-- Ganti bagian select company dengan ini: -->
+<div>
+  <label for="company_id" class="block text-sm font-medium text-blue-200 mb-1">Perusahaan</label>
+  <div class="relative">
+    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <i class="fas fa-building text-blue-400 text-sm"></i>
+    </div>
+    <select id="company_id" 
+            name="company_id" 
+            autocomplete="organization" 
+            class="custom-input pl-10 block w-full py-2 px-3 rounded-lg text-sm focus:outline-none" 
+            required>
+      <option value="" disabled selected>Pilih Perusahaan</option> <!-- Tambah selected di sini -->
+      @foreach($companies as $company)
+        <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
+          {{ $company->name }}
+        </option>
+      @endforeach
+    </select>
+    @error('company_id')
+      <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
+  </div>
+</div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Nomor Telepon -->
@@ -277,5 +277,6 @@
       </form>
     </div>
   </div>
+ 
 </body>
 </html>

@@ -23,12 +23,23 @@ class Journal extends Model
         'kelas',
         'PT',
         'uraian_konsentrasi',
+        'user_id',
+        'status', // jika kamu menyimpan status seperti "Menunggu", "Disetujui", dsb.
     ];
 
-    // Di model Journal.php
-public function histories()
-{
-    return $this->hasMany(JournalHistory::class);
-}
-}
+    /**
+     * Relasi ke histori jurnal.
+     */
+    public function histories()
+    {
+        return $this->hasMany(JournalHistory::class);
+    }
 
+    /**
+     * Relasi ke user yang membuat jurnal.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}

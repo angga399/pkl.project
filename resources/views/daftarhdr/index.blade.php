@@ -362,7 +362,7 @@
                                         </td>
                                         <td>{{ $item->hari }}</td>
                                         <td class="font-medium">{{ $item->nama }}</td>
-                                        <td>{{ $item->pt }}</td>
+                                        <td>{{ $item->pt ?? '-' }}</td>
                                         <td>{{ $item->tanggal }}</td>
                                         <td>
                                             <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="location-link">
@@ -411,7 +411,7 @@
                                         </td>
                                         <td>{{ $item->hari }}</td>
                                         <td class="font-medium">{{ $item->nama }}</td>
-                                        <td>{{ $item->pt }}</td>
+                                        <td>{{ $item->pt ?? '-' }}</td>
                                         <td>{{ $item->tanggal }}</td>
                                         <td>
                                             <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}" target="_blank" class="location-link">
@@ -446,12 +446,17 @@
     </div>
 
     <script>
-        function showModal(img) {
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-            modalImage.src = img.src;
-            modal.style.display = 'flex';
-        }
+          function showModal(imgElement) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = imgElement.src;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.style.display = 'none';
+    }
 
         function hideModal() {
             const modal = document.getElementById('imageModal');
