@@ -264,7 +264,7 @@
       <div class="form-group">
         <span class="input-icon"><i class="fas fa-building"></i></span>
         <label for="perusahaan" class="form-label">Perusahaan</label>
-        <input type="text" id="perusahaan" name="perusahaan" value="{{ Auth::user()->PT }}" class="form-control" readonly>
+        <input type="text" id="perusahaan" name="perusahaan"value="{{ Auth::user()->company_id }}" class="form-control" readonly>
       </div>
       
       <div class="form-group">

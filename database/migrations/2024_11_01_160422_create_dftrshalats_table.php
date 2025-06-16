@@ -10,6 +10,7 @@ class CreateDftrshalatsTable extends Migration
     {
         Schema::create('dftrshalats', function (Blueprint $table) {
             $table->id(); // Primary Key
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('jenis'); // Jenis Shalat: Duha, Dzuhur, Ashar
             $table->string('nama'); // Jenis Shalat: Duha, Dzuhur, Ashar
             $table->string('perusahaan'); // Jenis Shalat: Duha, Dzuhur, Ashar

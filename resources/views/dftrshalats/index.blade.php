@@ -257,8 +257,10 @@
         }
     </style>
 </head>
+
 <body>
     @include('sidebar')
+    
     <!-- Page Header -->
     <div class="page-header">
         <div class="container mx-auto px-4">
@@ -283,9 +285,18 @@
         </div>
     @endif
 
+    <!-- Debug Info -->
+    <div class="fixed bottom-0 left-0 bg-black text-white p-2 z-50 text-xs">
+        Debug: User {{ auth()->id() }} | 
+        Total: {{ $dftrshalats->count() }} |
+        @foreach(['Duha','Dzuhur','Ashar'] as $type)
+            {{ $type }}: {{ $dftrshalats->where('jenis', $type)->count() }} |
+        @endforeach
+    </div>
+
     <!-- Main Content -->
     <div class="container mx-auto px-4 pb-20">
-        <!-- Tombol Tambah Data -->
+        <!-- Add Prayer Buttons -->
         <div class="mb-8">
             <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="btn-add text-yellow-400 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
                 <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Duha
@@ -298,7 +309,7 @@
             </a>
         </div>
 
-        <!-- All Prayer Times in One Table -->
+        <!-- All Prayers Table -->
         <div class="mb-10 main-table shadow-xl">
             <div class="p-6 bg-gradient-to-r from-indigo-900 to-purple-900 text-white">
                 <h2 class="text-xl font-bold mb-1">Semua Jadwal Shalat</h2>
@@ -312,15 +323,15 @@
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Jenis</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tanggal</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Hari</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Perusahaan</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Waktu</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
-                        @php $counter = 1; @endphp
-                        @foreach ($dftrshalats as $shalat)
+                        @forelse ($dftrshalats as $index => $shalat)
                             <tr class="transition-colors duration-150 ease-in-out">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $counter++ }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
                                         @if($shalat->jenis == 'Duha') bg-yellow-900 text-yellow-300
@@ -332,6 +343,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $shalat->tanggal }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $shalat->hari }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $shalat->perusahaan }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-200 bg-gray-800 px-3 py-1 rounded-full inline-block border border-gray-700">
                                         <i class="far fa-clock mr-1 opacity-70"></i> {{ $shalat->waktu }}
@@ -343,60 +355,68 @@
                                     </span>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-400">
+                                    <i class="fas fa-info-circle mr-2"></i> Belum ada data shalat
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
 
         <!-- Prayer Cards -->
-        @php
-            $shalatTypes = ['Duha', 'Dzuhur', 'Ashar'];
-            $prayerIcons = [
-                'Duha' => 'fas fa-sun',
-                'Dzuhur' => 'fas fa-mosque',
-                'Ashar' => 'fas fa-cloud-sun'
-            ];
-        @endphp
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @foreach ($shalatTypes as $type)
+            @foreach(['Duha' => 'fas fa-sun', 'Dzuhur' => 'fas fa-mosque', 'Ashar' => 'fas fa-cloud-sun'] as $type => $icon)
+                @php
+                    $prayers = $dftrshalats->where('jenis', $type);
+                @endphp
+                
                 <div class="prayer-card">
                     <div class="prayer-header {{ strtolower($type) }}-theme">
-                        <i class="{{ $prayerIcons[$type] }} prayer-icon"></i>
+                        <i class="{{ $icon }} prayer-icon"></i>
                         <h2 class="prayer-title text-white text-xl">Shalat {{ $type }}</h2>
                     </div>
                     <div class="p-4">
-                        <div class="overflow-hidden">
-                            <table class="prayer-table">
-                                <thead>
-                                    <tr>
-                                        <th class="py-3 text-left pl-4">Tanggal</th>
-                                        <th class="py-3 text-center">Hari</th>
-                                        <th class="py-3 text-center">Waktu</th>
-                                        <th class="py-3 text-right pr-4">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($dftrshalats->where('jenis', $type) as $shalat)
+                        @if($prayers->isEmpty())
+                            <div class="text-center py-4 text-yellow-400">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Belum ada data shalat {{ $type }}
+                            </div>
+                        @else
+                            <div class="overflow-hidden">
+                                <table class="prayer-table">
+                                    <thead>
                                         <tr>
-                                            <td class="py-3 text-sm pl-4 border-b">{{ $shalat->tanggal }}</td>
-                                            <td class="py-3 text-sm text-center border-b">{{ $shalat->hari }}</td>
-                                            <td class="py-3 border-b">
-                                                <div class="prayer-time-wrapper text-sm {{ strtolower($type) }}-theme text-white">
-                                                    {{ $shalat->waktu }}
-                                                </div>
-                                            </td>
-                                            <td class="py-3 text-sm text-right pr-4 border-b">
-                                                <span class="status-badge {{ $shalat->status == 'aktif' ? 'status-active' : 'status-inactive' }}">
-                                                    {{ ucfirst($shalat->status) }}
-                                                </span>
-                                            </td>
+                                            <th class="py-3 text-left pl-4">Tanggal</th>
+                                            <th class="py-3 text-center">Hari</th>
+                                            <th class="py-3 text-center">Waktu</th>
+                                            <th class="py-3 text-right pr-4">Status</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($prayers as $shalat)
+                                            <tr>
+                                                <td class="py-3 text-sm pl-4 border-b">{{ $shalat->tanggal }}</td>
+                                                <td class="py-3 text-sm text-center border-b">{{ $shalat->hari }}</td>
+                                                <td class="py-3 border-b">
+                                                    <div class="prayer-time-wrapper text-sm {{ strtolower($type) }}-theme text-white">
+                                                        {{ $shalat->waktu }}
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-sm text-right pr-4 border-b">
+                                                    <span class="status-badge {{ $shalat->status == 'aktif' ? 'status-active' : 'status-inactive' }}">
+                                                        {{ ucfirst($shalat->status) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
