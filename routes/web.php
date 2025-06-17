@@ -11,7 +11,6 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\CompanyController;
-
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ShalatController;
 use App\Http\Controllers\ChatController;
@@ -202,13 +201,7 @@ Route::get('/guru/shalats', [DftrshalatController::class, 'showGuru'])->name('gu
 Route::get('/guru/absen', [DaftarhdrController::class, 'showGuru'])->name('absen');
 
 
-
-
-// routes/web.php
-// routes/web.php
-
-
-Route::get('/', function () {
+Route::get('awal', function () {
     return view('awal'); // Ganti dengan nama view yang sesuai
 })->name('awal');
 
@@ -246,3 +239,24 @@ Route::post('/pembimbing/approve-all', [PembimbingController::class, 'approveAll
 
     Route::post('/pembimbing/approve-all-shalat', [PembimbingController::class, 'approveAllShalat'])
     ->name('pembimbing.approveAllShalat');
+
+    Route::middleware('auth')->group(function() {
+    Route::get('/notifications', [NotificationController::class, 'showAll'])->name('notifications.index');
+});
+
+// routes/web.php
+Route::middleware('auth')->get('/api/notifications', function() {
+    return response()->json(auth()->user()->notifications);
+});
+Route::middleware('auth')->group(function() {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+});
+
+
+Route::get('/journals/export-excel', [JournalController::class, 'exportExcel'])->name('journals.exportExcel');
+
+Route::get('/', function () {
+    return view('blog'); // Ganti dengan nama view yang sesuai
+})->name('blog');

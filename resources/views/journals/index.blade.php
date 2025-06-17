@@ -217,56 +217,82 @@
                 </div>
     
                 <!-- History Section -->
-                <!-- History Section -->
-<div class="p-6">
-    <div class="bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-700">
-        <h2 class="text-2xl font-bold text-white mb-6 section-header">Histori Jurnal</h2>
-        <div class="table-container mt-6">
-            <table class="w-full">
-                <thead>
-                    <tr class="text-white">
-                        <th class="px-6 py-4 text-left">No</th>
-                        <th class="px-6 py-4 text-left">Nama</th>
-                        <th class="px-6 py-4 text-left">Tanggal</th>
-                        <th class="px-6 py-4 text-left">Uraian</th>
-                        <th class="px-6 py-4 text-left">Jurusan</th>
-                        <th class="px-6 py-4 text-left">Perusahaan</th>
-                        <th class="px-6 py-4 text-left">Tanggal Lengkap</th>
-                        <th class="px-6 py-4 text-left">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-300">
-                    @forelse ($histories as $index => $history)
-                        @php 
-                            $changes = json_decode($history->changes);
-                        @endphp
-                        <tr>
-                            <td class="px-6 py-4">{{ $index + 1 }}</td>
-                            <td class="px-6 py-4">{{ Auth::user()->full_name }}</td>
-                            <td class="px-6 py-4">{{ $changes->tanggal ?? '-' }}</td>
-                            <td class="px-6 py-4">{{ $changes->uraian_konsentrasi ?? '-' }}</td>
-                            <td class="px-6 py-4">{{ Auth::user()->major }}</td>
-                            <td class="px-6 py-4">{{ $changes->PT ?? '-' }}</td>
-                            <td class="px-6 py-4">{{ $history->created_at }}</td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 rounded-full text-sm 
-                                    {{ ($changes->status ?? '') === 'Approved' ? 'bg-green-900 text-green-100' : 
-                                       (($changes->status ?? '') === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
-                                        'bg-red-900 text-red-100') }}">
-                                    {{ $changes->status ?? 'Unknown' }}
-                                </span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="px-6 py-8 text-center text-gray-400">
-                                <i class="fas fa-history text-4xl mb-4"></i>
-                                <p>Tidak ada histori jurnal.</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                <div class="p-6">
+                    <div class="bg-gray-800 rounded-xl shadow-xl p-6 border border-gray-700">
+                        <h2 class="text-2xl font-bold text-white mb-6 section-header">Histori Jurnal</h2>
+                        <div class="table-container mt-6">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-white">
+                                        <th class="px-6 py-4 text-left">No</th>
+                                        <th class="px-6 py-4 text-left">Nama</th>
+                                        <th class="px-6 py-4 text-left">Tanggal</th>
+                                        <th class="px-6 py-4 text-left">Uraian</th>
+                                        <th class="px-6 py-4 text-left">Jurusan</th>
+                                        <th class="px-6 py-4 text-left">Perusahaan</th>
+                                        <th class="px-6 py-4 text-left">Tanggal Lengkap</th>
+                                        <th class="px-6 py-4 text-left">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-300">
+                                    @forelse ($histories as $history)
+                                        @php $changes = json_decode($history->changes); @endphp
+                                        <tr>
+                                            <td class="px-6 py-4">{{ $history->journal_id }}</td>
+                                            <td class="px-6 py-4">{{ Auth::user()->full_name }}</td>
+                                            <td class="px-6 py-4">{{ $changes->tanggal }}</td>
+                                            <td class="px-6 py-4">{{ $changes->uraian_konsentrasi }}</td>
+                                            <td class="px-6 py-4">{{ Auth::user()->major }}</td>
+                                            <td class="px-6 py-4">{{ $changes->PT }}</td>
+                                            <td class="px-6 py-4">{{ $history->created_at }}</td>
+                                            <td class="px-6 py-4">
+                                                <span class="px-3 py-1 rounded-full text-sm 
+                                                    {{ $journal->status === 'Approved' ? 'bg-green-900 text-green-100' : 
+                                                       ($journal->status === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
+                                                        'bg-red-900 text-red-100') }}">
+                                                    {{ $journal->status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="8" class="px-6 py-8 text-center text-gray-400">
+                                                <i class="fas fa-history text-4xl mb-4"></i>
+                                                <p>Tidak ada histori jurnal.</p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                       <div class="mt-6 flex gap-4">
+    <!-- Tombol PDF -->
+    <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
+       class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg inline-flex items-center">
+        <i class="fas fa-file-pdf mr-2"></i> Ekspor PDF
+    </a>
+
+    <!-- Tombol Excel (Hanya aktif jika ada data) -->
+    @if($journals->isNotEmpty())
+        <a href="{{ route('journals.exportExcel', ['week' => $week]) }}" 
+           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg inline-flex items-center">
+            <i class="fas fa-file-excel mr-2"></i> Ekspor Excel
+        </a>
+    @else
+        <button class="bg-gray-500 text-white px-4 py-2 rounded-lg inline-flex items-center cursor-not-allowed" disabled>
+            <i class="fas fa-file-excel mr-2"></i> Ekspor Excel
+        </button>
+    @endif
+</div>
+                </div>
+    
+                <!-- Footer -->
+                <footer class="footer py-6 mt-8">
+                    <div class="text-center text-gray-400">
+                        &copy; {{ date('Y') }} Journal Kegiatan. All rights reserved.
+                    </div>
+                </footer>
+            </div>
         </div>
         <div class="mt-6">
             <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
@@ -288,4 +314,3 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
     </html>
-    
