@@ -52,7 +52,7 @@ class DftrshalatController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'jenis' => 'required|string|in:Subuh,Dzuhur,Ashar,Maghrib,Isya,Duha',
+            'jenis' => 'required|string|in:duha,d   zuhur,ashar,',
             'nama' => 'required|string|max:255',
             'perusahaan' => 'required|string|max:255',
             'tanggal' => 'required|date',

@@ -289,7 +289,7 @@
     <div class="fixed bottom-0 left-0 bg-black text-white p-2 z-50 text-xs">
         Debug: User {{ auth()->id() }} | 
         Total: {{ $dftrshalats->count() }} |
-        @foreach(['Duha','Dzuhur','Ashar'] as $type)
+        @foreach(['duha','dzuhur','ashar'] as $type)
             {{ $type }}: {{ $dftrshalats->where('jenis', $type)->count() }} |
         @endforeach
     </div>
@@ -299,13 +299,13 @@
         <!-- Add Prayer Buttons -->
         <div class="mb-8">
             <a href="{{ route('dftrshalats.create', ['jenis' => 'duha']) }}" id="duhaBtn" class="btn-add text-yellow-400 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
-                <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Duha
+                <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat duha
             </a>
             <a href="{{ route('dftrshalats.create', ['jenis' => 'dzuhur']) }}" id="dzuhurBtn" class="btn-add text-blue-400 px-6 py-3 rounded-lg inline-block mr-4" style="display: none;">
-                <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Dzuhur
+                <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat dzuhur
             </a>
             <a href="{{ route('dftrshalats.create', ['jenis' => 'ashar']) }}" id="asharBtn" class="btn-add text-purple-400 px-6 py-3 rounded-lg inline-block" style="display: none;">
-                <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat Ashar
+                <i class="fas fa-plus-circle mr-2"></i>Tambah Shalat ashar
             </a>
         </div>
 
@@ -334,9 +334,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($shalat->jenis == 'Duha') bg-yellow-900 text-yellow-300
-                                        @elseif($shalat->jenis == 'Dzuhur') bg-blue-900 text-blue-300
-                                        @elseif($shalat->jenis == 'Ashar') bg-purple-900 text-purple-300
+                                        @if($shalat->jenis == 'duha') bg-yellow-900 text-yellow-300
+                                        @elseif($shalat->jenis == 'dzuhur') bg-blue-900 text-blue-300
+                                        @elseif($shalat->jenis == 'ashar') bg-purple-900 text-purple-300
                                         @endif">
                                         {{ $shalat->jenis }}
                                     </span>
@@ -369,7 +369,7 @@
 
         <!-- Prayer Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @foreach(['Duha' => 'fas fa-sun', 'Dzuhur' => 'fas fa-mosque', 'Ashar' => 'fas fa-cloud-sun'] as $type => $icon)
+            @foreach(['duha' => 'fas fa-sun', 'dzuhur' => 'fas fa-mosque', 'ashar' => 'fas fa-cloud-sun'] as $type => $icon)
                 @php
                     $prayers = $dftrshalats->where('jenis', $type);
                 @endphp

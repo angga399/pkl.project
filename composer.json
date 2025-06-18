@@ -11,6 +11,7 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.6",
         "rap2hpoutre/fast-excel": "^5.6",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "twbs/bootstrap": "^5.3"
     },
     "require-dev": {

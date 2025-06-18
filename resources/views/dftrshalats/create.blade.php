@@ -303,29 +303,22 @@
       
       waktuInput.value = `${hours}:${minutes}`;
 
-      let jenisShalat = 'Duha'; // Default jika di luar waktu utama
-      let prayerClass = 'prayer-duha';
+      let jenisShalat = 'subuh'; // Default jika di luar waktu utama
+      let prayerClass = 'prayer-subuh';
 
       if (hours >= 4 && hours < 11) {
-        jenisShalat = 'Subuh';
-        prayerClass = 'prayer-subuh';
+        jenisShalat = 'duha';
+        prayerClass = 'prayer-duha';
       }
       else if (hours >= 12 && hours < 15) {
-        jenisShalat = 'Dzuhur';
+        jenisShalat = 'dzuhur';
         prayerClass = 'prayer-dzuhur';
       }
       else if (hours >= 15 && hours < 18) {
-        jenisShalat = 'Ashar';
+        jenisShalat = 'ashar';
         prayerClass = 'prayer-ashar';
       }
-      else if (hours >= 18 && hours < 19) {
-        jenisShalat = 'Maghrib';
-        prayerClass = 'prayer-maghrib';
-      }
-      else if (hours >= 19 && hours < 20) {
-        jenisShalat = 'Isya';
-        prayerClass = 'prayer-isya';
-      }
+     
 
       jenisInput.value = jenisShalat;
       

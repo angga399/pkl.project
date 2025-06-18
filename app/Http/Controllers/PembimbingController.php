@@ -116,34 +116,33 @@ public function approvals(Request $request)
 }
 public function shalat(Request $request)
 {
+    // Dapatkan company_id pembimbing yang login
+    $companyId = auth()->user()->company_id;
+
     // Jika week dipilih, gunakan tanggal dari minggu yang dipilih
     // Jika tidak, gunakan minggu ini sebagai default
-    if ($request->has('week')) {
-        $selectedWeek = $request->week;
-        $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
-        $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
-    } else {
-        $selectedWeek = Carbon::now()->format('Y-\WW');
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-    }
+    $selectedWeek = $request->week ?? Carbon::now()->format('Y-\WW');
+    $startOfWeek = Carbon::parse($selectedWeek)->startOfWeek();
+    $endOfWeek = Carbon::parse($selectedWeek)->endOfWeek();
 
-    // Mulai query
-    $dftrshalats = Dftrshalat::query();
-
-    // Terapkan filter tanggal berdasarkan minggu yang dipilih
-    $dftrshalats->whereBetween('tanggal', [
-        $startOfWeek->format('Y-m-d'),
-        $endOfWeek->format('Y-m-d')
-    ]);
+    // Mulai query dengan relasi user dan filter company_id
+    $dftrshalats = Dftrshalat::with('user')
+        ->whereHas('user', function($query) use ($companyId) {
+            $query->where('company_id', $companyId);
+        })
+        ->where('status', 'Menunggu') // Hanya ambil yang statusnya Menunggu
+        ->whereBetween('tanggal', [
+            $startOfWeek->format('Y-m-d'),
+            $endOfWeek->format('Y-m-d')
+        ]);
 
     // Filter berdasarkan perusahaan jika dipilih
     if ($request->has('PT') && $request->PT != '') {
-        $dftrshalats->where('PT', $request->PT);
+        $dftrshalats->where('PT', 'like', '%'.$request->PT.'%');
     }
 
     // Ambil data
-    $dftrshalats = $dftrshalats->get();
+    $dftrshalats = $dftrshalats->orderBy('tanggal')->get();
 
     // Kirim data ke view dengan parameter yang dipilih
     return view('pembimbing.shalat', compact(
@@ -155,15 +154,31 @@ public function shalat(Request $request)
 }
 
     // Proses setuju dan tolak untuk jurnal
-    public function setuju($id)
+ public function setuju($id)
 {
     $journal = Journal::findOrFail($id);
+
+    if ($journal->status != 'Menunggu') {
+        return response()->json([
+            'success' => false,
+            'message' => 'Jurnal sudah diproses sebelumnya'
+        ], 400);
+    }
+
     $journal->status = 'Disetujui';
     $journal->save();
 
+    if (request()->wantsJson()) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Jurnal berhasil disetujui',
+            'journal' => $journal
+        ]);
+    }
 
     return redirect()->route('pembimbing.journals')->with('status', 'Jurnal disetujui!');
 }
+
 
 public function tolak($id)
 {

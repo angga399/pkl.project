@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
 
 class Journal extends Model
 {
@@ -15,6 +17,7 @@ class Journal extends Model
         'full_name' => 'User Tidak Ditemukan',
         'major' => '-'
     ]);
+            return $this->belongsTo(User::class, 'user_id');
 }
     protected $fillable = [
         'judul_jurnal',
@@ -38,8 +41,5 @@ class Journal extends Model
     /**
      * Relasi ke user yang membuat jurnal.
      */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+  
 }

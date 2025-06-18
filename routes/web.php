@@ -16,6 +16,10 @@ use App\Http\Controllers\ShalatController;
 use App\Http\Controllers\ChatController;
 use App\Models\User;
 use FontLib\Table\Type\name;
+use App\Http\Controllers\ApprovalController;
+
+Route::get('/qr/generate/{user}/{type}', [ApprovalController::class, 'generateQr'])->name('qr.generate');
+Route::get('/qr/approve', [ApprovalController::class, 'approveFromQR'])->name('qr.approve');
 
 // Untuk web routes (gunakan CSRF + session auth)
 // Route::post('/send-message', [ChatController::class, 'sendMessage'])
@@ -27,12 +31,18 @@ use FontLib\Table\Type\name;
 // Route::get('/chat', function () {
 //     return view('chat');
 // });
-// Route::post('/send-message', [ChatController::class, 'sendMessage']);
+Route::get('/scan', function () {
+    return view('scan'); // Halaman untuk absen datang
+})->name('scan');
+
+Route::post('/pembimbing/setuju/{id}', [PembimbingController::class, 'setuju'])
+     ->name('pembimbing.setuju');
 
 Route::get('/test-user', function() {
     return \App\Models\Journal::with('user')->latest()->first()->user->nama ?? 'tidak ada nama';
 });
 
+//  Route::get('/scan', [welcome::class, 'scan']);
 
 // di route/web.php
 Route::middleware('auth')->group(function () {
@@ -80,7 +90,7 @@ Route::get('/', function () {
 // })->name('gurui.ndex');
 
 
-
+Route::middleware(['auth', 'role:pembimbing'])->group(function () {
 Route::get('/pembimbing/journals', [PembimbingController::class, 'journals'])->name('pembimbing.journals');
 Route::post('/pembimbing/journals/{id}/approve', [PembimbingController::class, 'setuju'])->name('pembimbing.setuju');
 Route::post('/pembimbing/journals/{id}/reject', [PembimbingController::class, 'tolak'])->name('pembimbing.tolak');
@@ -93,7 +103,7 @@ Route::post('/pembimbing/approvals/{id}/reject', [PembimbingController::class, '
 Route::get('/pembimbing/shalat', [PembimbingController::class, 'shalat'])->name('pembimbing.shalat');
 Route::post('/pembimbing/shalat/{id}/approve', [PembimbingController::class, 'disetujui'])->name('pembimbing.setuju');
 Route::post('/pembimbing/shalat/{id}/reject', [PembimbingController::class, 'ditolak'])->name('pembimbing.tolak');
-
+});
 // Tambahkan ini di routes/web.php
 Route::middleware('guest')->group(function () {
 

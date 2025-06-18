@@ -20,7 +20,8 @@ class Dftrshalat extends Model
 
 
 
-    public function user()
+// Di model Dftrshalat
+public function user()
 {
     return $this->belongsTo(User::class);
 }

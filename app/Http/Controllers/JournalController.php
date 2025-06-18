@@ -127,94 +127,63 @@ $histories = JournalHistory::whereHas('journal', function ($query) use ($startOf
     }
 
 
-    public function exportExcel(Request $request)
+
+public function exportExcel(Request $request)
 {
+    
     try {
         // Validasi autentikasi
+        
         if (!auth()->check()) {
             throw new \Exception('User tidak terautentikasi');
         }
 
-        // Ambil input minggu dengan default minggu ini
+        // Ambil dan validasi input minggu
         $weekInput = $request->input('week', Carbon::now()->format('Y-\WW'));
-
-        // Validasi format minggu (YYYY-Www)
         if (!preg_match('/^(\d{4})-W(\d{2})$/', $weekInput, $matches)) {
-            throw new \Exception('Format minggu tidak valid. Gunakan format YYYY-Www (contoh: 2023-W52)');
-        }
-
-        $year = (int)$matches[1];
-        $weekNum = (int)$matches[2];
-
-        // Validasi range minggu
-        if ($weekNum < 1 || $weekNum > 53) {
-            throw new \Exception('Nomor minggu harus antara 1-53');
+            throw new \Exception('Format minggu tidak valid. Gunakan format YYYY-Www');
         }
 
         // Hitung rentang tanggal
         $startOfWeek = Carbon::now()
-            ->setISODate($year, $weekNum)
-            ->startOfWeek()
-            ->startOfDay();
+            ->setISODate($matches[1], $matches[2])
+            ->startOfWeek();
+        $endOfWeek = $startOfWeek->copy()->endOfWeek();
 
-        $endOfWeek = $startOfWeek->copy()
-            ->endOfWeek()
-            ->endOfDay();
-
-        // Ambil data jurnal
+        // Ambil data
         $journals = Journal::with('user')
-            ->whereBetween('tanggal', [
-                $startOfWeek->format('Y-m-d H:i:s'),
-                $endOfWeek->format('Y-m-d H:i:s')
-            ])
+            ->where('user_id', auth()->id())
+            ->whereBetween('tanggal', [$startOfWeek, $endOfWeek])
             ->orderBy('tanggal')
             ->get();
 
-        // Verifikasi data
         if ($journals->isEmpty()) {
-            $hasAnyData = Journal::whereBetween('tanggal', [
-                $startOfWeek->format('Y-m-d'),
-                $endOfWeek->format('Y-m-d')
-            ])->exists();
-
-            $message = $hasAnyData 
-                ? 'Data ada tetapi gagal dimuat' 
-                : 'Tidak ada data jurnal untuk minggu yang dipilih';
-
-            throw new \Exception($message);
+            throw new \Exception('Tidak ada data jurnal untuk minggu ini');
         }
 
-        // Siapkan data untuk Excel
-        $exportData = $journals->map(function ($journal) {
+        // Mapping data
+        $mappedData = $journals->map(function ($journal) {
             return [
-                'Tanggal' => optional($journal->tanggal)->format('d/m/Y') ?? '-',
-                'Nama' => $journal->user->name ?? 'N/A',
+               'Tanggal' => Carbon::parse($journal->tanggal)->format('d/m/Y'),
+           'Nama Siswa' => $journal->nama, 
                 'Uraian Kegiatan' => $journal->uraian_konsentrasi,
-                'Jurusan' => $journal->kelas ?? '-',
-                'Perusahaan' => $journal->PT ?? '-',
-                'Status' => $journal->status ?? 'Pending',
-                'Dibuat Pada' => optional($journal->created_at)->format('d/m/Y H:i') ?? '-'
+                'Jurusan' => $journal->kelas,
+                'Perusahaan' => $journal->PT,
+                'Status' => $journal->status,
+                'Dibuat Pada' => $journal->created_at->format('d/m/Y H:i')
             ];
         });
 
-        // Generate Excel
-        return (new FastExcel($exportData))->download(sprintf(
-            'jurnal_%s_%s.xlsx',
-            auth()->user()->username,
-            $weekInput
-        ));
+        // Export
+        return (new FastExcel($mappedData))
+            ->download('jurnal_' . $weekInput . '.xlsx');
 
     } catch (\Exception $e) {
-        Log::error('Excel Export Failed: ' . $e->getMessage(), [
-            'user_id' => auth()->id(),
-            'week_input' => $request->input('week'),
-            'trace' => $e->getTraceAsString()
-        ]);
-
-        return redirect()
-            ->route('journals.index')
-            ->with('error', 'Gagal ekspor: ' . $e->getMessage());
+        Log::error('Export Error: ' . $e->getMessage());
+        return back()->with('error', 'Gagal ekspor: ' . $e->getMessage());
     }
+
+    
 }
     
 

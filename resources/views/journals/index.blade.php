@@ -177,6 +177,7 @@
                             <thead>
                                 <tr class="text-white">
                                     <th class="px-6 py-4 text-left">No</th>
+                                    <th class="px-6 py-4 text-left">Barcode</th> 
                                     <th class="px-6 py-4 text-left">Nama</th>
                                     <th class="px-6 py-4 text-left">Tanggal</th>
                                     <th class="px-6 py-4 text-left">Uraian</th>
@@ -189,18 +190,25 @@
                                 @forelse ($journals as $journal)
                                     <tr>
                                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="inline-block p-1 bg-white rounded">
+                                                {!! QrCode::size(80)->generate('journal_'.$journal->id) !!}
+                                                <div class="text-xs text-gray-400 mt-1">ID: {{ $journal->id }}</div>
+                                            </div>
+                                        </td>
                                         <td class="px-6 py-4">{{ $journal->nama  }}</td>
                                         <td class="px-6 py-4">{{ $journal->tanggal }}</td>
                                         <td class="px-6 py-4">{{ $journal->uraian_konsentrasi }}</td>
                                         <td class="px-6 py-4">{{ $journal->kelas }}</td>
                                         <td class="px-6 py-4">{{ $journal->PT }}</td>
                                         <td class="px-6 py-4">
+                                            
                                             <span class="px-3 py-1 rounded-full text-sm 
-                                                {{ $journal->status === 'Approved' ? 'bg-green-900 text-green-100' : 
+                                                {{ $journal->status === 'Disetujui' ? 'bg-green-900 text-green-100' : 
                                                    ($journal->status === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
                                                     'bg-red-900 text-red-100') }}">
                                                 {{ $journal->status }}
-                                            </span>
+                             </span>
                                         </td>
                                     </tr>
                                 @empty
@@ -246,12 +254,12 @@
                                             <td class="px-6 py-4">{{ $changes->PT }}</td>
                                             <td class="px-6 py-4">{{ $history->created_at }}</td>
                                             <td class="px-6 py-4">
-                                                <span class="px-3 py-1 rounded-full text-sm 
-                                                    {{ $journal->status === 'Approved' ? 'bg-green-900 text-green-100' : 
-                                                       ($journal->status === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
-                                                        'bg-red-900 text-red-100') }}">
-                                                    {{ $journal->status }}
-                                                </span>
+                                                   <span class="px-3 py-1 rounded-full text-sm 
+                                                {{ $history->journal->status === 'Disetujui' ? 'bg-green-900 text-green-100' : 
+                                                ($history->journal->status === 'Pending' ? 'bg-yellow-900 text-yellow-100' : 
+                                                    'bg-red-900 text-red-100') }}">
+                                                {{ $history->journal->status }}
+                                            </span>
                                             </td>
                                         </tr>
                                     @empty
@@ -294,16 +302,10 @@
                 </footer>
             </div>
         </div>
-        <div class="mt-6">
-            <a href="{{ route('journals.exportPdf', ['week' => $week]) }}" 
-               target="_blank" 
-               class="custom-button text-white px-6 py-3 rounded-lg inline-flex items-center">
-                <i class="fas fa-file-pdf mr-2"></i>
-                Ekspor ke PDF
-            </a>
-        </div>
     </div>
 </div>
+
+
 
         <script>
             function toggleSidebar() {
